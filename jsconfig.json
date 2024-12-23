@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "checkJs": true,
+        "lib": ["es2020", "dom"],
+        "target": "es2020"
+    },
+    "exclude": ["node_modules", "**/node_modules/*"]
+}
