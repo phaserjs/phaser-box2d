@@ -33,6 +33,32 @@ export async function RunBuild (mode)
             legalComments: 'none'
         });
     }
+    else if (mode === 'render')
+    {
+        SetBuildPaths(
+            `src${path.sep}main.js`,
+            `${process.cwd()}${path.sep}dist${path.sep}`
+        );
+
+        SetFilename('PhaserBox2D-Render.js');
+    
+        console.log('runBuild', GetSrcJS(), GetOutFile());
+    
+        await esbuild.build({
+            plugins: [ OnStartPlugin, OnEndPlugin ],
+            entryPoints: [ GetSrcJS() ],
+            outfile: GetOutFile(),
+            target: 'esnext',
+            sourcemap: true,
+            minify: false,
+            bundle: true,
+            format: 'esm',
+            metafile: false,
+            logLevel: 'silent',
+            legalComments: 'none',
+            drop: ['console']
+        });
+    }
     else if (mode === 'prod')
     {
         SetBuildPaths(

@@ -15298,233 +15298,6 @@ function b2World_GetCounters() {
 function b2World_DumpMemoryStats() {
 }
 
-// src/debug_draw.js
-var p02 = new b2Vec2();
-
-// src/ragdoll.js
-var JointedBone = class {
-  constructor() {
-    this.bodyId = null;
-    this.jointId = null;
-    this.frictionScale = 1;
-    this.parentIndex = -1;
-    this.name = "";
-  }
-};
-var Skeletons = class {
-  static HumanBones = {
-    e_hip: 0,
-    e_torso: 1,
-    e_head: 2,
-    e_upperLeftLeg: 3,
-    e_lowerLeftLeg: 4,
-    e_upperRightLeg: 5,
-    e_lowerRightLeg: 6,
-    e_upperLeftArm: 7,
-    e_lowerLeftArm: 8,
-    e_upperRightArm: 9,
-    e_lowerRightArm: 10,
-    e_count: 11
-  };
-  static sideViewHuman11 = {
-    BONE_DATA: [
-      { name: "hip", parentIndex: -1, position: [0, 0.95], capsule: { center1: [0, -0.02], center2: [0, 0.02], radius: 0.095 } },
-      { name: "torso", parentIndex: 0, position: [0, 1.2], capsule: { center1: [0, -0.135], center2: [0, 0.135], radius: 0.09 }, frictionScale: 0.5 },
-      { name: "head", parentIndex: 1, position: [0, 1.5], capsule: { center1: [0, -0.0325], center2: [0, 0.0325], radius: 0.08 }, frictionScale: 0.25, linearDamping: 0.1 },
-      { name: "upperLeftLeg", parentIndex: 0, position: [0, 0.775], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.06 } },
-      { name: "lowerLeftLeg", parentIndex: 3, position: [0, 0.475], capsule: { center1: [0, -0.14], center2: [0, 0.125], radius: 0.05 }, frictionScale: 0.5, foot: "right" },
-      { name: "upperRightLeg", parentIndex: 0, position: [0, 0.775], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.06 } },
-      { name: "lowerRightLeg", parentIndex: 5, position: [0, 0.475], capsule: { center1: [0, -0.14], center2: [0, 0.125], radius: 0.05 }, frictionScale: 0.5, foot: "right" },
-      { name: "upperLeftArm", parentIndex: 1, position: [0, 1.225], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.035 }, frictionScale: 0.5 },
-      { name: "lowerLeftArm", parentIndex: 7, position: [0, 0.975], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.03 }, frictionScale: 0.1, linearDamping: 0.1 },
-      { name: "upperRightArm", parentIndex: 1, position: [0, 1.225], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.035 }, frictionScale: 0.5 },
-      { name: "lowerRightArm", parentIndex: 9, position: [0, 0.975], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.03 }, frictionScale: 0.1, linearDamping: 0.1 }
-    ],
-    JOINT_DATA: [
-      { boneName: "torso", pivot: [0, 1], limits: [-0.25 * Math.PI, 0] },
-      { boneName: "head", pivot: [0, 1.4], limits: [-0.3 * Math.PI, 0.1 * Math.PI] },
-      { boneName: "upperLeftLeg", pivot: [0, 0.9], limits: [-0.05 * Math.PI, 0.4 * Math.PI] },
-      { boneName: "lowerLeftLeg", pivot: [0, 0.625], limits: [-0.5 * Math.PI, -0.02 * Math.PI] },
-      { boneName: "upperRightLeg", pivot: [0, 0.9], limits: [-0.05 * Math.PI, 0.4 * Math.PI] },
-      { boneName: "lowerRightLeg", pivot: [0, 0.625], limits: [-0.5 * Math.PI, -0.02 * Math.PI] },
-      { boneName: "upperLeftArm", pivot: [0, 1.35], limits: [-0.1 * Math.PI, 0.8 * Math.PI] },
-      { boneName: "lowerLeftArm", pivot: [0, 1.1], limits: [0.01 * Math.PI, 0.5 * Math.PI] },
-      { boneName: "upperRightArm", pivot: [0, 1.35], limits: null },
-      { boneName: "lowerRightArm", pivot: [0, 1.1], limits: [0.01 * Math.PI, 0.5 * Math.PI] }
-    ]
-  };
-  static frontViewHuman11 = {
-    BONE_DATA: [
-      { name: "hip", parentIndex: -1, position: [0, 0.95], capsule: { center1: [-0.03, 0], center2: [0.03, 0], radius: 0.095 } },
-      { name: "torso", parentIndex: 0, position: [0, 1.2], capsule: { center1: [0, -0.135], center2: [0, 0.135], radius: 0.09 }, frictionScale: 0.5 },
-      { name: "head", parentIndex: 1, position: [0, 1.5], capsule: { center1: [0, -0.0325], center2: [0, 0.0325], radius: 0.08 }, frictionScale: 0.25, linearDamping: 0.1 },
-      { name: "upperLeftLeg", parentIndex: 0, position: [-0.1, 0.775], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.06 } },
-      { name: "lowerLeftLeg", parentIndex: 3, position: [-0.1, 0.475], capsule: { center1: [0, -0.14], center2: [0, 0.125], radius: 0.05 }, frictionScale: 0.5, foot: "left" },
-      { name: "upperRightLeg", parentIndex: 0, position: [0.1, 0.775], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.06 } },
-      { name: "lowerRightLeg", parentIndex: 5, position: [0.1, 0.475], capsule: { center1: [0, -0.14], center2: [0, 0.125], radius: 0.05 }, frictionScale: 0.5, foot: "right" },
-      { name: "upperLeftArm", parentIndex: 1, position: [-0.15, 1.22], capsule: { center1: [0, -0.125], center2: [0.05, 0.125], radius: 0.035 }, frictionScale: 0.5 },
-      { name: "lowerLeftArm", parentIndex: 7, position: [-0.15, 0.97], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.03 }, frictionScale: 0.1, linearDamping: 0.1 },
-      { name: "upperRightArm", parentIndex: 1, position: [0.15, 1.22], capsule: { center1: [0, -0.125], center2: [-0.05, 0.125], radius: 0.035 }, frictionScale: 0.5 },
-      { name: "lowerRightArm", parentIndex: 9, position: [0.15, 0.97], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.03 }, frictionScale: 0.1, linearDamping: 0.1 }
-    ],
-    JOINT_DATA: [
-      { boneName: "torso", pivot: [0, 1], limits: [-0.1 * Math.PI, 0.1 * Math.PI] },
-      { boneName: "head", pivot: [0, 1.4], limits: [-0.2 * Math.PI, 0.2 * Math.PI] },
-      { boneName: "upperLeftLeg", pivot: [-0.1, 0.9], limits: [-0.3 * Math.PI, 0.1 * Math.PI] },
-      { boneName: "lowerLeftLeg", pivot: [-0.1, 0.625], limits: [0, 0.5 * Math.PI] },
-      { boneName: "upperRightLeg", pivot: [0.1, 0.9], limits: [-0.1 * Math.PI, 0.3 * Math.PI] },
-      { boneName: "lowerRightLeg", pivot: [0.1, 0.625], limits: [-0.5 * Math.PI, 0] },
-      { boneName: "upperLeftArm", pivot: [-0.12, 1.35], limits: [-0.7 * Math.PI, 0.1 * Math.PI] },
-      { boneName: "lowerLeftArm", pivot: [-0.16, 1.1], limits: [0, 0.75 * Math.PI] },
-      { boneName: "upperRightArm", pivot: [0.12, 1.35], limits: [-0.1 * Math.PI, 0.7 * Math.PI] },
-      { boneName: "lowerRightArm", pivot: [0.14, 1.1], limits: [0, 0.75 * Math.PI] }
-    ]
-  };
-  static ElephantBones = {
-    e_torso: 0,
-    e_head: 1,
-    e_trunkBase: 2,
-    e_trunkMid: 3,
-    e_trunkTip: 4,
-    e_upperFrontLegL: 5,
-    e_lowerFrontLegL: 6,
-    e_upperRearLegL: 7,
-    e_lowerRearLegL: 8,
-    e_tail: 9,
-    e_ear: 10,
-    e_count: 11
-  };
-  static sideViewElephant = {
-    BONE_DATA: [
-      { name: "torso", parentIndex: -1, position: [0, 1.5], capsule: { center1: [0.8, 0], center2: [-0.8, 0], radius: 0.6 }, frictionScale: 0.5 },
-      { name: "head", parentIndex: 0, position: [-1.4, 2.2], capsule: { center1: [0.3, 0], center2: [-0.3, 0], radius: 0.35 }, frictionScale: 0.25, linearDamping: 0.1 },
-      { name: "trunkBase", parentIndex: 1, position: [-1.95, 1.85], capsule: { center1: [0, -0.2], center2: [0, 0.2], radius: 0.15 } },
-      { name: "trunkMid", parentIndex: 2, position: [-1.95, 1.4], capsule: { center1: [0, -0.2], center2: [0, 0.2], radius: 0.12 } },
-      { name: "trunkTip", parentIndex: 3, position: [-1.95, 1.05], capsule: { center1: [0, -0.2], center2: [0, 0.2], radius: 0.08 }, frictionScale: 0.1, linearDamping: 0.1 },
-      { name: "upperFrontLeg", parentIndex: 0, position: [-0.6, 0.8], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.2 } },
-      { name: "lowerFrontLeg", parentIndex: 5, position: [-0.6, 0.2], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.18 }, frictionScale: 0.5 },
-      { name: "upperBackLeg", parentIndex: 0, position: [0.7, 0.8], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.22 } },
-      { name: "lowerBackLeg", parentIndex: 7, position: [0.7, 0.2], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.2 }, frictionScale: 0.5 },
-      { name: "tail", parentIndex: 0, position: [1.2, 1.6], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.05 }, frictionScale: 0.1, linearDamping: 0.1 },
-      { name: "ear", parentIndex: 1, position: [-1.1, 2], capsule: { center1: [0, -0.15], center2: [0, 0.15], radius: 0.3 }, frictionScale: 0.1, linearDamping: 0.1 }
-    ],
-    JOINT_DATA: [
-      { boneName: "head", pivot: [-1, 2], limits: [-0.1 * Math.PI, 0.3 * Math.PI] },
-      { boneName: "trunkBase", pivot: [-1.95, 2], limits: [-0.5 * Math.PI, 0.5 * Math.PI] },
-      { boneName: "trunkMid", pivot: [-1.95, 1.55], limits: [-0.7 * Math.PI, 0.7 * Math.PI] },
-      { boneName: "trunkTip", pivot: [-1.95, 1.15], limits: [-0.9 * Math.PI, 0.9 * Math.PI] },
-      { boneName: "upperFrontLeg", pivot: [-0.6, 1.1], limits: [-0.2 * Math.PI, 0.2 * Math.PI] },
-      { boneName: "lowerFrontLeg", pivot: [-0.6, 0.5], limits: [-0.3 * Math.PI, 0.1 * Math.PI] },
-      { boneName: "upperBackLeg", pivot: [0.7, 1.1], limits: [-0.2 * Math.PI, 0.2 * Math.PI] },
-      { boneName: "lowerBackLeg", pivot: [0.7, 0.5], limits: [-0.1 * Math.PI, 0.3 * Math.PI] },
-      { boneName: "tail", pivot: [1.2, 1.9], limits: [-0.4 * Math.PI, 0.4 * Math.PI] },
-      { boneName: "ear", pivot: [-1.1, 2.2], limits: [-0.3 * Math.PI, 0.9 * Math.PI] }
-    ]
-  };
-};
-var Ragdoll = class {
-  constructor(skeleton, x, y, worldId, groupIndex, color, size = 2) {
-    this.skeleton = skeleton;
-    this.position = new b2Vec2(x, y);
-    this.worldId = worldId;
-    this.groupIndex = groupIndex;
-    this.color = color;
-    this.m_scale = size;
-    this.frictionTorque = 0.05;
-    this.hertz = 0;
-    this.dampingRatio = 0.5;
-    this.jointDrawSize = 0.5;
-    this.maxTorque = this.frictionTorque * this.m_scale;
-    this.m_bones = [];
-    this.create();
-  }
-  createBone(boneData) {
-    const { bodyId } = CreateCapsule({
-      worldId: this.worldId,
-      position: b2Add(new b2Vec2(boneData.position[0] * this.m_scale, boneData.position[1] * this.m_scale), this.position),
-      type: b2BodyType.b2_dynamicBody,
-      center1: new b2Vec2(boneData.capsule.center1[0] * this.m_scale, boneData.capsule.center1[1] * this.m_scale),
-      center2: new b2Vec2(boneData.capsule.center2[0] * this.m_scale, boneData.capsule.center2[1] * this.m_scale),
-      radius: boneData.capsule.radius * this.m_scale,
-      density: 1,
-      friction: 0.2,
-      groupIndex: -this.groupIndex,
-      color: this.color
-    });
-    const bone = new JointedBone();
-    bone.name = boneData.name;
-    bone.parentIndex = boneData.parentIndex;
-    bone.frictionScale = boneData.frictionScale || 1;
-    bone.bodyId = bodyId;
-    if (boneData.foot) {
-      const footShapeDef = b2DefaultShapeDef();
-      footShapeDef.density = 1;
-      footShapeDef.friction = 0.2;
-      footShapeDef.filter.groupIndex = -this.groupIndex;
-      footShapeDef.filter.maskBits = 1;
-      footShapeDef.customColor = this.color;
-      const footDir = boneData.foot == "left" ? -1 : 1;
-      const footCapsule = new b2Capsule();
-      footCapsule.center1 = new b2Vec2(footDir * -0.02 * this.m_scale, -0.175 * this.m_scale);
-      footCapsule.center2 = new b2Vec2(footDir * 0.13 * this.m_scale, -0.175 * this.m_scale);
-      footCapsule.radius = 0.03 * this.m_scale;
-      b2CreateCapsuleShape(bodyId, footShapeDef, footCapsule);
-    }
-    return bone;
-  }
-  createJoint(jointData) {
-    const bone = this.m_bones.find((b) => b.name === jointData.boneName);
-    const parentBone = this.m_bones[bone.parentIndex];
-    const pivot = b2Add(new b2Vec2(jointData.pivot[0] * this.m_scale, jointData.pivot[1] * this.m_scale), this.position);
-    const jointDef = new b2RevoluteJointDef();
-    jointDef.bodyIdA = parentBone.bodyId;
-    jointDef.bodyIdB = bone.bodyId;
-    jointDef.localAnchorA = b2Body_GetLocalPoint(jointDef.bodyIdA, pivot);
-    jointDef.localAnchorB = b2Body_GetLocalPoint(jointDef.bodyIdB, pivot);
-    if (jointData.limits) {
-      jointDef.enableLimit = true;
-      jointDef.lowerAngle = jointData.limits[0];
-      jointDef.upperAngle = jointData.limits[1];
-    }
-    jointDef.enableMotor = true;
-    jointDef.maxMotorTorque = bone.frictionScale * this.maxTorque;
-    jointDef.enableSpring = this.hertz > 0;
-    jointDef.hertz = this.hertz;
-    jointDef.dampingRatio = this.dampingRatio;
-    jointDef.drawSize = this.jointDrawSize;
-    return b2CreateRevoluteJoint(this.worldId, jointDef);
-  }
-  create() {
-    this.m_bones = this.skeleton.BONE_DATA.map((boneData) => this.createBone(boneData));
-    this.skeleton.JOINT_DATA.forEach((jointData) => {
-      const bone = this.m_bones.find((b) => b.name === jointData.boneName);
-      bone.jointId = this.createJoint(jointData);
-    });
-    this.m_bones.forEach((bone) => b2Body_SetUserData(bone.bodyId, this));
-    return this;
-  }
-  destroy() {
-    for (let i = 0; i < this.m_bones.length; ++i) {
-      if (this.m_bones[i].jointId) {
-        if (this.m_bones[i].jointId.index1 - 1 != B2_NULL_INDEX) {
-          b2DestroyJoint(this.m_bones[i].jointId);
-          this.m_bones[i].jointId = new b2JointId();
-        }
-      }
-    }
-    for (let i = 0; i < this.m_bones.length; ++i) {
-      if (this.m_bones[i].bodyId.index1 - 1 != B2_NULL_INDEX) {
-        b2DestroyBody(this.m_bones[i].bodyId);
-        this.m_bones[i].bodyId = null;
-      }
-    }
-    this.m_bones = null;
-  }
-};
-
-// src/main.js
-var DYNAMIC = 2;
-
 // src/physics.js
 function setIfDef(obj, prop, value) {
   if (value !== void 0) {
@@ -16190,22 +15963,809 @@ function CreateMouseJoint(data) {
   return { jointId };
 }
 
-// src/main-prod.js
+// src/debug_draw.js
+var p02 = new b2Vec2();
+var disableDrawing = false;
+function CreateDebugDraw(canvas, ctx, scale = 20) {
+  let wide = 1280;
+  let high = 720;
+  if (canvas) {
+    let resizeCanvas = function() {
+      if (window.innerWidth < window.innerHeight) {
+        wide = canvas.width = 720;
+        high = canvas.height = 1280;
+      } else {
+        wide = canvas.width = 1280;
+        high = canvas.height = 720;
+      }
+      const dpi = window.devicePixelRatio;
+      canvas.width = wide * dpi;
+      canvas.height = high * dpi;
+      canvas.style.width = wide + "px";
+      canvas.style.height = high + "px";
+      ctx.scale(dpi, dpi);
+    };
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+  }
+  const draw = new b2DebugDraw();
+  if (disableDrawing) {
+    draw.DrawCapsule = () => {
+      return;
+    };
+    draw.DrawCircle = () => {
+      return;
+    };
+    draw.DrawPoint = () => {
+      return;
+    };
+    draw.DrawPolygon = () => {
+      return;
+    };
+    draw.DrawImageCapsule = () => {
+      return;
+    };
+    draw.DrawImageCircle = () => {
+      return;
+    };
+    draw.DrawImagePolygon = () => {
+      return;
+    };
+    draw.DrawSegment = () => {
+      return;
+    };
+    draw.DrawSolidCapsule = () => {
+      return;
+    };
+    draw.DrawSolidCircle = () => {
+      return;
+    };
+    draw.DrawSolidPolygon = () => {
+      return;
+    };
+    draw.DrawString = () => {
+      return;
+    };
+    draw.DrawTransform = () => {
+      return;
+    };
+    return draw;
+  }
+  draw.DrawPolygon = function(xf2, vs, ps, col, ctx2) {
+    ctx2.beginPath();
+    const r = col >> 16 & 255;
+    const g = col >> 8 & 255;
+    const b = col & 255;
+    const a = 0.5;
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    for (let i = 0; i < ps; i++) {
+      b2TransformPointOut(xf2, vs[i], p02);
+      p02.y = -p02.y;
+      let p1X = scale * p02.x;
+      let p1Y = scale * p02.y;
+      let vX = p1X + cX;
+      let vY = p1Y + cY;
+      if (i === 0) {
+        ctx2.moveTo(vX, vY);
+      } else {
+        ctx2.lineTo(vX, vY);
+      }
+    }
+    ctx2.closePath();
+    ctx2.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+    ctx2.lineWidth = 1;
+    ctx2.stroke();
+  };
+  draw.DrawImagePolygon = function(xf2, shape, ctx2) {
+    let aabb = b2ComputeShapeAABB(shape, xf2);
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    const centerX = xf2.p.x;
+    const centerY = xf2.p.y;
+    const scaleCenterX = scale * centerX;
+    const scaleCenterY = scale * centerY;
+    let transformedCenterX = scaleCenterX + cX;
+    let transformedCenterY = scaleCenterY - cY;
+    transformedCenterY = -transformedCenterY;
+    ctx2.save();
+    ctx2.translate(transformedCenterX, transformedCenterY);
+    const angle = -Math.atan2(xf2.q.s, xf2.q.c);
+    ctx2.rotate(angle);
+    const image = shape.image;
+    const imageScale = shape.imageScale || new b2Vec2(1, 1);
+    const imageOffset = shape.imageOffset || new b2Vec2(0, 0);
+    let drawWidth = aabb.upperBoundX - aabb.lowerBoundX;
+    let drawHeight = aabb.upperBoundY - aabb.lowerBoundY;
+    const aspectRatio = drawWidth / drawHeight;
+    if (aspectRatio > 1) {
+      drawHeight *= scale * imageScale.x;
+      drawWidth = drawHeight * aspectRatio * imageScale.y;
+    } else {
+      drawWidth *= scale * imageScale.x;
+      drawHeight = drawWidth / aspectRatio * imageScale.y;
+    }
+    ctx2.drawImage(
+      image,
+      shape.imageRect.lowerBoundX,
+      shape.imageRect.lowerBoundY,
+      shape.imageRect.upperBoundX,
+      shape.imageRect.upperBoundY,
+      -drawWidth / 2 + drawWidth * imageOffset.x,
+      -drawHeight / 2 + drawHeight * imageOffset.y,
+      drawWidth,
+      drawHeight
+    );
+    ctx2.restore();
+  };
+  draw.DrawSolidPolygon = function(xf2, vs, ps, rad, col, ctx2) {
+    ctx2.beginPath();
+    const r = col >> 16 & 255;
+    const g = col >> 8 & 255;
+    const b = col & 255;
+    const a = 0.5;
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    for (let i = 0; i < ps; i++) {
+      b2TransformPointOut(xf2, vs[i], p02);
+      p02.y = -p02.y;
+      let p1X = scale * p02.x;
+      let p1Y = scale * p02.y;
+      let vX = p1X + cX;
+      let vY = p1Y + cY;
+      if (i === 0) {
+        ctx2.moveTo(vX, vY);
+      } else {
+        ctx2.lineTo(vX, vY);
+      }
+    }
+    ctx2.closePath();
+    ctx2.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+    ctx2.fill();
+    ctx2.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+    ctx2.lineWidth = rad * 2;
+    ctx2.stroke();
+  };
+  draw.DrawCircle = function(center, rad, col, ctx2) {
+    ctx2.beginPath();
+    const r = col >> 16 & 255;
+    const g = col >> 8 & 255;
+    const b = col & 255;
+    const a = 0.5;
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    const scaleCenterX = scale * cX;
+    const scaleCenterY = scale * cY;
+    let transformedCenterX = scaleCenterX + cX;
+    let transformedCenterY = scaleCenterY + cY;
+    transformedCenterY = -transformedCenterY;
+    ctx2.arc(transformedCenterX, transformedCenterY, rad * scale, 0, 2 * Math.PI);
+    ctx2.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+    ctx2.lineWidth = 2;
+    ctx2.stroke();
+  };
+  draw.DrawImageCircle = function(xf2, rad, shape, ctx2) {
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    const centerX = xf2.p.x;
+    const centerY = -xf2.p.y;
+    const scaleCenterX = scale * centerX;
+    const scaleCenterY = scale * centerY;
+    let transformedCenterX = scaleCenterX + cX;
+    let transformedCenterY = scaleCenterY + cY;
+    transformedCenterY = -transformedCenterY;
+    ctx2.save();
+    ctx2.translate(transformedCenterX, transformedCenterY);
+    const angle = -Math.atan2(xf2.q.s, xf2.q.c);
+    ctx2.rotate(angle);
+    const image = shape.image;
+    const imageScale = shape.imageScale || new b2Vec2(1, 1);
+    const imageOffset = shape.imageOffset || new b2Vec2(0, 0);
+    const aspectRatio = image.width / image.height;
+    let drawWidth, drawHeight;
+    if (aspectRatio > 1) {
+      drawHeight = rad * 2 * scale * imageScale.x;
+      drawWidth = drawHeight * aspectRatio * imageScale.y;
+    } else {
+      drawWidth = rad * 2 * scale * imageScale.x;
+      drawHeight = drawWidth / aspectRatio * imageScale.y;
+    }
+    ctx2.drawImage(image, -drawWidth / 2 + drawWidth * imageOffset.x, -drawHeight / 2 + drawHeight * imageOffset.y, drawWidth, drawHeight);
+    ctx2.restore();
+  };
+  draw.DrawSolidCircle = function(xf2, rad, col, ctx2) {
+    ctx2.beginPath();
+    const r = col >> 16 & 255;
+    const g = col >> 8 & 255;
+    const b = col & 255;
+    const a = 0.5;
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    const centerX = xf2.p.x;
+    const centerY = -xf2.p.y;
+    const scaleCenterX = scale * centerX;
+    const scaleCenterY = scale * centerY;
+    let transformedCenterX = scaleCenterX + cX;
+    let transformedCenterY = scaleCenterY + cY;
+    ctx2.arc(transformedCenterX, transformedCenterY, rad * scale, 0, 2 * Math.PI);
+    ctx2.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+    ctx2.fill();
+    ctx2.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+    ctx2.lineWidth = 2;
+    ctx2.stroke();
+  };
+  draw.DrawImageCapsule = function(p14, p23, radius, shape, ctx2) {
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    const rs = radius * scale;
+    const tp1 = p14;
+    const tp2 = p23;
+    tp1.y = -tp1.y;
+    tp2.y = -tp2.y;
+    const scaledP1X = scale * tp1.x;
+    const scaledP1Y = scale * tp1.y;
+    const scaledP2X = scale * tp2.x;
+    const scaledP2Y = scale * tp2.y;
+    let transformedP1X = scaledP1X + cX;
+    let transformedP1Y = scaledP1Y + cY;
+    let transformedP2X = scaledP2X + cX;
+    let transformedP2Y = scaledP2Y + cY;
+    let dx = transformedP2X - transformedP1X;
+    let dy = transformedP2Y - transformedP1Y;
+    let angle = Math.atan2(dy, dx);
+    let length = Math.sqrt(dx * dx + dy * dy);
+    ctx2.save();
+    ctx2.translate(transformedP1X + dx / 2, transformedP1Y + dy / 2);
+    ctx2.rotate(angle + Math.PI / 2);
+    const image = shape.image;
+    const imageScale = shape.imageScale || new b2Vec2(1, 1);
+    const imageOffset = shape.imageOffset || new b2Vec2(0, 0);
+    const aspectRatio = image.width / image.height;
+    const overlap = 1.1;
+    let drawHeight = (length + rs * 2) * overlap * imageScale.y;
+    let drawWidth = rs * 2 * overlap * Math.abs(imageScale.x);
+    ctx2.scale(Math.sign(imageScale.x), 1);
+    ctx2.drawImage(
+      image,
+      shape.imageRect.lowerBoundX,
+      shape.imageRect.lowerBoundY,
+      shape.imageRect.upperBoundX,
+      shape.imageRect.upperBoundY,
+      -drawWidth / 2 + drawWidth * imageOffset.x,
+      -drawHeight / 2 + drawHeight * imageOffset.y,
+      drawWidth,
+      drawHeight
+    );
+    ctx2.restore();
+  };
+  draw.DrawSolidCapsule = function(p14, p23, radius, col, ctx2) {
+    const r = col >> 16 & 255;
+    const g = col >> 8 & 255;
+    const b = col & 255;
+    const a = 0.5;
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    const tp1 = p14;
+    const tp2 = p23;
+    tp1.y = -tp1.y;
+    tp2.y = -tp2.y;
+    const scaledP1X = scale * tp1.x;
+    const scaledP1Y = scale * tp1.y;
+    const scaledP2X = scale * tp2.x;
+    const scaledP2Y = scale * tp2.y;
+    let transformedP1X = scaledP1X + cX;
+    let transformedP1Y = scaledP1Y + cY;
+    let transformedP2X = scaledP2X + cX;
+    let transformedP2Y = scaledP2Y + cY;
+    let dx = transformedP2X - transformedP1X;
+    let dy = transformedP2Y - transformedP1Y;
+    let angle = Math.atan2(dy, dx);
+    let length = Math.sqrt(dx * dx + dy * dy);
+    ctx2.save();
+    ctx2.translate(transformedP1X, transformedP1Y);
+    ctx2.rotate(angle);
+    ctx2.beginPath();
+    ctx2.arc(0, 0, radius * scale, Math.PI / 2, -Math.PI / 2);
+    ctx2.lineTo(length, -radius * scale);
+    ctx2.arc(length, 0, radius * scale, -Math.PI / 2, Math.PI / 2);
+    ctx2.lineTo(0, radius * scale);
+    ctx2.closePath();
+    ctx2.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+    ctx2.fill();
+    ctx2.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+    ctx2.lineWidth = 2;
+    ctx2.stroke();
+    ctx2.restore();
+  };
+  draw.DrawSegment = function(p14, p23, col, ctx2) {
+    ctx2.beginPath();
+    const r = col >> 16 & 255;
+    const g = col >> 8 & 255;
+    const b = col & 255;
+    const a = 0.5;
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    const tp1 = p14;
+    const tp2 = p23;
+    tp1.y = -tp1.y;
+    tp2.y = -tp2.y;
+    const v1X = scale * tp1.x + cX;
+    const v1Y = scale * tp1.y + cY;
+    const v2X = scale * tp2.x + cX;
+    const v2Y = scale * tp2.y + cY;
+    ctx2.moveTo(v1X, v1Y);
+    ctx2.lineTo(v2X, v2Y);
+    ctx2.strokeStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+    ctx2.lineWidth = 2;
+    ctx2.stroke();
+  };
+  draw.DrawPoint = function(x, y, radius, col, ctx2) {
+    const r = col >> 16 & 255;
+    const g = col >> 8 & 255;
+    const b = col & 255;
+    const a = 0.5;
+    const cX = (wide >> 1) + this.positionOffset.x;
+    const cY = (high >> 1) + this.positionOffset.y;
+    y = -y;
+    const vX = scale * x + cX;
+    const vY = scale * y + cY;
+    ctx2.beginPath();
+    ctx2.arc(vX, vY, radius, 0, 2 * Math.PI);
+    ctx2.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+    ctx2.fill();
+    ctx2.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+    ctx2.lineWidth = 1;
+    ctx2.stroke();
+  };
+  draw.SetPosition = function(x, y) {
+    draw.positionOffset.x = wide / 2 - x;
+    draw.positionOffset.y = y - high / 2;
+  };
+  draw.context = ctx;
+  return draw;
+}
+function RAF(callback) {
+  let lastTime = 0;
+  let totalTime = 0;
+  let frameCount = 0;
+  let lastFpsUpdateTime = 0;
+  let currentFps = 0;
+  function update(currentTime) {
+    requestAnimationFrame(update);
+    if (lastTime === 0) {
+      lastTime = currentTime;
+    }
+    const deltaTime = Math.min((currentTime - lastTime) / 1e3, 1 / 10);
+    lastTime = currentTime;
+    totalTime += deltaTime;
+    callback(deltaTime, totalTime, currentFps);
+    frameCount++;
+    if (currentTime - lastFpsUpdateTime >= 1e3) {
+      currentFps = Math.round(frameCount * 1e3 / (currentTime - lastFpsUpdateTime));
+      frameCount = 0;
+      lastFpsUpdateTime = currentTime;
+    }
+  }
+  requestAnimationFrame(update);
+}
+function loadPNGImage(imageUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = (event) => {
+      const errorDetails = {
+        message: "Failed to load image",
+        url: imageUrl,
+        event
+      };
+      reject(new Error(JSON.stringify(errorDetails, null, 2)));
+    };
+    img.src = imageUrl;
+  });
+}
+function AttachImage(worldId, bodyId, path, imgName, drawOffset = null, drawScale = null, sourcePosition = null, sourceSize = null) {
+  const world = b2GetWorldFromId(worldId);
+  const shapes = [];
+  b2Body_GetShapes(bodyId, shapes);
+  const shape = world.shapeArray[shapes[shapes.length - 1].index1 - 1];
+  shape.imageOffset = drawOffset;
+  shape.imageScale = drawScale;
+  shape.imageRect = new b2AABB(sourcePosition.x, sourcePosition.y, sourceSize.x, sourceSize.y);
+  const fullPath = path + "/" + imgName;
+  loadPNGImage(fullPath).then((loadedImage) => {
+    shape.image = loadedImage;
+  }).catch((error) => {
+  });
+  return shape;
+}
+function getMousePosUV(canvas, ps) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    u: (ps.x - rect.left) / rect.width,
+    v: 1 - (ps.y - rect.top) / rect.height
+  };
+}
+function ConvertScreenToWorld(canvas, drawScale, ps) {
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+  let uv = getMousePosUV(canvas, ps);
+  var ratio = w / h;
+  var center = new b2Vec2(0, 0);
+  var zoom = h / 2 / drawScale;
+  var extents = new b2Vec2(zoom * ratio, zoom);
+  var lower = b2Sub(center, extents);
+  var upper = b2Add(center, extents);
+  var pw = new b2Vec2((1 - uv.u) * lower.x + uv.u * upper.x, (1 - uv.v) * lower.y + uv.v * upper.y);
+  return pw;
+}
+function ConvertWorldToScreen(canvas, drawScale, pw) {
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+  var ratio = w / h;
+  var center = new b2Vec2(0, 0);
+  var zoom = h / 2 / drawScale;
+  var extents = new b2Vec2(zoom * ratio, zoom);
+  var lower = b2Sub(center, extents);
+  var upper = b2Add(center, extents);
+  var u = (pw.x - lower.x) / (upper.x - lower.x);
+  var v = (pw.y - lower.y) / (upper.y - lower.y);
+  var ps = new b2Vec2(u * w, v * h);
+  return ps;
+}
+
+// src/ragdoll.js
+var JointedBone = class {
+  constructor() {
+    this.bodyId = null;
+    this.jointId = null;
+    this.frictionScale = 1;
+    this.parentIndex = -1;
+    this.name = "";
+  }
+};
+var Skeletons = class {
+  static HumanBones = {
+    e_hip: 0,
+    e_torso: 1,
+    e_head: 2,
+    e_upperLeftLeg: 3,
+    e_lowerLeftLeg: 4,
+    e_upperRightLeg: 5,
+    e_lowerRightLeg: 6,
+    e_upperLeftArm: 7,
+    e_lowerLeftArm: 8,
+    e_upperRightArm: 9,
+    e_lowerRightArm: 10,
+    e_count: 11
+  };
+  static sideViewHuman11 = {
+    BONE_DATA: [
+      { name: "hip", parentIndex: -1, position: [0, 0.95], capsule: { center1: [0, -0.02], center2: [0, 0.02], radius: 0.095 } },
+      { name: "torso", parentIndex: 0, position: [0, 1.2], capsule: { center1: [0, -0.135], center2: [0, 0.135], radius: 0.09 }, frictionScale: 0.5 },
+      { name: "head", parentIndex: 1, position: [0, 1.5], capsule: { center1: [0, -0.0325], center2: [0, 0.0325], radius: 0.08 }, frictionScale: 0.25, linearDamping: 0.1 },
+      { name: "upperLeftLeg", parentIndex: 0, position: [0, 0.775], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.06 } },
+      { name: "lowerLeftLeg", parentIndex: 3, position: [0, 0.475], capsule: { center1: [0, -0.14], center2: [0, 0.125], radius: 0.05 }, frictionScale: 0.5, foot: "right" },
+      { name: "upperRightLeg", parentIndex: 0, position: [0, 0.775], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.06 } },
+      { name: "lowerRightLeg", parentIndex: 5, position: [0, 0.475], capsule: { center1: [0, -0.14], center2: [0, 0.125], radius: 0.05 }, frictionScale: 0.5, foot: "right" },
+      { name: "upperLeftArm", parentIndex: 1, position: [0, 1.225], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.035 }, frictionScale: 0.5 },
+      { name: "lowerLeftArm", parentIndex: 7, position: [0, 0.975], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.03 }, frictionScale: 0.1, linearDamping: 0.1 },
+      { name: "upperRightArm", parentIndex: 1, position: [0, 1.225], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.035 }, frictionScale: 0.5 },
+      { name: "lowerRightArm", parentIndex: 9, position: [0, 0.975], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.03 }, frictionScale: 0.1, linearDamping: 0.1 }
+    ],
+    JOINT_DATA: [
+      { boneName: "torso", pivot: [0, 1], limits: [-0.25 * Math.PI, 0] },
+      { boneName: "head", pivot: [0, 1.4], limits: [-0.3 * Math.PI, 0.1 * Math.PI] },
+      { boneName: "upperLeftLeg", pivot: [0, 0.9], limits: [-0.05 * Math.PI, 0.4 * Math.PI] },
+      { boneName: "lowerLeftLeg", pivot: [0, 0.625], limits: [-0.5 * Math.PI, -0.02 * Math.PI] },
+      { boneName: "upperRightLeg", pivot: [0, 0.9], limits: [-0.05 * Math.PI, 0.4 * Math.PI] },
+      { boneName: "lowerRightLeg", pivot: [0, 0.625], limits: [-0.5 * Math.PI, -0.02 * Math.PI] },
+      { boneName: "upperLeftArm", pivot: [0, 1.35], limits: [-0.1 * Math.PI, 0.8 * Math.PI] },
+      { boneName: "lowerLeftArm", pivot: [0, 1.1], limits: [0.01 * Math.PI, 0.5 * Math.PI] },
+      { boneName: "upperRightArm", pivot: [0, 1.35], limits: null },
+      { boneName: "lowerRightArm", pivot: [0, 1.1], limits: [0.01 * Math.PI, 0.5 * Math.PI] }
+    ]
+  };
+  static frontViewHuman11 = {
+    BONE_DATA: [
+      { name: "hip", parentIndex: -1, position: [0, 0.95], capsule: { center1: [-0.03, 0], center2: [0.03, 0], radius: 0.095 } },
+      { name: "torso", parentIndex: 0, position: [0, 1.2], capsule: { center1: [0, -0.135], center2: [0, 0.135], radius: 0.09 }, frictionScale: 0.5 },
+      { name: "head", parentIndex: 1, position: [0, 1.5], capsule: { center1: [0, -0.0325], center2: [0, 0.0325], radius: 0.08 }, frictionScale: 0.25, linearDamping: 0.1 },
+      { name: "upperLeftLeg", parentIndex: 0, position: [-0.1, 0.775], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.06 } },
+      { name: "lowerLeftLeg", parentIndex: 3, position: [-0.1, 0.475], capsule: { center1: [0, -0.14], center2: [0, 0.125], radius: 0.05 }, frictionScale: 0.5, foot: "left" },
+      { name: "upperRightLeg", parentIndex: 0, position: [0.1, 0.775], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.06 } },
+      { name: "lowerRightLeg", parentIndex: 5, position: [0.1, 0.475], capsule: { center1: [0, -0.14], center2: [0, 0.125], radius: 0.05 }, frictionScale: 0.5, foot: "right" },
+      { name: "upperLeftArm", parentIndex: 1, position: [-0.15, 1.22], capsule: { center1: [0, -0.125], center2: [0.05, 0.125], radius: 0.035 }, frictionScale: 0.5 },
+      { name: "lowerLeftArm", parentIndex: 7, position: [-0.15, 0.97], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.03 }, frictionScale: 0.1, linearDamping: 0.1 },
+      { name: "upperRightArm", parentIndex: 1, position: [0.15, 1.22], capsule: { center1: [0, -0.125], center2: [-0.05, 0.125], radius: 0.035 }, frictionScale: 0.5 },
+      { name: "lowerRightArm", parentIndex: 9, position: [0.15, 0.97], capsule: { center1: [0, -0.125], center2: [0, 0.125], radius: 0.03 }, frictionScale: 0.1, linearDamping: 0.1 }
+    ],
+    JOINT_DATA: [
+      { boneName: "torso", pivot: [0, 1], limits: [-0.1 * Math.PI, 0.1 * Math.PI] },
+      { boneName: "head", pivot: [0, 1.4], limits: [-0.2 * Math.PI, 0.2 * Math.PI] },
+      { boneName: "upperLeftLeg", pivot: [-0.1, 0.9], limits: [-0.3 * Math.PI, 0.1 * Math.PI] },
+      { boneName: "lowerLeftLeg", pivot: [-0.1, 0.625], limits: [0, 0.5 * Math.PI] },
+      { boneName: "upperRightLeg", pivot: [0.1, 0.9], limits: [-0.1 * Math.PI, 0.3 * Math.PI] },
+      { boneName: "lowerRightLeg", pivot: [0.1, 0.625], limits: [-0.5 * Math.PI, 0] },
+      { boneName: "upperLeftArm", pivot: [-0.12, 1.35], limits: [-0.7 * Math.PI, 0.1 * Math.PI] },
+      { boneName: "lowerLeftArm", pivot: [-0.16, 1.1], limits: [0, 0.75 * Math.PI] },
+      { boneName: "upperRightArm", pivot: [0.12, 1.35], limits: [-0.1 * Math.PI, 0.7 * Math.PI] },
+      { boneName: "lowerRightArm", pivot: [0.14, 1.1], limits: [0, 0.75 * Math.PI] }
+    ]
+  };
+  static ElephantBones = {
+    e_torso: 0,
+    e_head: 1,
+    e_trunkBase: 2,
+    e_trunkMid: 3,
+    e_trunkTip: 4,
+    e_upperFrontLegL: 5,
+    e_lowerFrontLegL: 6,
+    e_upperRearLegL: 7,
+    e_lowerRearLegL: 8,
+    e_tail: 9,
+    e_ear: 10,
+    e_count: 11
+  };
+  static sideViewElephant = {
+    BONE_DATA: [
+      { name: "torso", parentIndex: -1, position: [0, 1.5], capsule: { center1: [0.8, 0], center2: [-0.8, 0], radius: 0.6 }, frictionScale: 0.5 },
+      { name: "head", parentIndex: 0, position: [-1.4, 2.2], capsule: { center1: [0.3, 0], center2: [-0.3, 0], radius: 0.35 }, frictionScale: 0.25, linearDamping: 0.1 },
+      { name: "trunkBase", parentIndex: 1, position: [-1.95, 1.85], capsule: { center1: [0, -0.2], center2: [0, 0.2], radius: 0.15 } },
+      { name: "trunkMid", parentIndex: 2, position: [-1.95, 1.4], capsule: { center1: [0, -0.2], center2: [0, 0.2], radius: 0.12 } },
+      { name: "trunkTip", parentIndex: 3, position: [-1.95, 1.05], capsule: { center1: [0, -0.2], center2: [0, 0.2], radius: 0.08 }, frictionScale: 0.1, linearDamping: 0.1 },
+      { name: "upperFrontLeg", parentIndex: 0, position: [-0.6, 0.8], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.2 } },
+      { name: "lowerFrontLeg", parentIndex: 5, position: [-0.6, 0.2], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.18 }, frictionScale: 0.5 },
+      { name: "upperBackLeg", parentIndex: 0, position: [0.7, 0.8], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.22 } },
+      { name: "lowerBackLeg", parentIndex: 7, position: [0.7, 0.2], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.2 }, frictionScale: 0.5 },
+      { name: "tail", parentIndex: 0, position: [1.2, 1.6], capsule: { center1: [0, -0.3], center2: [0, 0.3], radius: 0.05 }, frictionScale: 0.1, linearDamping: 0.1 },
+      { name: "ear", parentIndex: 1, position: [-1.1, 2], capsule: { center1: [0, -0.15], center2: [0, 0.15], radius: 0.3 }, frictionScale: 0.1, linearDamping: 0.1 }
+    ],
+    JOINT_DATA: [
+      { boneName: "head", pivot: [-1, 2], limits: [-0.1 * Math.PI, 0.3 * Math.PI] },
+      { boneName: "trunkBase", pivot: [-1.95, 2], limits: [-0.5 * Math.PI, 0.5 * Math.PI] },
+      { boneName: "trunkMid", pivot: [-1.95, 1.55], limits: [-0.7 * Math.PI, 0.7 * Math.PI] },
+      { boneName: "trunkTip", pivot: [-1.95, 1.15], limits: [-0.9 * Math.PI, 0.9 * Math.PI] },
+      { boneName: "upperFrontLeg", pivot: [-0.6, 1.1], limits: [-0.2 * Math.PI, 0.2 * Math.PI] },
+      { boneName: "lowerFrontLeg", pivot: [-0.6, 0.5], limits: [-0.3 * Math.PI, 0.1 * Math.PI] },
+      { boneName: "upperBackLeg", pivot: [0.7, 1.1], limits: [-0.2 * Math.PI, 0.2 * Math.PI] },
+      { boneName: "lowerBackLeg", pivot: [0.7, 0.5], limits: [-0.1 * Math.PI, 0.3 * Math.PI] },
+      { boneName: "tail", pivot: [1.2, 1.9], limits: [-0.4 * Math.PI, 0.4 * Math.PI] },
+      { boneName: "ear", pivot: [-1.1, 2.2], limits: [-0.3 * Math.PI, 0.9 * Math.PI] }
+    ]
+  };
+};
+var Ragdoll = class {
+  constructor(skeleton, x, y, worldId, groupIndex, color, size = 2) {
+    this.skeleton = skeleton;
+    this.position = new b2Vec2(x, y);
+    this.worldId = worldId;
+    this.groupIndex = groupIndex;
+    this.color = color;
+    this.m_scale = size;
+    this.frictionTorque = 0.05;
+    this.hertz = 0;
+    this.dampingRatio = 0.5;
+    this.jointDrawSize = 0.5;
+    this.maxTorque = this.frictionTorque * this.m_scale;
+    this.m_bones = [];
+    this.create();
+  }
+  createBone(boneData) {
+    const { bodyId } = CreateCapsule({
+      worldId: this.worldId,
+      position: b2Add(new b2Vec2(boneData.position[0] * this.m_scale, boneData.position[1] * this.m_scale), this.position),
+      type: b2BodyType.b2_dynamicBody,
+      center1: new b2Vec2(boneData.capsule.center1[0] * this.m_scale, boneData.capsule.center1[1] * this.m_scale),
+      center2: new b2Vec2(boneData.capsule.center2[0] * this.m_scale, boneData.capsule.center2[1] * this.m_scale),
+      radius: boneData.capsule.radius * this.m_scale,
+      density: 1,
+      friction: 0.2,
+      groupIndex: -this.groupIndex,
+      color: this.color
+    });
+    const bone = new JointedBone();
+    bone.name = boneData.name;
+    bone.parentIndex = boneData.parentIndex;
+    bone.frictionScale = boneData.frictionScale || 1;
+    bone.bodyId = bodyId;
+    if (boneData.foot) {
+      const footShapeDef = b2DefaultShapeDef();
+      footShapeDef.density = 1;
+      footShapeDef.friction = 0.2;
+      footShapeDef.filter.groupIndex = -this.groupIndex;
+      footShapeDef.filter.maskBits = 1;
+      footShapeDef.customColor = this.color;
+      const footDir = boneData.foot == "left" ? -1 : 1;
+      const footCapsule = new b2Capsule();
+      footCapsule.center1 = new b2Vec2(footDir * -0.02 * this.m_scale, -0.175 * this.m_scale);
+      footCapsule.center2 = new b2Vec2(footDir * 0.13 * this.m_scale, -0.175 * this.m_scale);
+      footCapsule.radius = 0.03 * this.m_scale;
+      b2CreateCapsuleShape(bodyId, footShapeDef, footCapsule);
+    }
+    return bone;
+  }
+  createJoint(jointData) {
+    const bone = this.m_bones.find((b) => b.name === jointData.boneName);
+    const parentBone = this.m_bones[bone.parentIndex];
+    const pivot = b2Add(new b2Vec2(jointData.pivot[0] * this.m_scale, jointData.pivot[1] * this.m_scale), this.position);
+    const jointDef = new b2RevoluteJointDef();
+    jointDef.bodyIdA = parentBone.bodyId;
+    jointDef.bodyIdB = bone.bodyId;
+    jointDef.localAnchorA = b2Body_GetLocalPoint(jointDef.bodyIdA, pivot);
+    jointDef.localAnchorB = b2Body_GetLocalPoint(jointDef.bodyIdB, pivot);
+    if (jointData.limits) {
+      jointDef.enableLimit = true;
+      jointDef.lowerAngle = jointData.limits[0];
+      jointDef.upperAngle = jointData.limits[1];
+    }
+    jointDef.enableMotor = true;
+    jointDef.maxMotorTorque = bone.frictionScale * this.maxTorque;
+    jointDef.enableSpring = this.hertz > 0;
+    jointDef.hertz = this.hertz;
+    jointDef.dampingRatio = this.dampingRatio;
+    jointDef.drawSize = this.jointDrawSize;
+    return b2CreateRevoluteJoint(this.worldId, jointDef);
+  }
+  create() {
+    this.m_bones = this.skeleton.BONE_DATA.map((boneData) => this.createBone(boneData));
+    this.skeleton.JOINT_DATA.forEach((jointData) => {
+      const bone = this.m_bones.find((b) => b.name === jointData.boneName);
+      bone.jointId = this.createJoint(jointData);
+    });
+    this.m_bones.forEach((bone) => b2Body_SetUserData(bone.bodyId, this));
+    return this;
+  }
+  destroy() {
+    for (let i = 0; i < this.m_bones.length; ++i) {
+      if (this.m_bones[i].jointId) {
+        if (this.m_bones[i].jointId.index1 - 1 != B2_NULL_INDEX) {
+          b2DestroyJoint(this.m_bones[i].jointId);
+          this.m_bones[i].jointId = new b2JointId();
+        }
+      }
+    }
+    for (let i = 0; i < this.m_bones.length; ++i) {
+      if (this.m_bones[i].bodyId.index1 - 1 != B2_NULL_INDEX) {
+        b2DestroyBody(this.m_bones[i].bodyId);
+        this.m_bones[i].bodyId = null;
+      }
+    }
+    this.m_bones = null;
+  }
+};
+
+// src/fun_stuff.js
+function approx(value, variation) {
+  return value + (Math.random() - 0.5) * variation;
+}
+var ActiveBall = class {
+  constructor(id, createdTime) {
+    this.id = id;
+    this.created = createdTime;
+  }
+};
+function shootBall(startPosition, startForce, radius, density, color, worldId) {
+  const bodyDefBall = b2DefaultBodyDef();
+  bodyDefBall.type = b2BodyType.b2_dynamicBody;
+  bodyDefBall.fixedRotation = false;
+  bodyDefBall.position = startPosition.clone();
+  const shapeDefBall = b2DefaultShapeDef();
+  shapeDefBall.density = density;
+  shapeDefBall.friction = 0.05;
+  shapeDefBall.restitution = 0.5;
+  shapeDefBall.customColor = color;
+  const ballId = b2CreateBody(worldId, bodyDefBall);
+  const ball = new b2Circle();
+  ball.center = new b2Vec2(0, 0);
+  ball.radius = radius;
+  b2CreateCircleShape(ballId, shapeDefBall, ball);
+  const force = new b2Vec2(approx(startForce.x, 400), approx(startForce.y, 1500));
+  b2Body_ApplyForceToCenter(ballId, force, true);
+  return ballId;
+}
+var Gun = class {
+  constructor(position, power, frequency, life, radius, density, color, worldId) {
+    this.worldId = worldId;
+    this.position = position;
+    this.power = power;
+    this.frequency = frequency;
+    this.life = life;
+    this.radius = radius;
+    this.density = density;
+    this.color = color;
+    this.activeBalls = [];
+    this.nextShotTime = this.frequency;
+    this.totalTime = 0;
+  }
+  update(dt) {
+    if (isNaN(dt)) {
+      return;
+    }
+    this.totalTime += dt;
+    this.nextShotTime -= dt;
+    if (this.nextShotTime <= 0) {
+      this.nextShotTime = Math.max(this.nextShotTime + this.frequency, 1 / 240);
+      const ballId = shootBall(this.position, this.power, this.radius, this.density, this.color, this.worldId);
+      const ab = new ActiveBall(ballId, this.totalTime);
+      this.activeBalls.push(ab);
+      b2Body_SetUserData(ballId, ab);
+    }
+    for (let i = this.activeBalls.length - 1; i >= 0; --i) {
+      const ab = this.activeBalls[i];
+      if (this.totalTime - ab.created >= this.life) {
+        this.destroyBall(ab);
+      }
+    }
+  }
+  destroyBall(ab) {
+    const i = this.activeBalls.indexOf(ab);
+    if (i != -1) {
+      b2DestroyBody(ab.id);
+      this.activeBalls.splice(i, 1);
+      return true;
+    }
+    return false;
+  }
+};
+var Spinner = class {
+  constructor(position, torque, speed, color, size = 1, worldId) {
+    const bodyDefBall = b2DefaultBodyDef();
+    bodyDefBall.type = b2BodyType.b2_staticBody;
+    bodyDefBall.position = position;
+    const ballId = b2CreateBody(worldId, bodyDefBall);
+    const ball = new b2Circle();
+    ball.center = new b2Vec2(0, 0);
+    ball.radius = 2 * size;
+    const shapeDefBall = b2DefaultShapeDef();
+    shapeDefBall.density = 1;
+    shapeDefBall.friction = 0.05;
+    shapeDefBall.filter.maskBits = 0;
+    shapeDefBall.customColor = color;
+    b2CreateCircleShape(ballId, shapeDefBall, ball);
+    const paddleDef = b2DefaultBodyDef();
+    paddleDef.type = b2BodyType.b2_dynamicBody;
+    paddleDef.position = position;
+    paddleDef.fixedRotation = false;
+    const boxId = b2CreateBody(worldId, paddleDef);
+    const dynamicBox = b2MakeBox(12 * size, 0.5 * size);
+    const shapeDefBox = b2DefaultShapeDef();
+    shapeDefBox.density = 5;
+    shapeDefBox.friction = 1;
+    shapeDefBox.customColor = color;
+    b2CreatePolygonShape(boxId, shapeDefBox, dynamicBox);
+    const jointDef = b2DefaultRevoluteJointDef();
+    jointDef.bodyIdA = boxId;
+    jointDef.bodyIdB = ballId;
+    jointDef.localAnchorA = new b2Vec2(0, 0);
+    jointDef.localAnchorB = new b2Vec2(0, 0);
+    jointDef.enableMotor = true;
+    jointDef.motorSpeed = speed;
+    jointDef.maxMotorTorque = torque;
+    b2CreateRevoluteJoint(worldId, jointDef);
+  }
+};
+
+// src/main.js
 var STATIC = 0;
 var KINEMATIC = 1;
-var DYNAMIC2 = 2;
+var DYNAMIC = 2;
 export {
+  ActiveBall,
   AddSpriteToWorld,
+  AttachImage,
   B2_ID_EQUALS,
   B2_IS_NON_NULL,
   B2_IS_NULL,
   B2_NULL_INDEX,
   BodyToSprite,
   ClearWorldSprites,
+  ConvertScreenToWorld,
+  ConvertWorldToScreen,
   CreateBoxPolygon,
   CreateCapsule,
   CreateChain,
   CreateCircle,
+  CreateDebugDraw,
   CreateDistanceJoint,
   CreateMotorJoint,
   CreateMouseJoint,
@@ -16219,16 +16779,19 @@ export {
   CreateWeldJoint,
   CreateWheelJoint,
   CreateWorld,
-  DYNAMIC2 as DYNAMIC,
+  DYNAMIC,
   GetBodyFromSprite,
   GetWorldScale,
+  Gun,
   KINEMATIC,
+  RAF,
   Ragdoll,
   RemoveSpriteFromWorld,
   RotFromRad,
   STATIC,
   SetWorldScale,
   Skeletons,
+  Spinner,
   SpriteToBox,
   SpriteToCircle,
   UpdateWorldSprites,
@@ -16707,3 +17270,4 @@ export {
   pxm,
   pxmVec2
 };
+//# sourceMappingURL=PhaserBox2D-Render.js.map
