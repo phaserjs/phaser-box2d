@@ -24,6 +24,12 @@ There are plenty of ports of Box2D to JavaScript, so why did we create another o
 
 Version 3 introduces several significant improvements that justify the upgrade. The new Soft Step Solver demonstrates markedly increased stability compared to version 2 — an improvement acknowledged by the Box2D author himself. Additional enhancements include superior precision, extensively redesigned joint mechanics, and the introduction of capsule-based physics bodies. Perhaps most significantly, the speculative collision system has been completely reconstructed, eliminating polygon gaps, minimizing performance impact, and adding Bullet physics support. The Continuous Collision Detection (CCD) implementation in version 3 is particularly refined. The lack of these substantial improvements in v2 warranted the conversion.
 
+It was important to us that we kept our conversion of Box2D within JavaScript. Modern browser VMs are so incredibly powerful you can easily have thousands of bodies flying around your world. It also allows you to easily integrate it into any front-end bundler you like, takes up less than 70KB (min+gz), will run client-side or server-side and is easy for developers to contribute back to the source.
+
+## Does this only work with Phaser?
+
+No. This library is entirely standalone and runs self-contained on the client or server. We include helper functions for integration with the [Phaser game framework](https://phaser.io) and lots of examples demonstrating use, they are optional.
+
 ## Getting Started
 
 There is an extensive Getting Started Guide.
