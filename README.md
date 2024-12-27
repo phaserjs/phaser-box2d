@@ -12,15 +12,33 @@ This repository contains the complete Phaser Box2D library, along with:
 
 See https://phaser.io/box2d for details about Phaser Box2D.
 
+Need support? Join our Box2D channel in the [Phaser Discord](https://discord.gg/phaser).
+
 ## 50+ Free Box2D Source Code Examples
 
 We've put together a comprehensive package of over 50 Phaser Box2D examples. These showcase all kinds of features, from complete mini-games to Phaser sprite integration. You can download these for free at https://phaser.io/account/downloads#box2d (requires free Phaser account)
+
+## Why another Box2D port?
+
+There are plenty of ports of Box2D to JavaScript, so why did we create another one? The main reason is because on August 12th 2024 Box2D version 3.0 was released. This is was a brand-new version and is the one that we converted. The others available are ports based on the old version 2.
+
+Version 3 introduces several significant improvements that justify the upgrade. The new Soft Step Solver demonstrates markedly increased stability compared to version 2 — an improvement acknowledged by the Box2D author himself. Additional enhancements include superior precision, extensively redesigned joint mechanics, and the introduction of capsule-based physics bodies. Perhaps most significantly, the speculative collision system has been completely reconstructed, eliminating polygon gaps, minimizing performance impact, and adding Bullet physics support. The Continuous Collision Detection (CCD) implementation in version 3 is particularly refined. The lack of these substantial improvements in v2 warranted the conversion.
 
 ## Getting Started
 
 There is an extensive Getting Started Guide.
 
 You can find this in the `getting-started` folder. Please start here! There's lots of information and handy things to learn.
+
+## npm
+
+You can download Phaser Box2D from npm:
+
+```bash
+npm i phaser-box2d
+```
+
+https://www.npmjs.com/package/phaser-box2d
 
 ## How to run the API Docs
 
