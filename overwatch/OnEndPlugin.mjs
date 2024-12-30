@@ -6,6 +6,7 @@ import { filesize } from 'filesize';
 import fs from 'fs';
 import { gzipSizeSync } from 'gzip-size';
 import { minify } from 'terser';
+import path from 'path';
 
 export const OnEndPlugin = {
     name: 'on-end',
@@ -59,6 +60,19 @@ export const OnEndPlugin = {
             }));
 
             await AddLicense(pathJS);
+
+            const targetDir = `..${path.sep}box2d-examples${path.sep}examples${path.sep}lib`;
+
+            if (fs.existsSync(targetDir))
+            {
+                fs.copyFileSync(pathJS, `${targetDir}${path.sep}PhaserBox2D.js`);
+                fs.copyFileSync(`${pathJS}.map`, `${targetDir}${path.sep}PhaserBox2D.js.map`);
+                // console.log(`Copied to: ${targetDir}`);
+            }
+            else
+            {
+                // console.log(`Target directory does not exist: ${targetDir}`);
+            }
 
         });
     }
