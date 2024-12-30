@@ -7,7 +7,7 @@
 
 import { b2GetLengthAndNormalize } from '../math_functions_c.js';
 
-export const b2_pi = 3.14159265359;
+export const B2_PI = 3.14159265359;
 export const eps = 1.0e-10;
 export const epsSqr = eps * eps;
 
@@ -896,13 +896,13 @@ function b2RelativeAngle(b, a)
  */
 function b2UnwindAngle(angle)
 {
-    if (angle < -b2_pi)
+    if (angle < -B2_PI)
     {
-        return angle + 2 * b2_pi;
+        return angle + 2 * B2_PI;
     }
-    else if (angle > b2_pi)
+    else if (angle > B2_PI)
     {
-        return angle - 2 * b2_pi;
+        return angle - 2 * B2_PI;
     }
 
     return angle;

@@ -6,6 +6,7 @@
  */
 
 import {
+    B2_PI,
     b2Add,
     b2ClampFloat,
     b2Cross,
@@ -21,8 +22,7 @@ import {
     b2RotateVector,
     b2Sub,
     b2UnwindAngle,
-    b2Vec2,
-    b2_pi
+    b2Vec2
 } from './include/math_functions_h.js';
 
 import { B2_NULL_INDEX } from './include/core_h.js';
@@ -80,7 +80,7 @@ export function b2MotorJoint_GetLinearOffset(jointId)
 export function b2MotorJoint_SetAngularOffset(jointId, angularOffset)
 {
     const joint = b2GetJointSimCheckType(jointId, b2JointType.b2_motorJoint);
-    joint.motorJoint.angularOffset = b2ClampFloat(angularOffset, -b2_pi, b2_pi);
+    joint.motorJoint.angularOffset = b2ClampFloat(angularOffset, -B2_PI, B2_PI);
 }
 
 /**

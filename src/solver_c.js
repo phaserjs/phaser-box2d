@@ -14,8 +14,8 @@ import * as joint_h from './include/joint_h.js';
 import * as shape_h from './include/shape_h.js';
 
 import { B2_NULL_INDEX, b2_graphColorCount } from './include/core_h.js';
-import { B2_PROXY_ID, B2_PROXY_TYPE, b2BroadPhase_EnlargeProxy, b2BufferMove } from './include/broad_phase_h.js';
 import {
+    B2_PI,
     b2AABB,
     b2AABB_Contains,
     b2AABB_Union,
@@ -33,9 +33,9 @@ import {
     b2Transform,
     b2TransformPoint,
     b2TransformPointOut,
-    b2Vec2,
-    b2_pi
+    b2Vec2
 } from './include/math_functions_h.js';
+import { B2_PROXY_ID, B2_PROXY_TYPE, b2BroadPhase_EnlargeProxy, b2BufferMove } from './include/broad_phase_h.js';
 import { b2AllocateStackItem, b2FreeStackItem } from './include/stack_allocator_h.js';
 import { b2BodyId, b2ShapeId } from './include/id_h.js';
 import { b2BodyMoveEvent, b2BodyType, b2ContactHitEvent, b2ShapeType } from './include/types_h.js';
@@ -169,7 +169,7 @@ export function b2MakeSoft(hertz, zeta, h)
         return new b2Softness(0.0, 1.0, 0.0);
     }
 
-    const omega = 2.0 * b2_pi * hertz;
+    const omega = 2.0 * B2_PI * hertz;
     const a1 = 2.0 * zeta + h * omega;
     const a2 = h * omega * a1;
     const a3 = 1.0 / (1.0 + a2);
