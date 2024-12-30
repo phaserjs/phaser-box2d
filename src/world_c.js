@@ -5,6 +5,7 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
+import { B2_DEFAULT_MASK_BITS, b2DistanceInput, b2RayCastInput, b2ShapeCastInput } from './include/collision_h.js';
 import { B2_NULL_INDEX, b2_graphColorCount, b2_linearSlop } from './include/core_h.js';
 import { B2_PROXY_TYPE, b2BroadPhase, b2BroadPhase_RebuildTrees, b2CreateBroadPhase, b2DestroyBroadPhase, b2UpdateBroadPhasePairs } from './include/broad_phase_h.js';
 import {
@@ -54,7 +55,6 @@ import { b2ConstraintGraph, b2CreateGraph, b2DestroyGraph, b2_overflowIndex } fr
 import { b2Contact, b2ContactFlags, b2ContactSimFlags, b2DestroyContact, b2GetContactSim, b2InitializeContactRegisters, b2UpdateContact } from './include/contact_h.js';
 import { b2CreateStackAllocator, b2DestroyStackAllocator, b2GetStackAllocation, b2StackAllocator } from './include/stack_allocator_h.js';
 import { b2DestroySolverSet, b2SolverSet, b2WakeSolverSet } from './include/solver_set_h.js';
-import { b2DistanceInput, b2RayCastInput, b2ShapeCastInput, b2_defaultMaskBits } from './include/collision_h.js';
 import { b2DrawJoint, b2GetJointSim } from './include/joint_h.js';
 import { b2DynamicTree_Query, b2DynamicTree_RayCast, b2DynamicTree_ShapeCast } from './include/dynamic_tree_h.js';
 import { b2GetBody, b2GetBodySim, b2GetBodyTransformQuick, b2WakeBody } from './include/body_h.js';
@@ -1233,7 +1233,7 @@ function b2DrawWithBounds(world, draw)
 
     for (let i = 0; i < b2BodyType.b2_bodyTypeCount; ++i)
     {
-        b2DynamicTree_Query(world.broadPhase.trees[i], draw.drawingBounds, b2_defaultMaskBits, DrawQueryCallback,
+        b2DynamicTree_Query(world.broadPhase.trees[i], draw.drawingBounds, B2_DEFAULT_MASK_BITS, DrawQueryCallback,
             drawContext);
     }
 
@@ -3019,7 +3019,7 @@ export function b2World_Explode(worldId, position, radius, magnitude)
     b2DynamicTree_Query(
         world.broadPhase.trees[b2BodyType.b2_dynamicBody],
         aabb,
-        b2_defaultMaskBits,
+        B2_DEFAULT_MASK_BITS,
         ExplosionCallback,
         explosionContext
     );

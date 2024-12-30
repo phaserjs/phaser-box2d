@@ -13,6 +13,7 @@ import * as core_h from './include/core_h.js';
 import * as joint_h from './include/joint_h.js';
 import * as shape_h from './include/shape_h.js';
 
+import { B2_DEFAULT_MASK_BITS, b2Manifold, b2Sweep, b2TOIInput } from './include/collision_h.js';
 import { B2_NULL_INDEX, b2_graphColorCount } from './include/core_h.js';
 import {
     B2_PI,
@@ -42,7 +43,6 @@ import { b2BodyMoveEvent, b2BodyType, b2ContactHitEvent, b2ShapeType } from './i
 import { b2ContactSimFlags, b2ShouldShapesCollide } from './include/contact_h.js';
 import { b2DynamicTree_EnlargeProxy, b2DynamicTree_Query } from './include/dynamic_tree_h.js';
 import { b2GetSweepTransform, b2MakeProxy, b2TimeOfImpact } from './include/distance_h.js';
-import { b2Manifold, b2Sweep, b2TOIInput, b2_defaultMaskBits } from './include/collision_h.js';
 import { b2MergeAwakeIslands, b2SplitIsland } from './include/island_h.js';
 import { b2SetType, b2ValidateSolverSets, b2_maxWorkers } from './include/world_h.js';
 
@@ -869,12 +869,12 @@ export function b2SolveContinuous(world, bodySimIndex)
             continue;
         }
 
-        b2DynamicTree_Query(staticTree, box, b2_defaultMaskBits, b2ContinuousQueryCallback, context);
+        b2DynamicTree_Query(staticTree, box, B2_DEFAULT_MASK_BITS, b2ContinuousQueryCallback, context);
 
         if (isBullet)
         {
-            b2DynamicTree_Query(kinematicTree, box, b2_defaultMaskBits, b2ContinuousQueryCallback, context);
-            b2DynamicTree_Query(dynamicTree, box, b2_defaultMaskBits, b2ContinuousQueryCallback, context);
+            b2DynamicTree_Query(kinematicTree, box, B2_DEFAULT_MASK_BITS, b2ContinuousQueryCallback, context);
+            b2DynamicTree_Query(dynamicTree, box, B2_DEFAULT_MASK_BITS, b2ContinuousQueryCallback, context);
         }
     }
 
