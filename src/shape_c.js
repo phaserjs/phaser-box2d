@@ -773,6 +773,9 @@ export function b2ComputeShapeExtent(shape, localCenter)
     return extent;
 }
 
+const rayPoint = new b2Vec2(0, 0);
+const rayNormal = new b2Vec2(0, 1);
+
 export function b2RayCastShape(input, shape, transform)
 {
     const localInput = input;
@@ -1063,7 +1066,7 @@ export function b2Shape_RayCast(shapeId, origin, translation)
     input.origin = b2InvTransformPoint(transform, origin);
     input.translation = b2InvRotateVector(transform.q, translation);
 
-    let output = new b2CastOutput();
+    let output = new b2CastOutput(rayNormal, rayPoint);
 
     switch (shape.type)
     {

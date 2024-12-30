@@ -676,6 +676,9 @@ export function b2ShapeDistance(cache, input, simplexes, simplexCapacity)
     return output;
 }
 
+const rayPoint = new b2Vec2(0, 0);
+const rayNormal = new b2Vec2(0, 1);
+
 /**
  * @function b2ShapeCast
  * @summary Performs a shape cast between two convex shapes to detect collision.
@@ -700,7 +703,7 @@ export function b2ShapeDistance(cache, input, simplexes, simplexCapacity)
  */
 export function b2ShapeCast(input)
 {
-    const output = new b2CastOutput();
+    const output = new b2CastOutput(rayNormal, rayPoint);
     output.fraction = input.maxFraction;
 
     const proxyA = input.proxyA;

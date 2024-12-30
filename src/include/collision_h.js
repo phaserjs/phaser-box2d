@@ -65,10 +65,10 @@ export class b2ShapeCastInput
  */
 export class b2CastOutput
 {
-    constructor()
+    constructor(normal = null, point = null)
     {
-        this.normal = null;   // new b2Vec2(0,0);
-        this.point = null;   // new b2Vec2(0,0);
+        this.normal = normal;   // new b2Vec2(0,0);
+        this.point = point;   // new b2Vec2(0,0);
         this.fraction = 0;
         this.iterations = 0;
         this.hit = false;

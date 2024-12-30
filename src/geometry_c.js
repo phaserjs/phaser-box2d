@@ -737,6 +737,9 @@ export function b2PointInPolygon(point, shape)
     return output.distance <= shape.radius;
 }
 
+const rayPoint = new b2Vec2(0, 0);
+const rayNormal = new b2Vec2(0, 1);
+
 /**
  * @function b2RayCastCircle
  * @summary Performs a ray cast against a circle shape.
@@ -762,7 +765,7 @@ export function b2RayCastCircle(input, shape)
 
     const p = shape.center.clone();
 
-    const output = new b2CastOutput();
+    const output = new b2CastOutput(rayNormal, rayPoint);
 
     // Shift ray so circle center is the origin
     const s = b2Sub(input.origin, p);
@@ -838,7 +841,7 @@ export function b2RayCastCapsule(input, shape)
 {
     console.assert(b2IsValidRay(input));
 
-    const output = new b2CastOutput();
+    const output = new b2CastOutput(rayNormal, rayPoint);
 
     const v1 = shape.center1;
     const v2 = shape.center2;
@@ -1005,7 +1008,7 @@ export function b2RayCastSegment(input, shape, oneSided)
 
         if (offset < 0.0)
         {
-            const output = new b2CastOutput();
+            const output = new b2CastOutput(rayNormal, rayPoint);
 
             return output;
         }
@@ -1019,7 +1022,7 @@ export function b2RayCastSegment(input, shape, oneSided)
     const v2 = shape.point2;
     const e = b2Sub(v2, v1);
 
-    const output = new b2CastOutput();
+    const output = new b2CastOutput(rayNormal, rayPoint);
 
     const res = b2GetLengthAndNormalize(e);
     const length = res.length;
@@ -1112,7 +1115,7 @@ export function b2RayCastPolygon(input, shape)
 
         let index = -1;
 
-        const output = new b2CastOutput();
+        const output = new b2CastOutput(rayNormal, rayPoint);
 
         for (let i = 0; i < shape.count; ++i)
         {
