@@ -2,10 +2,8 @@
  * This file includes code that is:
  * 
  * - Copyright 2023 Erin Catto, released under the MIT license.
- * - Copyright 2024 Phaser Studio Inc, released under a commercial use license.
- * 
- * The commercial code provided by Phaser Studio Inc is not for public distribution.
-*/
+ * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
+ */
 
 import { b2AABB, b2Rot, b2Vec2 } from './math_functions_h.js';
 
