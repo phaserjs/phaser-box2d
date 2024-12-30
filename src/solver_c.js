@@ -248,18 +248,19 @@ function b2IntegrateVelocitiesTask(startIndex, endIndex, context)
     }
 }
 
+//  PJB: 19/11/2024 another unused function (SIMD related?)
+
+/**
 function b2PrepareJointsTask(startIndex, endIndex, context)
 {
-    return;
+    const joints = context.joints;
 
-    // PJB: 19/11/2024 another unused function (SIMD related?)
-    // const joints = context.joints;
-
-    // for (let i = startIndex; i < endIndex; ++i) {
-    //     const joint = joints[i];
-    //     joint_h.b2PrepareJoint(joint, context);
-    // }
+    for (let i = startIndex; i < endIndex; ++i) {
+        const joint = joints[i];
+        joint_h.b2PrepareJoint(joint, context);
+    }
 }
+*/
 
 function b2IntegratePositionsTask(startIndex, endIndex, context)
 {
@@ -518,20 +519,23 @@ export function b2SolverTask(workerContext)
 
     if (workerIndex === 0)
     {
-        let bodySyncIndex = 1;
+        // let bodySyncIndex = 1; // un-used except in debugging
         let stageIndex = 0;
 
         b2ExecuteMainStage(stages[stageIndex], context);
         stageIndex += 1;
 
-        let contactSyncIndex = 1;
+        //  unused except for debugging
+        // let contactSyncIndex = 1;
 
         // syncBits = (contactSyncIndex << 16) | stageIndex;
         b2ExecuteMainStage(stages[stageIndex], context);
         stageIndex += 1;
-        contactSyncIndex += 1;
 
-        let graphSyncIndex = 1;
+        // contactSyncIndex += 1;
+
+        //  unused except for debugging
+        // let graphSyncIndex = 1;
 
         joint_h.b2PrepareOverflowJoints(context);
         contact_solver_h.b2PrepareOverflowContacts(context);
@@ -545,7 +549,8 @@ export function b2SolverTask(workerContext)
             // syncBits = (bodySyncIndex << 16) | iterStageIndex;
             b2ExecuteMainStage(stages[iterStageIndex], context);
             iterStageIndex += 1;
-            bodySyncIndex += 1;
+
+            // bodySyncIndex += 1;
 
             joint_h.b2WarmStartOverflowJoints(context);
             contact_solver_h.b2WarmStartOverflowContacts(context);
@@ -556,7 +561,8 @@ export function b2SolverTask(workerContext)
                 b2ExecuteMainStage(stages[iterStageIndex], context);
                 iterStageIndex += 1;
             }
-            graphSyncIndex += 1;
+
+            // graphSyncIndex += 1;
 
             let useBias = true;
             joint_h.b2SolveOverflowJoints(context, useBias);
@@ -568,12 +574,14 @@ export function b2SolverTask(workerContext)
                 b2ExecuteMainStage(stages[iterStageIndex], context);
                 iterStageIndex += 1;
             }
-            graphSyncIndex += 1;
+
+            // graphSyncIndex += 1;
 
             // syncBits = (bodySyncIndex << 16) | iterStageIndex;
             b2ExecuteMainStage(stages[iterStageIndex], context);
             iterStageIndex += 1;
-            bodySyncIndex += 1;
+
+            // bodySyncIndex += 1;
 
             useBias = false;
             joint_h.b2SolveOverflowJoints(context, useBias);
@@ -585,7 +593,8 @@ export function b2SolverTask(workerContext)
                 b2ExecuteMainStage(stages[iterStageIndex], context);
                 iterStageIndex += 1;
             }
-            graphSyncIndex += 1;
+
+            // graphSyncIndex += 1;
         }
 
         stageIndex += 1 + activeColorCount + activeColorCount + 1 + activeColorCount;

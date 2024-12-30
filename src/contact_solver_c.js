@@ -5,8 +5,6 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
-import { b2Manifold, b2ManifoldPoint } from './include/collision_h.js';
-
 import { B2_NULL_INDEX } from './include/core_h.js';
 import { b2BodyState } from './include/body_h.js';
 import { b2SetType } from './include/world_h.js';
@@ -557,78 +555,3 @@ export function b2StoreOverflowImpulses(context)
         }
     }
 }
-
-/*
-export function b2PrepareContactsTask(startIndex, endIndex, context) {
-    return;
-}
-
-const p1 = new b2ManifoldPoint();
-const p2 = new b2ManifoldPoint();
-
-export function b2StoreImpulsesTask(startIndex, endIndex, context) {
-    
-    const contacts = context.contacts;
-    const constraints = context.simdContactConstraints;
-
-    const dummy = new b2Manifold(p1, p2);
-
-    for (let i = startIndex; i < endIndex; ++i) {
-        const c = constraints[i];
-        const normalImpulse1 = [c.normalImpulse1.x, c.normalImpulse1.y, c.normalImpulse1.z, c.normalImpulse1.w];
-        const normalImpulse2 = [c.normalImpulse2.x, c.normalImpulse2.y, c.normalImpulse2.z, c.normalImpulse2.w];
-        const tangentImpulse1 = [c.tangentImpulse1.x, c.tangentImpulse1.y, c.tangentImpulse1.z, c.tangentImpulse1.w];
-        const tangentImpulse2 = [c.tangentImpulse2.x, c.tangentImpulse2.y, c.tangentImpulse2.z, c.tangentImpulse2.w];
-        const maxNormalImpulse1 = [c.maxNormalImpulse1.x, c.maxNormalImpulse1.y, c.maxNormalImpulse1.z, c.maxNormalImpulse1.w];
-        const maxNormalImpulse2 = [c.maxNormalImpulse2.x, c.maxNormalImpulse2.y, c.maxNormalImpulse2.z, c.maxNormalImpulse2.w];
-        const normalVelocity1 = [c.relativeVelocity1.x, c.relativeVelocity1.y, c.relativeVelocity1.z, c.relativeVelocity1.w];
-        const normalVelocity2 = [c.relativeVelocity2.x, c.relativeVelocity2.y, c.relativeVelocity2.z, c.relativeVelocity2.w];
-
-        const base = 4 * i;
-        const m0 = contacts[base + 0] == null ? dummy : contacts[base + 0].manifold;
-        const m1 = contacts[base + 1] == null ? dummy : contacts[base + 1].manifold;
-        const m2 = contacts[base + 2] == null ? dummy : contacts[base + 2].manifold;
-        const m3 = contacts[base + 3] == null ? dummy : contacts[base + 3].manifold;
-
-        m0.points[0].normalImpulse = normalImpulse1[0];
-        m0.points[0].tangentImpulse = tangentImpulse1[0];
-        m0.points[0].maxNormalImpulse = maxNormalImpulse1[0];
-        m0.points[0].normalVelocity = normalVelocity1[0];
-
-        m0.points[1].normalImpulse = normalImpulse2[0];
-        m0.points[1].tangentImpulse = tangentImpulse2[0];
-        m0.points[1].maxNormalImpulse = maxNormalImpulse2[0];
-        m0.points[1].normalVelocity = normalVelocity2[0];
-
-        m1.points[0].normalImpulse = normalImpulse1[1];
-        m1.points[0].tangentImpulse = tangentImpulse1[1];
-        m1.points[0].maxNormalImpulse = maxNormalImpulse1[1];
-        m1.points[0].normalVelocity = normalVelocity1[1];
-
-        m1.points[1].normalImpulse = normalImpulse2[1];
-        m1.points[1].tangentImpulse = tangentImpulse2[1];
-        m1.points[1].maxNormalImpulse = maxNormalImpulse2[1];
-        m1.points[1].normalVelocity = normalVelocity2[1];
-
-        m2.points[0].normalImpulse = normalImpulse1[2];
-        m2.points[0].tangentImpulse = tangentImpulse1[2];
-        m2.points[0].maxNormalImpulse = maxNormalImpulse1[2];
-        m2.points[0].normalVelocity = normalVelocity1[2];
-
-        m2.points[1].normalImpulse = normalImpulse2[2];
-        m2.points[1].tangentImpulse = tangentImpulse2[2];
-        m2.points[1].maxNormalImpulse = maxNormalImpulse2[2];
-        m2.points[1].normalVelocity = normalVelocity2[2];
-
-        m3.points[0].normalImpulse = normalImpulse1[3];
-        m3.points[0].tangentImpulse = tangentImpulse1[3];
-        m3.points[0].maxNormalImpulse = maxNormalImpulse1[3];
-        m3.points[0].normalVelocity = normalVelocity1[3];
-
-        m3.points[1].normalImpulse = normalImpulse2[3];
-        m3.points[1].tangentImpulse = tangentImpulse2[3];
-        m3.points[1].maxNormalImpulse = maxNormalImpulse2[3];
-        m3.points[1].normalVelocity = normalVelocity2[3];
-    }
-}
-*/

@@ -12,7 +12,6 @@ import { b2HexColor, b2JointType } from './include/types_h.js';
 import { B2_NULL_INDEX } from './include/core_h.js';
 import { b2BodyState } from './include/body_h.js';
 import { b2GetJointSimCheckType } from './include/joint_h.js';
-import { b2JointId } from './include/id_h.js';
 import { b2MakeSoft } from './include/solver_h.js';
 
 /**

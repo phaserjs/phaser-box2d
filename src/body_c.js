@@ -10,7 +10,6 @@ import { b2AABB, b2AABB_Contains, b2AABB_Union, b2Add, b2Cross, b2CrossSV, b2Dot
 import { b2AddBodySim, b2AddBodyState, b2RemoveBodySim, b2RemoveBodyState } from './include/block_array_h.js';
 import { b2AllocId, b2FreeId } from './include/id_pool_h.js';
 import { b2BodyId, b2JointId, b2ShapeId } from './include/id_h.js';
-import { b2BodyType, b2ContactData } from './include/types_h.js';
 import { b2ComputeShapeAABB, b2ComputeShapeExtent, b2ComputeShapeMass, b2CreateShapeProxy, b2DestroyShapeProxy } from './include/shape_h.js';
 import { b2ContactFlags, b2DestroyContact, b2GetContactSim } from './include/contact_h.js';
 import { b2CreateIsland, b2DestroyIsland, b2LinkJoint, b2SplitIsland, b2UnlinkJoint, b2ValidateIsland } from './include/island_h.js';
@@ -20,6 +19,7 @@ import { b2GetWorld, b2GetWorldLocked } from './include/world_h.js';
 import { b2GetWorldFromId, b2SetType, b2ValidateConnectivity, b2ValidateSolverSets } from './include/world_h.js';
 
 import { b2Body } from './include/body_h.js';
+import { b2BodyType } from './include/types_h.js';
 import { b2Body_IsValid } from './include/world_h.js';
 import { b2BroadPhase_MoveProxy } from './include/broad_phase_h.js';
 import { b2MassData } from './include/collision_h.js';

@@ -5,12 +5,10 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
-import { B2_MAX_POLYGON_VERTICES, b2Capsule, b2Circle, b2Polygon } from './include/collision_h.js';
-import { DYNAMIC, b2BodyId, b2JointId, b2ShapeId, b2WorldId } from './main.js';
+import { B2_MAX_POLYGON_VERTICES, b2Capsule, b2Circle } from './include/collision_h.js';
 import { b2Add, b2Distance, b2RelativeAngle, b2Rot, b2Transform, b2Vec2 } from './include/math_functions_h.js';
 import
 {
-    b2BodyDef,
     b2BodyType,
     b2DefaultBodyDef,
     b2DefaultShapeDef,
@@ -21,10 +19,8 @@ import
     b2MouseJointDef,
     b2PrismaticJointDef,
     b2RevoluteJointDef,
-    b2ShapeDef,
     b2WeldJointDef,
-    b2WheelJointDef,
-    b2WorldDef
+    b2WheelJointDef
 } from './include/types_h.js';
 import { b2Body_GetRotation, b2Body_GetTransform, b2Body_SetTransform, b2Body_SetUserData, b2CreateBody, b2DestroyBody, b2GetBodyTransform } from './include/body_h.js';
 import { b2CreateCapsuleShape, b2CreateCircleShape, b2CreatePolygonShape } from './include/shape_h.js';
@@ -32,6 +28,7 @@ import { b2CreateDistanceJoint, b2CreateMotorJoint, b2CreateMouseJoint, b2Create
 import { b2CreateWorld, b2CreateWorldArray, b2World_Step } from './include/world_h.js';
 import { b2MakeBox, b2MakeOffsetBox, b2MakeOffsetPolygon, b2MakePolygon } from './include/geometry_h.js';
 
+import { DYNAMIC } from './main.js';
 import { b2ComputeHull } from './include/hull_h.js';
 
 /**

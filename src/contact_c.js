@@ -422,8 +422,7 @@ export function b2DestroyContact(world, contact, wakeBodies)
 
     const flags = contact.flags;
 
-    if ( ( flags & ( b2ContactFlags.b2_contactTouchingFlag | b2ContactFlags.b2_contactSensorTouchingFlag ) ) != 0 &&
-		 ( flags & ( b2ContactFlags.b2_contactEnableContactEvents | b2ContactFlags.b2_contactEnableSensorEvents ) ) != 0 )
+    if ((flags & (b2ContactFlags.b2_contactTouchingFlag | b2ContactFlags.b2_contactSensorTouchingFlag)) != 0 && (flags & (b2ContactFlags.b2_contactEnableContactEvents | b2ContactFlags.b2_contactEnableSensorEvents)) != 0)
     {
         const worldId = world.worldId;
         const shapeA = world.shapeArray[contact.shapeIdA];
@@ -432,14 +431,14 @@ export function b2DestroyContact(world, contact, wakeBodies)
         const shapeIdB = new b2ShapeId(shapeB.id + 1, worldId, shapeB.revision);
 
         // Was touching?
-        if ( ( flags & b2ContactFlags.b2_contactTouchingFlag ) != 0 && ( flags & b2ContactFlags.b2_contactEnableContactEvents ) != 0 )
+        if ((flags & b2ContactFlags.b2_contactTouchingFlag) != 0 && (flags & b2ContactFlags.b2_contactEnableContactEvents) != 0)
         {
             console.assert( ( flags & b2ContactFlags.b2_contactSensorFlag ) == 0 );
             const event = new b2ContactEndTouchEvent(shapeIdA, shapeIdB);
             world.contactEndArray.push(event);
         }
 
-        if ( ( flags & b2ContactFlags.b2_contactSensorTouchingFlag ) != 0 && ( flags & b2ContactFlags.b2_contactEnableSensorEvents ) != 0 )
+        if ((flags & b2ContactFlags.b2_contactSensorTouchingFlag) != 0 && (flags & b2ContactFlags.b2_contactEnableSensorEvents) != 0)
         {
             console.assert( ( flags & b2ContactFlags.b2_contactSensorFlag ) != 0 );
             console.assert( shapeA.isSensor == true || shapeB.isSensor == true );
@@ -457,6 +456,7 @@ export function b2DestroyContact(world, contact, wakeBodies)
                 event.sensorShapeId = shapeIdB;
                 event.visitorShapeId = shapeIdA;
             }
+
             world.sensorEndEventArray.push(event);
         }
     }
