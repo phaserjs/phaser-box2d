@@ -1,6 +1,6 @@
 # Phaser Box2D Change Log
 
-## Version 1.0.1 - December 30th 2024
+## Version 1.1.0 - December 30th 2024
 
 * The `b2CastOutput` function now takes two `b2Vec` instances, `rayPoint` and `rayNormal`. These are now passed in from locally cached values where-ever `b2ShapeCast` is called. This prevents a crash when `b2TransformPoint` is called on the `output.point` which was previously null.
 * Renamed smooth segment to chain segment as per #783 (https://github.com/erincatto/box2d/pull/783)
