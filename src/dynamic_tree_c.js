@@ -18,7 +18,7 @@ import { b2TreeNode } from './include/collision_h.js';
  * @namespace DynamicTree
  */
 
-const b2_treeStackSize = 1024;
+const B2_TREE_STACK_SIZE = 1024;
 
 function b2IsLeaf(node)
 {
@@ -1410,7 +1410,7 @@ export function b2DynamicTree_ShapeCast(tree, input, maskBits, callback, context
 
     const subInput = input;
 
-    const stack = []; // new Array(b2_treeStackSize);
+    const stack = []; // new Array(B2_TREE_STACK_SIZE);
     stack.push(tree.root);
 
     while (stack.length > 0)
@@ -1588,7 +1588,7 @@ function b2BuildTree(tree, leafCount)
         return leafIndices[0];
     }
 
-    const stack = new Array(b2_treeStackSize);
+    const stack = new Array(B2_TREE_STACK_SIZE);
     let top = 0;
 
     stack[0] = {
@@ -1710,7 +1710,7 @@ export function b2DynamicTree_Rebuild(tree)
     }
 
     let leafCount = 0;
-    const stack = [];   // new Array(b2_treeStackSize);
+    const stack = [];   // new Array(B2_TREE_STACK_SIZE);
 
     let nodeIndex = tree.root;
     const nodes = tree.nodes;
