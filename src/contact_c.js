@@ -619,7 +619,7 @@ export function b2UpdateContact(world, contactSim, shapeA, transformA, centerOff
         // Copy the existing manifold for matching just below...
         contactSim.manifold.copyTo(oldManifold);
 
-        // Compute TOI
+        // Compute new manifold
         const fcn = s_registers[shapeA.type][shapeB.type].fcn;
 
         // Re-use the existing manifold

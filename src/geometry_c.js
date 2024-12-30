@@ -797,7 +797,7 @@ export function b2RayCastCircle(input, shape)
         return output;
     }
 
-    // Pythagorus
+    // Pythagoras
     const h = Math.sqrt(rr - cc);
 
     const fraction = t - h;
