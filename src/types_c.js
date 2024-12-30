@@ -85,7 +85,7 @@ export function b2DefaultWorldDef()
  * - fixedRotation: false
  * - isBullet: false
  * - isEnabled: true
- * - automaticMass: true
+ * - updateBodyMass: true
  * - allowFastRotation: false
  */
 export function b2DefaultBodyDef()
@@ -106,7 +106,7 @@ export function b2DefaultBodyDef()
     def.fixedRotation = false;
     def.isBullet = false;
     def.isEnabled = true;
-    def.automaticMass = true;
+    def.updateBodyMass = true;
     def.allowFastRotation = false;
 
     return def;

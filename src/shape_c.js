@@ -215,7 +215,7 @@ export function b2CreateShape(bodyId, def, geometry, shapeType)
 
     const shape = b2CreateShapeInternal(world, body, transform, def, geometry, shapeType);
 
-    if (body.automaticMass === true)
+    if (body.updateBodyMass === true)
     {
         b2UpdateBodyMassData(world, body);
     }
@@ -387,7 +387,7 @@ export function b2DestroyShape(shapeId)
     const body = b2GetBody(world, shape.bodyId);
     b2DestroyShapeInternal(world, shape, body, wakeBodies);
 
-    if (body.automaticMass === true)
+    if (body.updateBodyMass === true)
     {
         b2UpdateBodyMassData(world, body);
     }

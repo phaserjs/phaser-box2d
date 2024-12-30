@@ -112,8 +112,6 @@ export {
     b2Body_SetMassData,
     b2Body_GetMassData,
     b2Body_ApplyMassFromShapes,
-    b2Body_SetAutomaticMass,
-    b2Body_GetAutomaticMass,
     b2Body_SetLinearDamping,
     b2Body_GetLinearDamping,
     b2Body_SetAngularDamping,

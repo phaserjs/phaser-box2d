@@ -1773,47 +1773,6 @@ export function b2Body_ApplyMassFromShapes(bodyId)
 }
 
 /**
- * Sets the automatic mass flag for a body.
- * @function b2Body_SetAutomaticMass
- * @param {Object} bodyId - The identifier object for the body.
- * @param {number} bodyId.world0 - The world identifier component of the body ID.
- * @param {boolean} automaticMass - Flag indicating whether mass should be computed automatically.
- * @returns {void}
- * @description
- * Sets whether the body's mass properties should be automatically computed from its shape.
- * If the world is locked, the function returns without making changes.
- */
-export function b2Body_SetAutomaticMass(bodyId, automaticMass)
-{
-    const world = b2GetWorldLocked(bodyId.world0);
-
-    if (world === null)
-    {
-        return;
-    }
-
-    const body = b2GetBodyFullId(world, bodyId);
-    body.automaticMass = automaticMass;
-}
-
-/**
- * Gets the automatic mass value for a body.
- * @function b2Body_GetAutomaticMass
- * @param {b2BodyId} bodyId - The ID of the body to query.
- * @returns {boolean} The automatic mass setting of the body.
- * @description
- * Returns whether the body's mass is automatically computed from its attached shapes
- * or manually set. When true, the mass is automatically calculated from shapes.
- */
-export function b2Body_GetAutomaticMass(bodyId)
-{
-    const world = b2GetWorld(bodyId.world0);
-    const body = b2GetBodyFullId(world, bodyId);
-
-    return body.automaticMass;
-}
-
-/**
  * Sets the linear damping value for a body.
  * @function b2Body_SetLinearDamping
  * @param {b2BodyId} bodyId - The identifier for the body to modify.

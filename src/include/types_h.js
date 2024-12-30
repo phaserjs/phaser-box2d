@@ -149,7 +149,7 @@ export class b2BodyDef
         this.fixedRotation = false;
         this.isBullet = false;
         this.isEnabled = false;
-        this.automaticMass = false;
+        this.updateBodyMass = false;
         this.allowFastRotation = false;
     }
 }
