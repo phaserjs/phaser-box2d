@@ -38,8 +38,8 @@ import {
 import { b2Capsule, b2CastOutput, b2Circle, b2DistanceCache, b2DistanceInput, b2MassData, b2Polygon, b2ShapeCastPairInput, b2_maxPolygonVertices } from './include/collision_h.js';
 import { b2MakeProxy, b2ShapeCast, b2ShapeDistance } from './include/distance_h.js';
 
+import { B2_HUGE } from './include/core_h.js';
 import { b2ValidateHull } from './include/hull_h.js';
-import { b2_huge } from './include/core_h.js';
 
 /**
  * @namespace Geometry
@@ -58,12 +58,12 @@ import { b2_huge } from './include/core_h.js';
  * - The origin vector is valid
  * - The translation vector is valid
  * - The maxFraction is a valid number
- * - The maxFraction is between 0 and b2_huge (exclusive)
+ * - The maxFraction is between 0 and B2_HUGE(exclusive)
  */
 export function b2IsValidRay(input)
 {
     const isValid = b2Vec2_IsValid(input.origin) && b2Vec2_IsValid(input.translation) && b2IsValid(input.maxFraction) &&
-                  0.0 <= input.maxFraction && input.maxFraction < b2_huge;
+                  0.0 <= input.maxFraction && input.maxFraction < B2_HUGE;
 
     return isValid;
 }

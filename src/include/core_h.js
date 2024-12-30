@@ -11,7 +11,7 @@ export const b2_lengthUnitsPerMeter = 1.0;
 
 // Used to detect bad values. Positions greater than about 16km will have precision
 // problems, so 100km as a limit should be fine in all cases.
-export const b2_huge = 100000.0 * b2_lengthUnitsPerMeter;
+export const B2_HUGE= 100000.0 * b2_lengthUnitsPerMeter;
 
 // Maximum number of colors in the constraint graph. Constraints that cannot
 // find a color are added to the overflow set which are solved single-threaded.

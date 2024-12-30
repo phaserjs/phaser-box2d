@@ -5,7 +5,7 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
-import { B2_NULL_INDEX, b2_aabbMargin, b2_graphColorCount, b2_speculativeDistance } from './include/core_h.js';
+import { B2_HUGE, B2_NULL_INDEX, b2_aabbMargin, b2_graphColorCount, b2_speculativeDistance } from './include/core_h.js';
 import { b2AABB, b2AABB_Contains, b2AABB_Union, b2Add, b2Cross, b2CrossSV, b2Dot, b2InvRotateVector, b2InvTransformPoint, b2IsValid, b2LengthSquared, b2MulAdd, b2MulSV, b2Rot, b2Rot_IsValid, b2RotateVector, b2Sub, b2Transform, b2TransformPoint, b2Vec2, b2Vec2_IsValid } from './include/math_functions_h.js';
 import { b2AddBodySim, b2AddBodyState, b2RemoveBodySim, b2RemoveBodyState } from './include/block_array_h.js';
 import { b2AllocId, b2FreeId } from './include/id_pool_h.js';
@@ -23,7 +23,6 @@ import { b2Body } from './include/body_h.js';
 import { b2Body_IsValid } from './include/world_h.js';
 import { b2BroadPhase_MoveProxy } from './include/broad_phase_h.js';
 import { b2MassData } from './include/collision_h.js';
-import { b2_huge } from './include/core_h.js';
 
 /**
  * @namespace Body
@@ -304,7 +303,7 @@ export function b2CreateBody(worldId, def)
         invMass: 0.0,
         inertia: 0.0,
         invInertia: 0.0,
-        minExtent: b2_huge,
+        minExtent: B2_HUGE,
         maxExtent: 0.0,
         linearDamping: def.linearDamping,
         angularDamping: def.angularDamping,
@@ -652,7 +651,7 @@ export function b2UpdateBodyMassData(world, body)
     bodySim.invInertia = 0.0;
 
     // bodySim.localCenter = new b2Vec2(); assigned in the function
-    bodySim.minExtent = b2_huge;
+    bodySim.minExtent = B2_HUGE;
     bodySim.maxExtent = 0.0;
 
     // Static and kinematic sims have zero mass.

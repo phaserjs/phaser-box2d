@@ -7,7 +7,7 @@
 
 import * as b2Math from './include/math_functions_h.js';
 
-import { B2_NULL_INDEX, b2_huge } from './include/core_h.js';
+import { B2_HUGE, B2_NULL_INDEX } from './include/core_h.js';
 import { b2AABB_Overlaps, b2EnlargeAABB, b2Perimeter } from './include/aabb_h.js';
 
 import { b2DynamicTree } from './include/dynamic_tree_h.js';
@@ -717,10 +717,10 @@ export function b2RemoveLeaf(tree, leaf)
  */
 export function b2DynamicTree_CreateProxy(tree, aabb, categoryBits, userData)
 {
-    console.assert( -b2_huge < aabb.lowerBoundX && aabb.lowerBoundX < b2_huge );
-    console.assert( -b2_huge < aabb.lowerBoundY && aabb.lowerBoundY < b2_huge );
-    console.assert( -b2_huge < aabb.upperBoundX && aabb.upperBoundX < b2_huge );
-    console.assert( -b2_huge < aabb.upperBoundY && aabb.upperBoundY < b2_huge );
+    console.assert( -B2_HUGE< aabb.lowerBoundX && aabb.lowerBoundX < B2_HUGE);
+    console.assert( -B2_HUGE< aabb.lowerBoundY && aabb.lowerBoundY < B2_HUGE);
+    console.assert( -B2_HUGE< aabb.upperBoundX && aabb.upperBoundX < B2_HUGE);
+    console.assert( -B2_HUGE< aabb.upperBoundY && aabb.upperBoundY < B2_HUGE);
 
     const proxyId = b2AllocateNode(tree);
     const node = tree.nodes[proxyId];
@@ -789,15 +789,15 @@ export function b2DynamicTree_GetProxyCount(tree)
  * @returns {void}
  * @throws {Error} Throws assertion errors if:
  * - The AABB is invalid
- * - The AABB dimensions exceed b2_huge
+ * - The AABB dimensions exceed B2_HUGE
  * - The proxyId is out of bounds
  * - The node at proxyId is not a leaf node
  */
 export function b2DynamicTree_MoveProxy(tree, proxyId, aabb)
 {
     console.assert( b2Math.b2AABB_IsValid( aabb ) );
-    console.assert( aabb.upperBoundX - aabb.lowerBoundX < b2_huge );
-    console.assert( aabb.upperBoundY - aabb.lowerBoundY < b2_huge );
+    console.assert( aabb.upperBoundX - aabb.lowerBoundX < B2_HUGE);
+    console.assert( aabb.upperBoundY - aabb.lowerBoundY < B2_HUGE);
     console.assert( 0 <= proxyId && proxyId < tree.nodeCapacity );
     console.assert( b2IsLeaf( tree.nodes[proxyId] ) );
 
@@ -820,7 +820,7 @@ export function b2DynamicTree_MoveProxy(tree, proxyId, aabb)
  * @returns {void}
  * @throws {Error} Throws assertion errors if:
  * - The AABB is invalid
- * - The AABB dimensions exceed b2_huge
+ * - The AABB dimensions exceed B2_HUGE
  * - The proxyId is out of bounds
  * - The node is not a leaf
  * - The new AABB is contained within the old one
@@ -830,8 +830,8 @@ export function b2DynamicTree_EnlargeProxy(tree, proxyId, aabb)
     const nodes = tree.nodes;
 
     console.assert( b2Math.b2AABB_IsValid( aabb ) );
-    console.assert( aabb.upperBoundX - aabb.lowerBoundX < b2_huge );
-    console.assert( aabb.upperBoundY - aabb.lowerBoundY < b2_huge );
+    console.assert( aabb.upperBoundX - aabb.lowerBoundX < B2_HUGE);
+    console.assert( aabb.upperBoundY - aabb.lowerBoundY < B2_HUGE);
     console.assert( 0 <= proxyId && proxyId < tree.nodeCapacity );
     console.assert( b2IsLeaf( tree.nodes[proxyId] ) );
 

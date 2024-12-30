@@ -5,7 +5,7 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
-import { B2_NULL_INDEX, b2_huge, b2_lengthUnitsPerMeter, b2_linearSlop } from './include/core_h.js';
+import { B2_HUGE, B2_NULL_INDEX, b2_lengthUnitsPerMeter, b2_linearSlop } from './include/core_h.js';
 import {
     b2Add,
     b2ClampFloat,
@@ -37,11 +37,11 @@ import { b2MakeSoft } from './include/solver_h.js';
  * @function b2DistanceJoint_SetLength
  * @summary Sets the target length of a distance joint and resets its impulses.
  * @param {b2JointId} jointId - The identifier of the distance joint to modify.
- * @param {number} length - The desired length of the joint, clamped between b2_linearSlop and b2_huge.
+ * @param {number} length - The desired length of the joint, clamped between b2_linearSlop and B2_HUGE.
  * @returns {void}
  * @description
  * Sets the target length of a distance joint. The length value is automatically
- * clamped between b2_linearSlop and b2_huge. After setting the length,
+ * clamped between b2_linearSlop and B2_HUGE. After setting the length,
  * the joint's impulse values are reset to zero.
  * @throws {Error} Throws if the joint type is not b2_distanceJoint.
  */
@@ -50,7 +50,7 @@ export function b2DistanceJoint_SetLength(jointId, length)
     const base = b2GetJointSimCheckType(jointId, b2JointType.b2_distanceJoint);
     const joint = base.distanceJoint;
 
-    joint.length = b2ClampFloat(length, b2_linearSlop, b2_huge);
+    joint.length = b2ClampFloat(length, b2_linearSlop, B2_HUGE);
     joint.impulse = 0.0;
     joint.lowerImpulse = 0.0;
     joint.upperImpulse = 0.0;
@@ -109,7 +109,7 @@ export function b2DistanceJoint_IsLimitEnabled(jointId)
  * @function b2DistanceJoint_SetLengthRange
  * @description
  * Sets the minimum and maximum length constraints for a distance joint.
- * The values are clamped between b2_linearSlop and b2_huge.
+ * The values are clamped between b2_linearSlop and B2_HUGE.
  * The function resets all impulse values to zero after updating the length range.
  * @param {b2JointId} jointId - The identifier for the distance joint
  * @param {number} minLength - The minimum allowed length of the joint
@@ -122,8 +122,8 @@ export function b2DistanceJoint_SetLengthRange(jointId, minLength, maxLength)
     const base = b2GetJointSimCheckType(jointId, b2JointType.b2_distanceJoint);
     const joint = base.distanceJoint;
 
-    minLength = b2ClampFloat(minLength, b2_linearSlop, b2_huge);
-    maxLength = b2ClampFloat(maxLength, b2_linearSlop, b2_huge);
+    minLength = b2ClampFloat(minLength, b2_linearSlop, B2_HUGE);
+    maxLength = b2ClampFloat(maxLength, b2_linearSlop, B2_HUGE);
     joint.minLength = Math.min(minLength, maxLength);
     joint.maxLength = Math.max(minLength, maxLength);
     joint.impulse = 0.0;
@@ -691,12 +691,12 @@ export function b2DrawDistanceJoint(draw, base, transformA, transformB)
             draw.DrawSegment(b2Sub(pMin, offset), b2Add(pMin, offset), b2HexColor.b2_colorLightGreen, draw.context);
         }
 
-        if (joint.maxLength < b2_huge)
+        if (joint.maxLength < B2_HUGE)
         {
             draw.DrawSegment(b2Sub(pMax, offset), b2Add(pMax, offset), b2HexColor.b2_colorRed, draw.context);
         }
 
-        if (joint.minLength > b2_linearSlop && joint.maxLength < b2_huge)
+        if (joint.minLength > b2_linearSlop && joint.maxLength < B2_HUGE)
         {
             draw.DrawSegment(pMin, pMax, b2HexColor.b2_colorGray, draw.context);
         }

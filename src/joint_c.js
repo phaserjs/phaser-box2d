@@ -5,7 +5,7 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
-import { B2_NULL_INDEX, b2_huge, b2_linearSlop } from "./include/core_h.js";
+import { B2_HUGE, B2_NULL_INDEX, b2_linearSlop } from "./include/core_h.js";
 import { b2AddJoint, b2RemoveJoint } from "./include/block_array_h.js";
 import { b2AllocId, b2FreeId } from "./include/id_pool_h.js";
 import { b2Body_IsValid, b2GetWorld, b2GetWorldFromId, b2GetWorldLocked, b2SetType, b2ValidateSolverSets } from "./include/world_h.js";
@@ -41,18 +41,18 @@ import { b2JointId } from "./include/id_h.js";
  * @function b2DefaultDistanceJointDef
  * @returns {b2DistanceJointDef} A distance joint definition with:
  * - length set to 1
- * - maxLength set to b2_huge
+ * - maxLength set to B2_HUGE
  * - all other properties at their default values
  * @description
  * Creates and returns a new b2DistanceJointDef object initialized with specific default values.
- * The length is set to 1 unit and the maxLength is set to b2_huge. All other properties
+ * The length is set to 1 unit and the maxLength is set to B2_HUGE. All other properties
  * of the joint definition retain their default values from the b2DistanceJointDef constructor.
  */
 export function b2DefaultDistanceJointDef()
 {
     const def = new b2DistanceJointDef();
     def.length = 1.0;
-    def.maxLength = b2_huge;
+    def.maxLength = B2_HUGE;
 
     return def;
 }
