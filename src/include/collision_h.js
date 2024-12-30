@@ -11,7 +11,7 @@ import { B2_NULL_INDEX } from '../core_c.js';
 
 // Constants
 export const B2_MAX_POLYGON_VERTICES = 8;
-export const b2_defaultCategoryBits = 0x00000001;
+export const B2_DEFAULT_CATEGORY_BITS = 0x00000001;
 export const B2_DEFAULT_MASK_BITS = 0xFFFFFFFF;
 
 // Classes
