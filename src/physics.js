@@ -5,6 +5,7 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
+import { B2_MAX_POLYGON_VERTICES, b2Capsule, b2Circle, b2Polygon } from './include/collision_h.js';
 import { DYNAMIC, b2BodyId, b2JointId, b2ShapeId, b2WorldId } from './main.js';
 import { b2Add, b2Distance, b2RelativeAngle, b2Rot, b2Transform, b2Vec2 } from './include/math_functions_h.js';
 import
@@ -26,7 +27,6 @@ import
     b2WorldDef
 } from './include/types_h.js';
 import { b2Body_GetRotation, b2Body_GetTransform, b2Body_SetTransform, b2Body_SetUserData, b2CreateBody, b2DestroyBody, b2GetBodyTransform } from './include/body_h.js';
-import { b2Capsule, b2Circle, b2Polygon, b2_maxPolygonVertices } from './include/collision_h.js';
 import { b2CreateCapsuleShape, b2CreateCircleShape, b2CreatePolygonShape } from './include/shape_h.js';
 import { b2CreateDistanceJoint, b2CreateMotorJoint, b2CreateMouseJoint, b2CreatePrismaticJoint, b2CreateRevoluteJoint, b2CreateWeldJoint, b2CreateWheelJoint } from './include/joint_h.js';
 import { b2CreateWorld, b2CreateWorldArray, b2World_Step } from './include/world_h.js';
@@ -773,7 +773,7 @@ export function CreateBoxPolygon (data)
  */
 export function CreateNGonPolygon (data)
 {
-    if (data.sides < 3 || data.sides > b2_maxPolygonVertices)
+    if (data.sides < 3 || data.sides > B2_MAX_POLYGON_VERTICES)
     {
         console.warn(`WARNING: invalid number of sides for a polygon (${data.sides}).`);
 
@@ -851,7 +851,7 @@ export function CreateNGonPolygon (data)
  */
 export function CreatePolygon (data)
 {
-    if (data.vertices.length < 3 || data.vertices.length > b2_maxPolygonVertices)
+    if (data.vertices.length < 3 || data.vertices.length > B2_MAX_POLYGON_VERTICES)
     {
         console.warn(`WARNING: invalid number of sides for a polygon (${data.vertices.length}).`);
 

@@ -6,6 +6,20 @@
  */
 
 import {
+    B2_MAX_POLYGON_VERTICES,
+    b2CastOutput,
+    b2DistanceCache,
+    b2DistanceInput,
+    b2DistanceOutput,
+    b2DistanceProxy,
+    b2SegmentDistanceResult,
+    b2Simplex,
+    b2SimplexVertex,
+    b2Sweep,
+    b2TOIOutput,
+    b2TOIState
+} from './include/collision_h.js';
+import {
     b2Add,
     b2ClampFloat,
     b2Cross,
@@ -31,20 +45,6 @@ import {
     eps,
     epsSqr
 } from './include/math_functions_h.js';
-import {
-    b2CastOutput,
-    b2DistanceCache,
-    b2DistanceInput,
-    b2DistanceOutput,
-    b2DistanceProxy,
-    b2SegmentDistanceResult,
-    b2Simplex,
-    b2SimplexVertex,
-    b2Sweep,
-    b2TOIOutput,
-    b2TOIState,
-    b2_maxPolygonVertices
-} from './include/collision_h.js';
 
 import { b2_linearSlop } from './include/core_h.js';
 
@@ -179,16 +179,16 @@ export function b2SegmentDistance(p1X, p1Y, q1X, q1Y, p2X, p2Y, q2X, q2Y)
  * @function b2MakeProxy
  * @summary Creates a distance proxy from a set of vertices
  * @param {b2Vec2[]} vertices - Array of 2D vectors representing the vertices
- * @param {number} count - Number of vertices to process (max b2_maxPolygonVertices)
+ * @param {number} count - Number of vertices to process (max B2_MAX_POLYGON_VERTICES)
  * @param {number} radius - Radius value for the proxy
  * @returns {b2DistanceProxy} A new distance proxy containing the processed vertices
- * @throws {Error} Throws assertion error if count exceeds b2_maxPolygonVertices
+ * @throws {Error} Throws assertion error if count exceeds B2_MAX_POLYGON_VERTICES
  */
 export function b2MakeProxy(vertices, count, radius)
 {
-    console.assert(count <= b2_maxPolygonVertices);
+    console.assert(count <= B2_MAX_POLYGON_VERTICES);
     
-    count = Math.min(count, b2_maxPolygonVertices);
+    count = Math.min(count, B2_MAX_POLYGON_VERTICES);
     
     const proxy = new b2DistanceProxy();
     proxy.points = [];
@@ -1281,7 +1281,7 @@ export function b2TimeOfImpact(input)
 
             ++pushBackIter;
 
-            if (pushBackIter == b2_maxPolygonVertices)
+            if (pushBackIter == B2_MAX_POLYGON_VERTICES)
             {
                 break;
             }

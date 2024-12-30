@@ -5,6 +5,7 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
+import { B2_MAX_POLYGON_VERTICES, b2Capsule, b2CastOutput, b2Circle, b2DistanceCache, b2DistanceInput, b2MassData, b2Polygon, b2ShapeCastPairInput } from './include/collision_h.js';
 import {
     b2AABB,
     b2Add,
@@ -35,7 +36,6 @@ import {
     b2Vec2_IsValid,
     eps
 } from './include/math_functions_h.js';
-import { b2Capsule, b2CastOutput, b2Circle, b2DistanceCache, b2DistanceInput, b2MassData, b2Polygon, b2ShapeCastPairInput, b2_maxPolygonVertices } from './include/collision_h.js';
 import { b2MakeProxy, b2ShapeCast, b2ShapeDistance } from './include/distance_h.js';
 
 import { B2_HUGE } from './include/core_h.js';
@@ -425,7 +425,7 @@ export function b2ComputeCapsuleMass(shape, density)
  * - mass: Total mass of the shape
  * - center: Center of mass as b2Vec2
  * - rotationalInertia: Moment of inertia about the center of mass
- * @throws {Error} Throws assertion error if shape.count is 0 or exceeds b2_maxPolygonVertices
+ * @throws {Error} Throws assertion error if shape.count is 0 or exceeds B2_MAX_POLYGON_VERTICES
  */
 export function b2ComputePolygonMass(shape, density)
 {
@@ -450,10 +450,10 @@ export function b2ComputePolygonMass(shape, density)
         return b2ComputeCapsuleMass(capsule, density);
     }
 
-    const vertices = new Array(b2_maxPolygonVertices);
+    const vertices = new Array(B2_MAX_POLYGON_VERTICES);
     const count = shape.count;
     const radius = shape.radius;
-    console.assert(count <= b2_maxPolygonVertices);     // PJB: ragdolls crash at 8, maxPolygonVertices == 8, coincidence?
+    console.assert(count <= B2_MAX_POLYGON_VERTICES);     // PJB: ragdolls crash at 8, maxPolygonVertices == 8, coincidence?
 
     if (radius > 0.0)
     {

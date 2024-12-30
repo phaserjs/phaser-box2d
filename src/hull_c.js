@@ -5,8 +5,8 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
+import { B2_MAX_POLYGON_VERTICES, b2Hull } from './include/collision_h.js';
 import { b2AABB, b2AABB_Center, b2Cross, b2DistanceSquared, b2Normalize, b2Sub } from './include/math_functions_h.js';
-import { b2Hull, b2_maxPolygonVertices } from './include/collision_h.js';
 
 import { b2Validation } from './include/types_h.js';
 import { b2_linearSlop } from './include/core_h.js';
@@ -126,13 +126,13 @@ export function b2ReverseWinding(points, count)
  * - Finds extreme points to establish initial hull edges
  * - Recursively adds points to build the complete hull
  * - Removes collinear/near-collinear points from final hull
- * @throws {Error} If count < 3 or count > b2_maxPolygonVertices
+ * @throws {Error} If count < 3 or count > B2_MAX_POLYGON_VERTICES
  */
 export function b2ComputeHull(points, count)
 {
     const hull = new b2Hull();
 
-    if (count < 3 || count > b2_maxPolygonVertices)
+    if (count < 3 || count > B2_MAX_POLYGON_VERTICES)
     {
         // check your data
         console.assert(false, "WARNING: not enough points in the hull.");
@@ -140,7 +140,7 @@ export function b2ComputeHull(points, count)
         return hull;
     }
 
-    // count = Math.min(count, b2_maxPolygonVertices);
+    // count = Math.min(count, B2_MAX_POLYGON_VERTICES);
 
     const aabb = new b2AABB(Number.MAX_VALUE, Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE);
 
@@ -279,7 +279,7 @@ export function b2ComputeHull(points, count)
         hull.points[hull.count++] = hull2.points[i];
     }
 
-    console.assert(hull.count <= b2_maxPolygonVertices);
+    console.assert(hull.count <= B2_MAX_POLYGON_VERTICES);
 
     // merge collinear
     let searching = true;
@@ -333,7 +333,7 @@ export function b2ComputeHull(points, count)
  * @function b2ValidateHull
  * @description
  * Validates that a hull meets the requirements for a valid convex polygon:
- * - Has between 3 and b2_maxPolygonVertices points
+ * - Has between 3 and B2_MAX_POLYGON_VERTICES points
  * - Points are in counter-clockwise order
  * - All points are behind the edges
  * - No collinear points within b2_linearSlop tolerance
@@ -348,7 +348,7 @@ export function b2ValidateHull(hull)
         return true;
     }
 
-    if (hull.count < 3 || b2_maxPolygonVertices < hull.count)
+    if (hull.count < 3 || B2_MAX_POLYGON_VERTICES < hull.count)
     {
         console.warn("WARNING: hull does not have enough points.");
 

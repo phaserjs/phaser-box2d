@@ -5,7 +5,7 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
-import { b2Capsule, b2DistanceInput, b2ManifoldPoint, b2Polygon, b2_maxPolygonVertices } from './include/collision_h.js';
+import { B2_MAX_POLYGON_VERTICES, b2Capsule, b2DistanceInput, b2ManifoldPoint, b2Polygon } from './include/collision_h.js';
 import {
     b2ClampFloat,
     b2Cross,
@@ -995,8 +995,8 @@ function b2FindMaxSeparation(poly1, poly2)
 //   clip edges
 // end
 
-const localPolyA = new b2Polygon(b2_maxPolygonVertices);
-const localPolyB = new b2Polygon(b2_maxPolygonVertices);
+const localPolyA = new b2Polygon(B2_MAX_POLYGON_VERTICES);
+const localPolyB = new b2Polygon(B2_MAX_POLYGON_VERTICES);
 const p = new b2Vec2();
 const sfA = new b2Transform();
 

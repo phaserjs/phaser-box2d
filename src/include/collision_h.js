@@ -10,7 +10,7 @@ import { b2Rot, b2Transform, b2Vec2 } from './math_functions_h.js';
 import { B2_NULL_INDEX } from '../core_c.js';
 
 // Constants
-export const b2_maxPolygonVertices = 8;
+export const B2_MAX_POLYGON_VERTICES = 8;
 export const b2_defaultCategoryBits = 0x00000001;
 export const B2_DEFAULT_MASK_BITS = 0xFFFFFFFF;
 
@@ -46,7 +46,7 @@ export class b2ShapeCastInput
 {
     constructor()
     {
-        this.points = [];   // Array(b2_maxPolygonVertices).fill().map(() => new b2Vec2(0, 0));
+        this.points = [];   // Array(B2_MAX_POLYGON_VERTICES).fill().map(() => new b2Vec2(0, 0));
         this.count = 0;
         this.radius = 0;
         this.translation = null;   // new b2Vec2(0,0);
@@ -132,7 +132,7 @@ export class b2Capsule
 
 /**
  * @class b2Polygon
- * @summary A solid convex polygon. It is assumed that the interior of the polygon is to the left of each edge. Polygons have a maximum number of vertices equal to b2_maxPolygonVertices. In most cases you should not need many vertices for a convex polygon.
+ * @summary A solid convex polygon. It is assumed that the interior of the polygon is to the left of each edge. Polygons have a maximum number of vertices equal to B2_MAX_POLYGON_VERTICES. In most cases you should not need many vertices for a convex polygon.
  * @warning DO NOT fill this out manually, instead use a helper function like b2MakePolygon or b2MakeBox.
  * @property {b2Vec2[]} vertices - The polygon vertices
  * @property {b2Vec2[]} normals - The outward normal vectors of the polygon sides
@@ -198,7 +198,7 @@ export class b2Hull
 {
     constructor()
     {
-        this.points = [];   // new Array(b2_maxPolygonVertices).fill().map(() => new b2Vec2(0,0));
+        this.points = [];   // new Array(B2_MAX_POLYGON_VERTICES).fill().map(() => new b2Vec2(0,0));
         this.count = 0;
     }
 }
