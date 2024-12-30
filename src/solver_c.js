@@ -187,7 +187,7 @@ function b2IntegrateVelocitiesTask(startIndex, endIndex, context)
     const gravity = context.world.gravity;
     const h = context.h;
     const maxLinearSpeed = context.maxLinearVelocity;
-    const maxAngularSpeed = core_h.b2_maxRotation * context.inv_dt;
+    const maxAngularSpeed = core_h.B2_MAX_ROTATION * context.inv_dt;
     const maxLinearSpeedSquared = maxLinearSpeed * maxLinearSpeed;
     const maxAngularSpeedSquared = maxAngularSpeed * maxAngularSpeed;
 

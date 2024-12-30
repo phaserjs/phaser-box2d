@@ -72,7 +72,7 @@ import { b2HexColor } from './include/types_h.js';
  * @namespace World
  */
 
-export const b2_maxWorlds = 32;
+export const B2_MAX_WORLDS = 32;
 
 export const b2SetType =
 {
@@ -196,7 +196,7 @@ export class b2TaskContext
 
 export function b2GetWorldFromId(id)
 {
-    console.assert(1 <= id.index1 && id.index1 <= b2_maxWorlds);
+    console.assert(1 <= id.index1 && id.index1 <= B2_MAX_WORLDS);
     const world = b2_worlds[id.index1 - 1];
     console.assert(id.index1 === world.worldId + 1);
     console.assert(id.revision === world.revision);
@@ -206,7 +206,7 @@ export function b2GetWorldFromId(id)
 
 export function b2GetWorld(index)
 {
-    console.assert(0 <= index && index < b2_maxWorlds);
+    console.assert(0 <= index && index < B2_MAX_WORLDS);
     const world = b2_worlds[index];
     console.assert(world.worldId === index);
 
@@ -215,7 +215,7 @@ export function b2GetWorld(index)
 
 export function b2GetWorldLocked(index)
 {
-    console.assert(0 <= index && index < b2_maxWorlds);
+    console.assert(0 <= index && index < B2_MAX_WORLDS);
     const world = b2_worlds[index];
     console.assert(world.worldId === index);
 
@@ -236,7 +236,7 @@ let b2_worlds = null;
  * @function b2CreateWorldArray
  * @description
  * Initializes a global array of Box2D world instances if it hasn't been created yet.
- * Creates b2_maxWorlds number of world instances and marks them as not in use.
+ * Creates B2_MAX_WORLDS number of world instances and marks them as not in use.
  * If the array already exists, the function returns without doing anything.
  * @returns {void}
  * @see b2World
@@ -251,7 +251,7 @@ export function b2CreateWorldArray()
 
     b2_worlds = [];
 
-    for (let i = 0; i < b2_maxWorlds; i++)
+    for (let i = 0; i < B2_MAX_WORLDS; i++)
     {
         b2_worlds[i] = new b2World();
         b2_worlds[i].inUse = false;
@@ -1779,7 +1779,7 @@ export function b2World_GetContactEvents(worldId)
  * @description
  * Checks if a world ID is valid by verifying:
  * 1. The ID is not undefined
- * 2. The index is within valid bounds (1 to b2_maxWorlds)
+ * 2. The index is within valid bounds (1 to B2_MAX_WORLDS)
  * 3. The world exists at the specified index
  * 4. The revision number matches the world's current revision
  */
@@ -1790,7 +1790,7 @@ export function b2World_IsValid(id)
         return false;
     }
     
-    if (id.index1 < 1 || b2_maxWorlds < id.index1)
+    if (id.index1 < 1 || B2_MAX_WORLDS < id.index1)
     {
         return false;
     }
@@ -1833,7 +1833,7 @@ export function b2Body_IsValid(id)
         return false;
     }
 
-    if (id.world0 < 0 || b2_maxWorlds <= id.world0)
+    if (id.world0 < 0 || B2_MAX_WORLDS <= id.world0)
     {
         // invalid world
         return false;
@@ -1893,7 +1893,7 @@ export function b2Shape_IsValid(id)
         return false;
     }
     
-    if (b2_maxWorlds <= id.world0)
+    if (B2_MAX_WORLDS <= id.world0)
     {
         return false;
     }
@@ -1949,7 +1949,7 @@ export function b2Chain_IsValid(id)
         return false;
     }
     
-    if (id.world0 < 0 || b2_maxWorlds <= id.world0)
+    if (id.world0 < 0 || B2_MAX_WORLDS <= id.world0)
     {
         return false;
     }
@@ -2004,7 +2004,7 @@ export function b2Joint_IsValid(id)
         return false;
     }
     
-    if (id.world0 < 0 || b2_maxWorlds <= id.world0)
+    if (id.world0 < 0 || B2_MAX_WORLDS <= id.world0)
     {
         return false;
     }

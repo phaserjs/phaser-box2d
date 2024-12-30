@@ -23,12 +23,12 @@ export const b2_graphColorCount = 2;
 export const b2_linearSlop = 0.005 * b2_lengthUnitsPerMeter;
 
 // Maximum number of simultaneous worlds that can be allocated
-export const b2_maxWorlds = 16;
+export const B2_MAX_WORLDS = 16;
 
 // The maximum rotation of a body per time step. This limit is very large and is used
 // to prevent numerical problems. You shouldn't need to adjust this.
 // @warning increasing this to 0.5 * Math.PI or greater will break continuous collision.
-export const b2_maxRotation = 0.25 * Math.PI;
+export const B2_MAX_ROTATION = 0.25 * Math.PI;
 
 // @warning modifying this can have a significant impact on performance and stability
 export const b2_speculativeDistance = 4.0 * b2_linearSlop;
