@@ -36,7 +36,6 @@ export class b2WorldId
     {
         this.index1 = index;
         this.revision = revision;
-        
     }
 }
 
