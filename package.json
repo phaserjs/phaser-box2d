@@ -1,6 +1,6 @@
 {
   "name": "phaser-box2d",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Phaser Box2D",
   "keywords": [
     "physics",

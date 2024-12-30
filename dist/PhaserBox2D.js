@@ -1,7 +1,7 @@
 /**
  * @license
- * Phaser Box2D v1.0.0
- * Tuesday 24 December 2024 at 02:34
+ * Phaser Box2D v1.1.0
+ * Monday, 30 December 2024 at 17:51
  * 
  * This library includes code that is ported from the original C version. The original C code is Copyright 2023 Erin Catto
  * and was released under the MIT license. The JavaScript port of the C code along with all additional code is
@@ -19,7 +19,7 @@ function b2GetLengthAndNormalize(v) {
 }
 
 // src/include/math_functions_h.js
-var b2_pi = 3.14159265359;
+var B2_PI = 3.14159265359;
 var eps = 1e-10;
 var epsSqr = eps * eps;
 var GlobalDebug = {
@@ -290,10 +290,10 @@ function b2RelativeAngle(b, a) {
   return Math.atan2(s, c2);
 }
 function b2UnwindAngle(angle) {
-  if (angle < -b2_pi) {
-    return angle + 2 * b2_pi;
-  } else if (angle > b2_pi) {
-    return angle - 2 * b2_pi;
+  if (angle < -B2_PI) {
+    return angle + 2 * B2_PI;
+  } else if (angle > B2_PI) {
+    return angle - 2 * B2_PI;
   }
   return angle;
 }
@@ -461,10 +461,10 @@ function b2GetVersion() {
 
 // src/include/core_h.js
 var b2_lengthUnitsPerMeter2 = 1;
-var b2_huge = 1e5 * b2_lengthUnitsPerMeter2;
+var B2_HUGE = 1e5 * b2_lengthUnitsPerMeter2;
 var b2_graphColorCount = 2;
 var b2_linearSlop = 5e-3 * b2_lengthUnitsPerMeter2;
-var b2_maxRotation = 0.25 * Math.PI;
+var B2_MAX_ROTATION = 0.25 * Math.PI;
 var b2_speculativeDistance = 4 * b2_linearSlop;
 var b2_aabbMargin = 0.1 * b2_lengthUnitsPerMeter2;
 var b2_timeToSleep = 0.5;
@@ -529,6 +529,329 @@ function B2_IS_NON_NULL(id) {
 function B2_ID_EQUALS(id1, id2) {
   return id1.index1 === id2.index1 && id1.world0 === id2.world0 && id1.revision === id2.revision;
 }
+
+// src/include/collision_h.js
+var B2_MAX_POLYGON_VERTICES = 8;
+var B2_DEFAULT_MASK_BITS = 4294967295;
+var b2RayCastInput = class {
+  constructor() {
+    this.origin = null;
+    this.translation = null;
+    this.maxFraction = 0;
+  }
+};
+var b2ShapeCastInput = class {
+  constructor() {
+    this.points = [];
+    this.count = 0;
+    this.radius = 0;
+    this.translation = null;
+    this.maxFraction = 0;
+  }
+};
+var b2CastOutput = class {
+  constructor(normal = null, point = null) {
+    this.normal = normal;
+    this.point = point;
+    this.fraction = 0;
+    this.iterations = 0;
+    this.hit = false;
+  }
+};
+var b2MassData = class {
+  constructor() {
+    this.mass = 0;
+    this.center = null;
+    this.rotationalInertia = 0;
+  }
+};
+var b2Circle = class {
+  constructor(center = null, radius = 0) {
+    this.center = center;
+    if (!this.center) {
+      this.center = new b2Vec2(0, 0);
+    }
+    this.radius = radius;
+  }
+};
+var b2Capsule = class {
+  constructor() {
+    this.center1 = null;
+    this.center2 = null;
+    this.radius = 0;
+  }
+};
+var b2Polygon = class {
+  constructor(vertices) {
+    if (vertices > 0) {
+      this.vertices = new Array(vertices).fill().map(() => new b2Vec2(0, 0));
+      this.normals = new Array(vertices).fill().map(() => new b2Vec2(0, 0));
+    } else {
+      this.vertices = [];
+      this.normals = [];
+    }
+    this.centroid = null;
+    this.radius = 0;
+    this.count = 0;
+  }
+};
+var b2Segment = class {
+  constructor(point1 = null, point2 = null) {
+    this.point1 = point1;
+    this.point2 = point2;
+  }
+};
+var b2ChainSegment = class {
+  constructor() {
+    this.ghost1 = null;
+    this.segment = null;
+    this.ghost2 = null;
+    this.chainId = 0;
+  }
+};
+var b2Hull = class {
+  constructor() {
+    this.points = [];
+    this.count = 0;
+  }
+};
+var b2SegmentDistanceResult = class {
+  constructor() {
+    this.closest1 = null;
+    this.closest2 = null;
+    this.fraction1 = 0;
+    this.fraction2 = 0;
+    this.distanceSquared = 0;
+  }
+};
+var b2DistanceProxy = class _b2DistanceProxy {
+  constructor(points = [], count = null, radius = 0) {
+    this.points = points;
+    this.count = count;
+    this.radius = radius;
+  }
+  clone() {
+    const points = [];
+    for (let i = 0, l = this.points.length; i < l; i++) {
+      points.push(this.points[i]);
+    }
+    return new _b2DistanceProxy(points, this.count, this.radius);
+  }
+};
+var b2DistanceCache = class _b2DistanceCache {
+  constructor() {
+    this.count = 0;
+    this.indexA = [0, 0, 0];
+    this.indexB = [0, 0, 0];
+  }
+  clone() {
+    const cache = new _b2DistanceCache();
+    cache.count = this.count;
+    cache.indexA = [...this.indexA];
+    cache.indexB = [...this.indexB];
+    return cache;
+  }
+};
+var b2DistanceInput = class {
+  constructor() {
+    this.proxyA = new b2DistanceProxy();
+    this.proxyB = new b2DistanceProxy();
+    this.transformA = new b2Transform(new b2Vec2(0, 0), new b2Rot(0, 0));
+    this.transformB = new b2Transform(new b2Vec2(0, 0), new b2Rot(0, 0));
+    this.useRadii = false;
+  }
+};
+var b2DistanceOutput = class {
+  constructor() {
+    this.pointA = new b2Vec2(0, 0);
+    this.pointB = new b2Vec2(0, 0);
+    this.distance = 0;
+    this.iterations = 0;
+    this.simplexCount = 0;
+  }
+};
+var b2SimplexVertex = class _b2SimplexVertex {
+  constructor() {
+    this.wA = null;
+    this.wB = null;
+    this.w = null;
+    this.a = 0;
+    this.indexA = 0;
+    this.indexB = 0;
+  }
+  clone() {
+    const sv = new _b2SimplexVertex();
+    sv.wA = this.wA.clone();
+    sv.wB = this.wB.clone();
+    sv.w = this.w.clone();
+    sv.a = this.a;
+    sv.indexA = this.indexA;
+    sv.indexB = this.indexB;
+    return sv;
+  }
+};
+var b2Simplex = class {
+  constructor() {
+    this.v1 = new b2SimplexVertex();
+    this.v2 = new b2SimplexVertex();
+    this.v3 = new b2SimplexVertex();
+    this.count = 0;
+  }
+};
+var b2ShapeCastPairInput = class {
+  constructor() {
+    this.proxyA = new b2DistanceProxy();
+    this.proxyB = new b2DistanceProxy();
+    this.transformA = new b2Transform(new b2Vec2(0, 0), new b2Rot(0, 0));
+    this.transformB = new b2Transform(new b2Vec2(0, 0), new b2Rot(0, 0));
+    this.translationB = new b2Vec2(0, 0);
+    this.maxFraction = 0;
+  }
+};
+var b2Sweep = class _b2Sweep {
+  constructor(c2 = null, v1 = null, v2 = null, r1 = null, r2 = null) {
+    this.localCenter = c2;
+    this.c1 = v1;
+    this.c2 = v2;
+    this.q1 = r1;
+    this.q2 = r2;
+  }
+  clone() {
+    return new _b2Sweep(this.localCenter.clone(), this.c1.clone(), this.c2.clone(), this.q1.clone(), this.q2.clone());
+  }
+};
+var b2TOIInput = class _b2TOIInput {
+  constructor(proxyA = null, proxyB = null, sweepA = null, sweepB = null, tMax = 0) {
+    this.proxyA = proxyA;
+    this.proxyB = proxyB;
+    this.sweepA = sweepA;
+    this.sweepB = sweepB;
+    this.tMax = tMax;
+  }
+  clone() {
+    return new _b2TOIInput(this.proxyA.clone(), this.proxyB.clone(), this.sweepA.clone(), this.sweepB.clone(), this.tMax);
+  }
+};
+var b2TOIState = {
+  b2_toiStateUnknown: 0,
+  b2_toiStateFailed: 1,
+  b2_toiStateOverlapped: 2,
+  b2_toiStateHit: 3,
+  b2_toiStateSeparated: 4
+};
+var b2TOIOutput = class {
+  constructor() {
+    this.state = b2TOIState.b2_toiStateUnknown;
+    this.t = 0;
+  }
+};
+var b2ManifoldPoint = class _b2ManifoldPoint {
+  constructor() {
+    this.pointX = 0;
+    this.pointY = 0;
+    this.anchorAX = 0;
+    this.anchorAY = 0;
+    this.anchorBX = 0;
+    this.anchorBY = 0;
+    this.separation = 0;
+    this.normalImpulse = 0;
+    this.tangentImpulse = 0;
+    this.maxNormalImpulse = 0;
+    this.normalVelocity = 0;
+    this.id = 0;
+    this.persisted = false;
+  }
+  clone() {
+    const clone = new _b2ManifoldPoint();
+    clone.pointX = this.pointX;
+    clone.pointY = this.pointY;
+    clone.anchorAX = this.anchorAX;
+    clone.anchorAY = this.anchorAY;
+    clone.anchorBX = this.anchorBX;
+    clone.anchorBY = this.anchorBY;
+    clone.separation = this.separation;
+    clone.normalImpulse = this.normalImpulse;
+    clone.tangentImpulse = this.tangentImpulse;
+    clone.maxNormalImpulse = this.maxNormalImpulse;
+    clone.normalVelocity = this.normalVelocity;
+    clone.id = this.id;
+    clone.persisted = this.persisted;
+    return clone;
+  }
+  clear() {
+    this.pointX = 0;
+    this.pointY = 0;
+    this.anchorAX = 0;
+    this.anchorAY = 0;
+    this.anchorBX = 0;
+    this.anchorBY = 0;
+    this.separation = 0;
+    this.normalImpulse = 0;
+    this.tangentImpulse = 0;
+    this.maxNormalImpulse = 0;
+    this.normalVelocity = 0;
+    this.id = 0;
+    this.persisted = false;
+    return this;
+  }
+  copyTo(mp) {
+    mp.pointX = this.pointX;
+    mp.pointY = this.pointY;
+    mp.anchorAX = this.anchorAX;
+    mp.anchorAY = this.anchorAY;
+    mp.anchorBX = this.anchorBX;
+    mp.anchorBY = this.anchorBY;
+    mp.separation = this.separation;
+    mp.normalImpulse = this.normalImpulse;
+    mp.tangentImpulse = this.tangentImpulse;
+    mp.maxNormalImpulse = this.maxNormalImpulse;
+    mp.normalVelocity = this.normalVelocity;
+    mp.id = this.id;
+    mp.persisted = this.persisted;
+  }
+};
+var b2Manifold = class _b2Manifold {
+  constructor(p14 = new b2ManifoldPoint(), p23 = new b2ManifoldPoint()) {
+    this.points = [p14, p23];
+    this.normalX = this.normalY = 0;
+    this.pointCount = 0;
+  }
+  clone() {
+    const clone = new _b2Manifold();
+    this.copyTo(clone);
+    return clone;
+  }
+  clear() {
+    if (this.points[0]) {
+      this.points[0].clear();
+    }
+    if (this.points[1]) {
+      this.points[1].clear();
+    }
+    this.normalX = this.normalY = 0;
+    this.pointCount = 0;
+    return this;
+  }
+  copyTo(manifold) {
+    this.points[0].copyTo(manifold.points[0]);
+    this.points[1].copyTo(manifold.points[1]);
+    manifold.normalX = this.normalX;
+    manifold.normalY = this.normalY;
+    manifold.pointCount = this.pointCount;
+  }
+};
+var b2TreeNode = class {
+  constructor() {
+    this.aabb = null;
+    this.categoryBits = 0;
+    this.parent_next = B2_NULL_INDEX;
+    this.child1 = B2_NULL_INDEX;
+    this.child2 = B2_NULL_INDEX;
+    this.userData = 0;
+    this.height = -1;
+    this.enlarged = false;
+  }
+};
 
 // src/table_c.js
 function b2CreateSet() {
@@ -656,7 +979,7 @@ function b2DefaultBodyDef() {
   def.fixedRotation = false;
   def.isBullet = false;
   def.isEnabled = true;
-  def.automaticMass = true;
+  def.updateBodyMass = true;
   def.allowFastRotation = false;
   return def;
 }
@@ -702,7 +1025,7 @@ var b2ShapeType = {
   b2_capsuleShape: 1,
   b2_segmentShape: 2,
   b2_polygonShape: 3,
-  b2_smoothSegmentShape: 4,
+  b2_chainSegmentShape: 4,
   b2_shapeTypeCount: 5
 };
 var b2JointType = {
@@ -757,7 +1080,7 @@ var b2BodyDef = class {
     this.fixedRotation = false;
     this.isBullet = false;
     this.isEnabled = false;
-    this.automaticMass = false;
+    this.updateBodyMass = false;
     this.allowFastRotation = false;
   }
 };
@@ -1228,329 +1551,6 @@ function b2GetIdCount(pool) {
   return pool.nextIndex - pool.freeArray.length;
 }
 
-// src/include/collision_h.js
-var b2_maxPolygonVertices = 8;
-var b2_defaultMaskBits = 4294967295;
-var b2RayCastInput = class {
-  constructor() {
-    this.origin = null;
-    this.translation = null;
-    this.maxFraction = 0;
-  }
-};
-var b2ShapeCastInput = class {
-  constructor() {
-    this.points = [];
-    this.count = 0;
-    this.radius = 0;
-    this.translation = null;
-    this.maxFraction = 0;
-  }
-};
-var b2CastOutput = class {
-  constructor() {
-    this.normal = null;
-    this.point = null;
-    this.fraction = 0;
-    this.iterations = 0;
-    this.hit = false;
-  }
-};
-var b2MassData = class {
-  constructor() {
-    this.mass = 0;
-    this.center = null;
-    this.rotationalInertia = 0;
-  }
-};
-var b2Circle = class {
-  constructor(center = null, radius = 0) {
-    this.center = center;
-    if (!this.center) {
-      this.center = new b2Vec2(0, 0);
-    }
-    this.radius = radius;
-  }
-};
-var b2Capsule = class {
-  constructor() {
-    this.center1 = null;
-    this.center2 = null;
-    this.radius = 0;
-  }
-};
-var b2Polygon = class {
-  constructor(vertices) {
-    if (vertices > 0) {
-      this.vertices = new Array(vertices).fill().map(() => new b2Vec2(0, 0));
-      this.normals = new Array(vertices).fill().map(() => new b2Vec2(0, 0));
-    } else {
-      this.vertices = [];
-      this.normals = [];
-    }
-    this.centroid = null;
-    this.radius = 0;
-    this.count = 0;
-  }
-};
-var b2Segment = class {
-  constructor(point1 = null, point2 = null) {
-    this.point1 = point1;
-    this.point2 = point2;
-  }
-};
-var b2SmoothSegment = class {
-  constructor() {
-    this.ghost1 = null;
-    this.segment = null;
-    this.ghost2 = null;
-    this.chainId = 0;
-  }
-};
-var b2Hull = class {
-  constructor() {
-    this.points = [];
-    this.count = 0;
-  }
-};
-var b2SegmentDistanceResult = class {
-  constructor() {
-    this.closest1 = null;
-    this.closest2 = null;
-    this.fraction1 = 0;
-    this.fraction2 = 0;
-    this.distanceSquared = 0;
-  }
-};
-var b2DistanceProxy = class _b2DistanceProxy {
-  constructor(points = [], count = null, radius = 0) {
-    this.points = points;
-    this.count = count;
-    this.radius = radius;
-  }
-  clone() {
-    const points = [];
-    for (let i = 0, l = this.points.length; i < l; i++) {
-      points.push(this.points[i]);
-    }
-    return new _b2DistanceProxy(points, this.count, this.radius);
-  }
-};
-var b2DistanceCache = class _b2DistanceCache {
-  constructor() {
-    this.count = 0;
-    this.indexA = [0, 0, 0];
-    this.indexB = [0, 0, 0];
-  }
-  clone() {
-    const cache = new _b2DistanceCache();
-    cache.count = this.count;
-    cache.indexA = [...this.indexA];
-    cache.indexB = [...this.indexB];
-    return cache;
-  }
-};
-var b2DistanceInput = class {
-  constructor() {
-    this.proxyA = new b2DistanceProxy();
-    this.proxyB = new b2DistanceProxy();
-    this.transformA = new b2Transform(new b2Vec2(0, 0), new b2Rot(0, 0));
-    this.transformB = new b2Transform(new b2Vec2(0, 0), new b2Rot(0, 0));
-    this.useRadii = false;
-  }
-};
-var b2DistanceOutput = class {
-  constructor() {
-    this.pointA = new b2Vec2(0, 0);
-    this.pointB = new b2Vec2(0, 0);
-    this.distance = 0;
-    this.iterations = 0;
-    this.simplexCount = 0;
-  }
-};
-var b2SimplexVertex = class _b2SimplexVertex {
-  constructor() {
-    this.wA = null;
-    this.wB = null;
-    this.w = null;
-    this.a = 0;
-    this.indexA = 0;
-    this.indexB = 0;
-  }
-  clone() {
-    const sv = new _b2SimplexVertex();
-    sv.wA = this.wA.clone();
-    sv.wB = this.wB.clone();
-    sv.w = this.w.clone();
-    sv.a = this.a;
-    sv.indexA = this.indexA;
-    sv.indexB = this.indexB;
-    return sv;
-  }
-};
-var b2Simplex = class {
-  constructor() {
-    this.v1 = new b2SimplexVertex();
-    this.v2 = new b2SimplexVertex();
-    this.v3 = new b2SimplexVertex();
-    this.count = 0;
-  }
-};
-var b2ShapeCastPairInput = class {
-  constructor() {
-    this.proxyA = new b2DistanceProxy();
-    this.proxyB = new b2DistanceProxy();
-    this.transformA = new b2Transform(new b2Vec2(0, 0), new b2Rot(0, 0));
-    this.transformB = new b2Transform(new b2Vec2(0, 0), new b2Rot(0, 0));
-    this.translationB = new b2Vec2(0, 0);
-    this.maxFraction = 0;
-  }
-};
-var b2Sweep = class _b2Sweep {
-  constructor(c2 = null, v1 = null, v2 = null, r1 = null, r2 = null) {
-    this.localCenter = c2;
-    this.c1 = v1;
-    this.c2 = v2;
-    this.q1 = r1;
-    this.q2 = r2;
-  }
-  clone() {
-    return new _b2Sweep(this.localCenter.clone(), this.c1.clone(), this.c2.clone(), this.q1.clone(), this.q2.clone());
-  }
-};
-var b2TOIInput = class _b2TOIInput {
-  constructor(proxyA = null, proxyB = null, sweepA = null, sweepB = null, tMax = 0) {
-    this.proxyA = proxyA;
-    this.proxyB = proxyB;
-    this.sweepA = sweepA;
-    this.sweepB = sweepB;
-    this.tMax = tMax;
-  }
-  clone() {
-    return new _b2TOIInput(this.proxyA.clone(), this.proxyB.clone(), this.sweepA.clone(), this.sweepB.clone(), this.tMax);
-  }
-};
-var b2TOIState = {
-  b2_toiStateUnknown: 0,
-  b2_toiStateFailed: 1,
-  b2_toiStateOverlapped: 2,
-  b2_toiStateHit: 3,
-  b2_toiStateSeparated: 4
-};
-var b2TOIOutput = class {
-  constructor() {
-    this.state = b2TOIState.b2_toiStateUnknown;
-    this.t = 0;
-  }
-};
-var b2ManifoldPoint = class _b2ManifoldPoint {
-  constructor() {
-    this.pointX = 0;
-    this.pointY = 0;
-    this.anchorAX = 0;
-    this.anchorAY = 0;
-    this.anchorBX = 0;
-    this.anchorBY = 0;
-    this.separation = 0;
-    this.normalImpulse = 0;
-    this.tangentImpulse = 0;
-    this.maxNormalImpulse = 0;
-    this.normalVelocity = 0;
-    this.id = 0;
-    this.persisted = false;
-  }
-  clone() {
-    const clone = new _b2ManifoldPoint();
-    clone.pointX = this.pointX;
-    clone.pointY = this.pointY;
-    clone.anchorAX = this.anchorAX;
-    clone.anchorAY = this.anchorAY;
-    clone.anchorBX = this.anchorBX;
-    clone.anchorBY = this.anchorBY;
-    clone.separation = this.separation;
-    clone.normalImpulse = this.normalImpulse;
-    clone.tangentImpulse = this.tangentImpulse;
-    clone.maxNormalImpulse = this.maxNormalImpulse;
-    clone.normalVelocity = this.normalVelocity;
-    clone.id = this.id;
-    clone.persisted = this.persisted;
-    return clone;
-  }
-  clear() {
-    this.pointX = 0;
-    this.pointY = 0;
-    this.anchorAX = 0;
-    this.anchorAY = 0;
-    this.anchorBX = 0;
-    this.anchorBY = 0;
-    this.separation = 0;
-    this.normalImpulse = 0;
-    this.tangentImpulse = 0;
-    this.maxNormalImpulse = 0;
-    this.normalVelocity = 0;
-    this.id = 0;
-    this.persisted = false;
-    return this;
-  }
-  copyTo(mp) {
-    mp.pointX = this.pointX;
-    mp.pointY = this.pointY;
-    mp.anchorAX = this.anchorAX;
-    mp.anchorAY = this.anchorAY;
-    mp.anchorBX = this.anchorBX;
-    mp.anchorBY = this.anchorBY;
-    mp.separation = this.separation;
-    mp.normalImpulse = this.normalImpulse;
-    mp.tangentImpulse = this.tangentImpulse;
-    mp.maxNormalImpulse = this.maxNormalImpulse;
-    mp.normalVelocity = this.normalVelocity;
-    mp.id = this.id;
-    mp.persisted = this.persisted;
-  }
-};
-var b2Manifold = class _b2Manifold {
-  constructor(p14 = new b2ManifoldPoint(), p23 = new b2ManifoldPoint()) {
-    this.points = [p14, p23];
-    this.normalX = this.normalY = 0;
-    this.pointCount = 0;
-  }
-  clone() {
-    const clone = new _b2Manifold();
-    this.copyTo(clone);
-    return clone;
-  }
-  clear() {
-    if (this.points[0]) {
-      this.points[0].clear();
-    }
-    if (this.points[1]) {
-      this.points[1].clear();
-    }
-    this.normalX = this.normalY = 0;
-    this.pointCount = 0;
-    return this;
-  }
-  copyTo(manifold) {
-    this.points[0].copyTo(manifold.points[0]);
-    this.points[1].copyTo(manifold.points[1]);
-    manifold.normalX = this.normalX;
-    manifold.normalY = this.normalY;
-    manifold.pointCount = this.pointCount;
-  }
-};
-var b2TreeNode = class {
-  constructor() {
-    this.aabb = null;
-    this.categoryBits = 0;
-    this.parent_next = B2_NULL_INDEX;
-    this.child1 = B2_NULL_INDEX;
-    this.child2 = B2_NULL_INDEX;
-    this.userData = 0;
-    this.height = -1;
-    this.enlarged = false;
-  }
-};
-
 // src/distance_c.js
 function b2GetSweepTransform(sweep, time) {
   const xf2 = new b2Transform();
@@ -1617,7 +1617,7 @@ function b2SegmentDistance(p1X, p1Y, q1X, q1Y, p2X, p2Y, q2X, q2Y) {
   return sdResult;
 }
 function b2MakeProxy(vertices, count, radius) {
-  count = Math.min(count, b2_maxPolygonVertices);
+  count = Math.min(count, B2_MAX_POLYGON_VERTICES);
   const proxy = new b2DistanceProxy();
   proxy.points = [];
   proxy.count = count;
@@ -1930,8 +1930,10 @@ function b2ShapeDistance(cache, input, simplexes, simplexCapacity) {
   }
   return output;
 }
+var rayPoint = new b2Vec2(0, 0);
+var rayNormal = new b2Vec2(0, 1);
 function b2ShapeCast(input) {
-  const output = new b2CastOutput();
+  const output = new b2CastOutput(rayNormal, rayPoint);
   output.fraction = input.maxFraction;
   const proxyA = input.proxyA;
   const xfA = input.transformA;
@@ -2272,7 +2274,7 @@ function b2TimeOfImpact(input) {
         }
       }
       ++pushBackIter;
-      if (pushBackIter == b2_maxPolygonVertices) {
+      if (pushBackIter == B2_MAX_POLYGON_VERTICES) {
         break;
       }
     }
@@ -2338,7 +2340,7 @@ function b2IsPolygonCCW(points, count) {
 }
 function b2ComputeHull(points, count) {
   const hull = new b2Hull();
-  if (count < 3 || count > b2_maxPolygonVertices) {
+  if (count < 3 || count > B2_MAX_POLYGON_VERTICES) {
     return hull;
   }
   const aabb = new b2AABB(Number.MAX_VALUE, Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE);
@@ -2449,7 +2451,7 @@ function b2ValidateHull(hull) {
   if (!b2Validation) {
     return true;
   }
-  if (hull.count < 3 || b2_maxPolygonVertices < hull.count) {
+  if (hull.count < 3 || B2_MAX_POLYGON_VERTICES < hull.count) {
     return false;
   }
   if (!b2IsPolygonCCW(hull.points, hull.count)) {
@@ -2488,7 +2490,7 @@ function b2ValidateHull(hull) {
 
 // src/geometry_c.js
 function b2IsValidRay(input) {
-  const isValid = b2Vec2_IsValid(input.origin) && b2Vec2_IsValid(input.translation) && b2IsValid(input.maxFraction) && 0 <= input.maxFraction && input.maxFraction < b2_huge;
+  const isValid = b2Vec2_IsValid(input.origin) && b2Vec2_IsValid(input.translation) && b2IsValid(input.maxFraction) && 0 <= input.maxFraction && input.maxFraction < B2_HUGE;
   return isValid;
 }
 function b2ComputePolygonCentroid(vertices, count) {
@@ -2642,7 +2644,7 @@ function b2ComputePolygonMass(shape, density) {
     capsule.radius = shape.radius;
     return b2ComputeCapsuleMass(capsule, density);
   }
-  const vertices = new Array(b2_maxPolygonVertices);
+  const vertices = new Array(B2_MAX_POLYGON_VERTICES);
   const count = shape.count;
   const radius = shape.radius;
   if (radius > 0) {
@@ -2763,9 +2765,11 @@ function b2PointInPolygon(point, shape) {
   const output = b2ShapeDistance(cache, input, null, 0);
   return output.distance <= shape.radius;
 }
+var rayPoint2 = new b2Vec2(0, 0);
+var rayNormal2 = new b2Vec2(0, 1);
 function b2RayCastCircle(input, shape) {
   const p4 = shape.center.clone();
-  const output = new b2CastOutput();
+  const output = new b2CastOutput(rayNormal2, rayPoint2);
   const s = b2Sub(input.origin, p4);
   const res = b2GetLengthAndNormalize(input.translation);
   const length = res.length;
@@ -2794,7 +2798,7 @@ function b2RayCastCircle(input, shape) {
   return output;
 }
 function b2RayCastCapsule(input, shape) {
-  const output = new b2CastOutput();
+  const output = new b2CastOutput(rayNormal2, rayPoint2);
   const v1 = shape.center1;
   const v2 = shape.center2;
   const e = b2Sub(v2, v1);
@@ -2876,7 +2880,7 @@ function b2RayCastSegment(input, shape, oneSided) {
   if (oneSided) {
     const offset = b2Cross(b2Sub(input.origin, shape.point1), b2Sub(shape.point2, shape.point1));
     if (offset < 0) {
-      const output2 = new b2CastOutput();
+      const output2 = new b2CastOutput(rayNormal2, rayPoint2);
       return output2;
     }
   }
@@ -2885,7 +2889,7 @@ function b2RayCastSegment(input, shape, oneSided) {
   const v1 = shape.point1;
   const v2 = shape.point2;
   const e = b2Sub(v2, v1);
-  const output = new b2CastOutput();
+  const output = new b2CastOutput(rayNormal2, rayPoint2);
   const res = b2GetLengthAndNormalize(e);
   const length = res.length;
   const eUnit = res.normal;
@@ -2922,7 +2926,7 @@ function b2RayCastPolygon(input, shape) {
     const d = input.translation;
     let lower = 0, upper = input.maxFraction;
     let index = -1;
-    const output = new b2CastOutput();
+    const output = new b2CastOutput(rayNormal2, rayPoint2);
     for (let i = 0; i < shape.count; ++i) {
       const numerator = b2Dot(shape.normals[i], b2Sub(shape.vertices[i], p14));
       const denominator = b2Dot(shape.normals[i], d);
@@ -3055,8 +3059,8 @@ function b2CreateShapeInternal(world, body, transform, def, geometry, shapeType)
     case b2ShapeType.b2_segmentShape:
       shape.segment = geometry;
       break;
-    case b2ShapeType.b2_smoothSegmentShape:
-      shape.smoothSegment = geometry;
+    case b2ShapeType.b2_chainSegmentShape:
+      shape.chainSegment = geometry;
       break;
     default:
       break;
@@ -3105,7 +3109,7 @@ function b2CreateShape(bodyId, def, geometry, shapeType) {
   const body = b2GetBodyFullId(world, bodyId);
   const transform = b2GetBodyTransformQuick(world, body);
   const shape = b2CreateShapeInternal(world, body, transform, def, geometry, shapeType);
-  if (body.automaticMass === true) {
+  if (body.updateBodyMass === true) {
     b2UpdateBodyMassData(world, body);
   }
   b2ValidateSolverSets(world);
@@ -3169,7 +3173,7 @@ function b2DestroyShape(shapeId) {
   const wakeBodies = true;
   const body = b2GetBody(world, shape.bodyId);
   b2DestroyShapeInternal(world, shape, body, wakeBodies);
-  if (body.automaticMass === true) {
+  if (body.updateBodyMass === true) {
     b2UpdateBodyMassData(world, body);
   }
 }
@@ -3200,53 +3204,53 @@ function b2CreateChain(bodyId, def) {
   shapeDef.enableSensorEvents = false;
   const n = def.count;
   const points = def.points;
-  let smoothSegment;
+  let chainSegment;
   if (def.isLoop) {
     chainShape.count = n;
     chainShape.shapeIndices = new Array(n);
     let prevIndex = n - 1;
     for (let i = 0; i < n - 2; ++i) {
-      smoothSegment = new b2SmoothSegment();
-      smoothSegment.ghost1 = points[prevIndex].clone();
-      smoothSegment.segment = new b2Segment();
-      smoothSegment.segment.point1 = points[i].clone();
-      smoothSegment.segment.point2 = points[i + 1].clone();
-      smoothSegment.ghost2 = points[i + 2].clone();
-      smoothSegment.chainId = chainId;
+      chainSegment = new b2ChainSegment();
+      chainSegment.ghost1 = points[prevIndex].clone();
+      chainSegment.segment = new b2Segment();
+      chainSegment.segment.point1 = points[i].clone();
+      chainSegment.segment.point2 = points[i + 1].clone();
+      chainSegment.ghost2 = points[i + 2].clone();
+      chainSegment.chainId = chainId;
       prevIndex = i;
-      const shape2 = b2CreateShapeInternal(world, body, transform, shapeDef, smoothSegment, b2ShapeType.b2_smoothSegmentShape);
+      const shape2 = b2CreateShapeInternal(world, body, transform, shapeDef, chainSegment, b2ShapeType.b2_chainSegmentShape);
       chainShape.shapeIndices[i] = shape2.id;
     }
-    smoothSegment = new b2SmoothSegment();
-    smoothSegment.ghost1 = points[n - 3].clone();
-    smoothSegment.segment = new b2Segment();
-    smoothSegment.segment.point1 = points[n - 2].clone();
-    smoothSegment.segment.point2 = points[n - 1].clone();
-    smoothSegment.ghost2 = points[0].clone();
-    smoothSegment.chainId = chainId;
-    let shape = b2CreateShapeInternal(world, body, transform, shapeDef, smoothSegment, b2ShapeType.b2_smoothSegmentShape);
+    chainSegment = new b2ChainSegment();
+    chainSegment.ghost1 = points[n - 3].clone();
+    chainSegment.segment = new b2Segment();
+    chainSegment.segment.point1 = points[n - 2].clone();
+    chainSegment.segment.point2 = points[n - 1].clone();
+    chainSegment.ghost2 = points[0].clone();
+    chainSegment.chainId = chainId;
+    let shape = b2CreateShapeInternal(world, body, transform, shapeDef, chainSegment, b2ShapeType.b2_chainSegmentShape);
     chainShape.shapeIndices[n - 2] = shape.id;
-    smoothSegment = new b2SmoothSegment();
-    smoothSegment.ghost1 = points[n - 2].clone();
-    smoothSegment.segment = new b2Segment();
-    smoothSegment.segment.point1 = points[n - 1].clone();
-    smoothSegment.segment.point2 = points[0].clone();
-    smoothSegment.ghost2 = points[1].clone();
-    smoothSegment.chainId = chainId;
-    shape = b2CreateShapeInternal(world, body, transform, shapeDef, smoothSegment, b2ShapeType.b2_smoothSegmentShape);
+    chainSegment = new b2ChainSegment();
+    chainSegment.ghost1 = points[n - 2].clone();
+    chainSegment.segment = new b2Segment();
+    chainSegment.segment.point1 = points[n - 1].clone();
+    chainSegment.segment.point2 = points[0].clone();
+    chainSegment.ghost2 = points[1].clone();
+    chainSegment.chainId = chainId;
+    shape = b2CreateShapeInternal(world, body, transform, shapeDef, chainSegment, b2ShapeType.b2_chainSegmentShape);
     chainShape.shapeIndices[n - 1] = shape.id;
   } else {
     chainShape.count = n - 3;
     chainShape.shapeIndices = new Array(n);
     for (let i = 0; i < n - 3; ++i) {
-      smoothSegment = new b2SmoothSegment();
-      smoothSegment.ghost1 = points[i].clone();
-      smoothSegment.segment = new b2Segment();
-      smoothSegment.segment.point1 = points[i + 1].clone();
-      smoothSegment.segment.point2 = points[i + 2].clone();
-      smoothSegment.ghost2 = points[i + 3].clone();
-      smoothSegment.chainId = chainId;
-      const shape = b2CreateShapeInternal(world, body, transform, shapeDef, smoothSegment, b2ShapeType.b2_smoothSegmentShape);
+      chainSegment = new b2ChainSegment();
+      chainSegment.ghost1 = points[i].clone();
+      chainSegment.segment = new b2Segment();
+      chainSegment.segment.point1 = points[i + 1].clone();
+      chainSegment.segment.point2 = points[i + 2].clone();
+      chainSegment.ghost2 = points[i + 3].clone();
+      chainSegment.chainId = chainId;
+      const shape = b2CreateShapeInternal(world, body, transform, shapeDef, chainSegment, b2ShapeType.b2_chainSegmentShape);
       chainShape.shapeIndices[i] = shape.id;
     }
   }
@@ -3292,8 +3296,8 @@ function b2ComputeShapeAABB(shape, xf2) {
       return b2ComputePolygonAABB(shape.polygon, xf2);
     case b2ShapeType.b2_segmentShape:
       return b2ComputeSegmentAABB(shape.segment, xf2);
-    case b2ShapeType.b2_smoothSegmentShape:
-      return b2ComputeSegmentAABB(shape.smoothSegment.segment, xf2);
+    case b2ShapeType.b2_chainSegmentShape:
+      return b2ComputeSegmentAABB(shape.chainSegment.segment, xf2);
     default:
       return new b2AABB(xf2.p.x, xf2.p.y, xf2.p.x, xf2.p.y);
   }
@@ -3308,8 +3312,8 @@ function b2GetShapeCentroid(shape) {
       return shape.polygon.centroid.clone();
     case b2ShapeType.b2_segmentShape:
       return b2Lerp(shape.segment.point1, shape.segment.point2, 0.5);
-    case b2ShapeType.b2_smoothSegmentShape:
-      return b2Lerp(shape.smoothSegment.segment.point1, shape.smoothSegment.segment.point2, 0.5);
+    case b2ShapeType.b2_chainSegmentShape:
+      return b2Lerp(shape.chainSegment.segment.point1, shape.chainSegment.segment.point2, 0.5);
     default:
       return new b2Vec2(0, 0);
   }
@@ -3334,8 +3338,8 @@ function b2GetShapePerimeter(shape) {
     }
     case b2ShapeType.b2_segmentShape:
       return 2 * b2Length(b2Sub(shape.segment.point1, shape.segment.point2));
-    case b2ShapeType.b2_smoothSegmentShape:
-      return 2 * b2Length(b2Sub(shape.smoothSegment.segment.point1, shape.smoothSegment.segment.point2));
+    case b2ShapeType.b2_chainSegmentShape:
+      return 2 * b2Length(b2Sub(shape.chainSegment.segment.point1, shape.chainSegment.segment.point2));
     default:
       return 0;
   }
@@ -3396,11 +3400,11 @@ function b2ComputeShapeExtent(shape, localCenter) {
         extent.maxExtent = Math.sqrt(Math.max(b2LengthSquared(c1), b2LengthSquared(c2)));
       }
       break;
-    case b2ShapeType.b2_smoothSegmentShape:
+    case b2ShapeType.b2_chainSegmentShape:
       {
         extent.minExtent = 0;
-        const c1 = b2Sub(shape.smoothSegment.segment.point1, localCenter);
-        const c2 = b2Sub(shape.smoothSegment.segment.point2, localCenter);
+        const c1 = b2Sub(shape.chainSegment.segment.point1, localCenter);
+        const c2 = b2Sub(shape.chainSegment.segment.point2, localCenter);
         extent.maxExtent = Math.sqrt(Math.max(b2LengthSquared(c1), b2LengthSquared(c2)));
       }
       break;
@@ -3409,6 +3413,8 @@ function b2ComputeShapeExtent(shape, localCenter) {
   }
   return extent;
 }
+var rayPoint3 = new b2Vec2(0, 0);
+var rayNormal3 = new b2Vec2(0, 1);
 function b2RayCastShape(input, shape, transform) {
   const localInput = input;
   localInput.origin = b2InvTransformPoint(transform, input.origin);
@@ -3431,8 +3437,8 @@ function b2RayCastShape(input, shape, transform) {
     case b2ShapeType.b2_segmentShape:
       output = b2RayCastSegment(localInput, shape.segment, false);
       break;
-    case b2ShapeType.b2_smoothSegmentShape:
-      output = b2RayCastSegment(localInput, shape.smoothSegment.segment, true);
+    case b2ShapeType.b2_chainSegmentShape:
+      output = b2RayCastSegment(localInput, shape.chainSegment.segment, true);
       break;
     default:
       return output;
@@ -3465,8 +3471,8 @@ function b2ShapeCastShape(input, shape, transform) {
     case b2ShapeType.b2_segmentShape:
       output = b2ShapeCastSegment(localInput, shape.segment);
       break;
-    case b2ShapeType.b2_smoothSegmentShape:
-      output = b2ShapeCastSegment(localInput, shape.smoothSegment.segment);
+    case b2ShapeType.b2_chainSegmentShape:
+      output = b2ShapeCastSegment(localInput, shape.chainSegment.segment);
       break;
     default:
       return output;
@@ -3495,8 +3501,8 @@ function b2MakeShapeDistanceProxy(shape) {
       return b2MakeProxy(shape.polygon.vertices, shape.polygon.count, shape.polygon.radius);
     case b2ShapeType.b2_segmentShape:
       return b2MakeProxy([shape.segment.point1, shape.segment.point2], 2, 0);
-    case b2ShapeType.b2_smoothSegmentShape:
-      return b2MakeProxy([shape.smoothSegment.segment.point1.clone(), shape.smoothSegment.segment.point2.clone()], 2, 0);
+    case b2ShapeType.b2_chainSegmentShape:
+      return b2MakeProxy([shape.chainSegment.segment.point1.clone(), shape.chainSegment.segment.point2.clone()], 2, 0);
     default:
       return new b2DistanceProxy();
   }
@@ -3545,7 +3551,7 @@ function b2Shape_RayCast(shapeId, origin, translation) {
   input.maxFraction = 1;
   input.origin = b2InvTransformPoint(transform, origin);
   input.translation = b2InvRotateVector(transform.q, translation);
-  let output = new b2CastOutput();
+  let output = new b2CastOutput(rayNormal3, rayPoint3);
   switch (shape.type) {
     case b2ShapeType.b2_capsuleShape:
       output = b2RayCastCapsule(input, shape.capsule);
@@ -3559,8 +3565,8 @@ function b2Shape_RayCast(shapeId, origin, translation) {
     case b2ShapeType.b2_polygonShape:
       output = b2RayCastPolygon(input, shape.polygon);
       break;
-    case b2ShapeType.b2_smoothSegmentShape:
-      output = b2RayCastSegment(input, shape.smoothSegment.segment, true);
+    case b2ShapeType.b2_chainSegmentShape:
+      output = b2RayCastSegment(input, shape.chainSegment.segment, true);
       break;
     default:
       return output;
@@ -3736,10 +3742,10 @@ function b2Shape_GetSegment(shapeId) {
   const shape = b2GetShape(world, shapeId);
   return shape.segment;
 }
-function b2Shape_GetSmoothSegment(shapeId) {
+function b2Shape_GetChainSegment(shapeId) {
   const world = b2GetWorld(shapeId.world0);
   const shape = b2GetShape(world, shapeId);
-  return shape.smoothSegment;
+  return shape.chainSegment;
 }
 function b2Shape_GetCapsule(shapeId) {
   const world = b2GetWorld(shapeId.world0);
@@ -3802,8 +3808,8 @@ function b2Shape_SetPolygon(shapeId, polygon) {
 function b2Shape_GetParentChain(shapeId) {
   const world = b2GetWorld(shapeId.world0);
   const shape = b2GetShape(world, shapeId);
-  if (shape.type === b2ShapeType.b2_smoothSegmentShape) {
-    const chainId = shape.smoothSegment.chainId;
+  if (shape.type === b2ShapeType.b2_chainSegmentShape) {
+    const chainId = shape.chainSegment.chainId;
     if (chainId !== B2_NULL_INDEX) {
       const chain = world.chainArray[chainId];
       return new b2ChainId(chainId + 1, shapeId.world0, chain.revision);
@@ -3927,7 +3933,7 @@ var b2Shape = class {
     this.circle = new b2Circle();
     this.polygon = new b2Polygon();
     this.segment = new b2Segment();
-    this.smoothSegment = new b2SmoothSegment();
+    this.chainSegment = new b2ChainSegment();
     this.revision = 0;
     this.isSensor = false;
     this.enableSensorEvents = false;
@@ -4586,7 +4592,7 @@ function b2AABB_Overlaps(a, b) {
 }
 
 // src/dynamic_tree_c.js
-var b2_treeStackSize = 1024;
+var B2_TREE_STACK_SIZE = 1024;
 function b2IsLeaf(node) {
   return node.height === 0;
 }
@@ -5235,7 +5241,7 @@ function b2DynamicTree_RayCast(tree, input, maskBits, callback, context) {
       if (value == 0) {
         return;
       }
-      if (0 < value && value < maxFraction) {
+      if (0 < value && value <= maxFraction) {
         maxFraction = value;
         p23 = b2MulAdd(p14, maxFraction, d);
         segmentAABB.lowerBoundX = Math.min(p14.x, p23.x);
@@ -5394,7 +5400,7 @@ function b2BuildTree(tree, leafCount) {
     nodes[leafIndices[0]].parent_next = B2_NULL_INDEX;
     return leafIndices[0];
   }
-  const stack2 = new Array(b2_treeStackSize);
+  const stack2 = new Array(B2_TREE_STACK_SIZE);
   let top = 0;
   stack2[0] = {
     nodeIndex: b2AllocateNode(tree),
@@ -5964,7 +5970,7 @@ function b2MakeSoft(hertz, zeta, h) {
   if (hertz === 0) {
     return new b2Softness(0, 1, 0);
   }
-  const omega = 2 * b2_pi * hertz;
+  const omega = 2 * B2_PI * hertz;
   const a1 = 2 * zeta + h * omega;
   const a2 = h * omega * a1;
   const a3 = 1 / (1 + a2);
@@ -5976,7 +5982,7 @@ function b2IntegrateVelocitiesTask(startIndex, endIndex, context) {
   const gravity = context.world.gravity;
   const h = context.h;
   const maxLinearSpeed = context.maxLinearVelocity;
-  const maxAngularSpeed = b2_maxRotation * context.inv_dt;
+  const maxAngularSpeed = B2_MAX_ROTATION * context.inv_dt;
   const maxLinearSpeedSquared = maxLinearSpeed * maxLinearSpeed;
   const maxAngularSpeedSquared = maxAngularSpeed * maxAngularSpeed;
   for (let i = startIndex; i < endIndex; ++i) {
@@ -6160,15 +6166,11 @@ function b2SolverTask(workerContext) {
   const activeColorCount = context.activeColorCount;
   const stages = context.stages;
   if (workerIndex === 0) {
-    let bodySyncIndex = 1;
     let stageIndex = 0;
     b2ExecuteMainStage(stages[stageIndex], context);
     stageIndex += 1;
-    let contactSyncIndex = 1;
     b2ExecuteMainStage(stages[stageIndex], context);
     stageIndex += 1;
-    contactSyncIndex += 1;
-    let graphSyncIndex = 1;
     b2PrepareOverflowJoints(context);
     b2PrepareOverflowContacts(context);
     const subStepCount = context.subStepCount;
@@ -6176,14 +6178,12 @@ function b2SolverTask(workerContext) {
       let iterStageIndex = stageIndex;
       b2ExecuteMainStage(stages[iterStageIndex], context);
       iterStageIndex += 1;
-      bodySyncIndex += 1;
       b2WarmStartOverflowJoints(context);
       b2WarmStartOverflowContacts(context);
       for (let colorIndex = 0; colorIndex < activeColorCount; ++colorIndex) {
         b2ExecuteMainStage(stages[iterStageIndex], context);
         iterStageIndex += 1;
       }
-      graphSyncIndex += 1;
       let useBias = true;
       b2SolveOverflowJoints(context, useBias);
       b2SolveOverflowContacts(context, useBias);
@@ -6191,10 +6191,8 @@ function b2SolverTask(workerContext) {
         b2ExecuteMainStage(stages[iterStageIndex], context);
         iterStageIndex += 1;
       }
-      graphSyncIndex += 1;
       b2ExecuteMainStage(stages[iterStageIndex], context);
       iterStageIndex += 1;
-      bodySyncIndex += 1;
       useBias = false;
       b2SolveOverflowJoints(context, useBias);
       b2SolveOverflowContacts(context, useBias);
@@ -6202,7 +6200,6 @@ function b2SolverTask(workerContext) {
         b2ExecuteMainStage(stages[iterStageIndex], context);
         iterStageIndex += 1;
       }
-      graphSyncIndex += 1;
     }
     stageIndex += 1 + activeColorCount + activeColorCount + 1 + activeColorCount;
     {
@@ -6259,10 +6256,10 @@ function b2ContinuousQueryCallback(proxyId, shapeId, context) {
       return true;
     }
   }
-  if (shape.type === b2ShapeType.b2_smoothSegmentShape) {
+  if (shape.type === b2ShapeType.b2_chainSegmentShape) {
     const transform = bodySim.transform;
-    const p14 = b2TransformPoint(transform, shape.smoothSegment.segment.point1);
-    const p23 = b2TransformPoint(transform, shape.smoothSegment.segment.point2);
+    const p14 = b2TransformPoint(transform, shape.chainSegment.segment.point1);
+    const p23 = b2TransformPoint(transform, shape.chainSegment.segment.point2);
     const eX = p23.x - p14.x;
     const eY = p23.y - p14.y;
     const c1X = continuousContext.centroid1X;
@@ -6370,10 +6367,10 @@ function b2SolveContinuous(world, bodySimIndex) {
     if (fastShape.isSensor) {
       continue;
     }
-    b2DynamicTree_Query(staticTree, box, b2_defaultMaskBits, b2ContinuousQueryCallback, context);
+    b2DynamicTree_Query(staticTree, box, B2_DEFAULT_MASK_BITS, b2ContinuousQueryCallback, context);
     if (isBullet) {
-      b2DynamicTree_Query(kinematicTree, box, b2_defaultMaskBits, b2ContinuousQueryCallback, context);
-      b2DynamicTree_Query(dynamicTree, box, b2_defaultMaskBits, b2ContinuousQueryCallback, context);
+      b2DynamicTree_Query(kinematicTree, box, B2_DEFAULT_MASK_BITS, b2ContinuousQueryCallback, context);
+      b2DynamicTree_Query(dynamicTree, box, B2_DEFAULT_MASK_BITS, b2ContinuousQueryCallback, context);
     }
   }
   const speculativeDistance = b2_speculativeDistance;
@@ -6817,7 +6814,7 @@ function b2Solve(world, stepContext) {
 function b2DistanceJoint_SetLength(jointId, length) {
   const base = b2GetJointSimCheckType(jointId, b2JointType.b2_distanceJoint);
   const joint = base.distanceJoint;
-  joint.length = b2ClampFloat(length, b2_linearSlop, b2_huge);
+  joint.length = b2ClampFloat(length, b2_linearSlop, B2_HUGE);
   joint.impulse = 0;
   joint.lowerImpulse = 0;
   joint.upperImpulse = 0;
@@ -6839,8 +6836,8 @@ function b2DistanceJoint_IsLimitEnabled(jointId) {
 function b2DistanceJoint_SetLengthRange(jointId, minLength, maxLength) {
   const base = b2GetJointSimCheckType(jointId, b2JointType.b2_distanceJoint);
   const joint = base.distanceJoint;
-  minLength = b2ClampFloat(minLength, b2_linearSlop, b2_huge);
-  maxLength = b2ClampFloat(maxLength, b2_linearSlop, b2_huge);
+  minLength = b2ClampFloat(minLength, b2_linearSlop, B2_HUGE);
+  maxLength = b2ClampFloat(maxLength, b2_linearSlop, B2_HUGE);
   joint.minLength = Math.min(minLength, maxLength);
   joint.maxLength = Math.max(minLength, maxLength);
   joint.impulse = 0;
@@ -7137,10 +7134,10 @@ function b2DrawDistanceJoint(draw, base, transformA, transformB) {
     if (joint.minLength > b2_linearSlop) {
       draw.DrawSegment(b2Sub(pMin, offset), b2Add(pMin, offset), b2HexColor.b2_colorLightGreen, draw.context);
     }
-    if (joint.maxLength < b2_huge) {
+    if (joint.maxLength < B2_HUGE) {
       draw.DrawSegment(b2Sub(pMax, offset), b2Add(pMax, offset), b2HexColor.b2_colorRed, draw.context);
     }
-    if (joint.minLength > b2_linearSlop && joint.maxLength < b2_huge) {
+    if (joint.minLength > b2_linearSlop && joint.maxLength < B2_HUGE) {
       draw.DrawSegment(pMin, pMax, b2HexColor.b2_colorGray, draw.context);
     }
   }
@@ -8145,7 +8142,7 @@ function b2MotorJoint_GetLinearOffset(jointId) {
 }
 function b2MotorJoint_SetAngularOffset(jointId, angularOffset) {
   const joint = b2GetJointSimCheckType(jointId, b2JointType.b2_motorJoint);
-  joint.motorJoint.angularOffset = b2ClampFloat(angularOffset, -b2_pi, b2_pi);
+  joint.motorJoint.angularOffset = b2ClampFloat(angularOffset, -B2_PI, B2_PI);
 }
 function b2MotorJoint_GetAngularOffset(jointId) {
   const joint = b2GetJointSimCheckType(jointId, b2JointType.b2_motorJoint);
@@ -8633,7 +8630,7 @@ function b2SolveWeldJoint(base, context, useBias) {
 function b2DefaultDistanceJointDef() {
   const def = new b2DistanceJointDef();
   def.length = 1;
-  def.maxLength = b2_huge;
+  def.maxLength = B2_HUGE;
   return def;
 }
 function b2DefaultMotorJointDef() {
@@ -10444,7 +10441,7 @@ function b2CreateBody(worldId, def) {
     invMass: 0,
     inertia: 0,
     invInertia: 0,
-    minExtent: b2_huge,
+    minExtent: B2_HUGE,
     maxExtent: 0,
     linearDamping: def.linearDamping,
     angularDamping: def.angularDamping,
@@ -10494,7 +10491,7 @@ function b2CreateBody(worldId, def) {
     fixedRotation: def.fixedRotation,
     isSpeedCapped: false,
     isMarked: false,
-    automaticMass: def.automaticMass
+    updateBodyMass: def.updateBodyMass
   });
   if (setId >= b2SetType.b2_awakeSet) {
     b2CreateIslandForBody(world, setId, body);
@@ -10619,7 +10616,7 @@ function b2UpdateBodyMassData(world, body) {
   bodySim.invMass = 0;
   bodySim.inertia = 0;
   bodySim.invInertia = 0;
-  bodySim.minExtent = b2_huge;
+  bodySim.minExtent = B2_HUGE;
   bodySim.maxExtent = 0;
   if (body.type !== b2BodyType.b2_dynamicBody) {
     bodySim.center = bodySim.transform.p.clone();
@@ -11085,19 +11082,6 @@ function b2Body_ApplyMassFromShapes(bodyId) {
   const body = b2GetBodyFullId(world, bodyId);
   b2UpdateBodyMassData(world, body);
 }
-function b2Body_SetAutomaticMass(bodyId, automaticMass) {
-  const world = b2GetWorldLocked(bodyId.world0);
-  if (world === null) {
-    return;
-  }
-  const body = b2GetBodyFullId(world, bodyId);
-  body.automaticMass = automaticMass;
-}
-function b2Body_GetAutomaticMass(bodyId) {
-  const world = b2GetWorld(bodyId.world0);
-  const body = b2GetBodyFullId(world, bodyId);
-  return body.automaticMass;
-}
 function b2Body_SetLinearDamping(bodyId, linearDamping) {
   const world = b2GetWorldLocked(bodyId.world0);
   if (world === null) {
@@ -11455,7 +11439,7 @@ var b2Body = class {
     this.fixedRotation = false;
     this.isSpeedCapped = false;
     this.isMarked = false;
-    this.automaticMass = false;
+    this.updateBodyMass = false;
   }
 };
 var b2BodyState = class {
@@ -12282,8 +12266,8 @@ function b2FindMaxSeparation(poly1, poly2) {
   }
   return { edgeIndex: bestIndex, maxSeparation };
 }
-var localPolyA = new b2Polygon(b2_maxPolygonVertices);
-var localPolyB = new b2Polygon(b2_maxPolygonVertices);
+var localPolyA = new b2Polygon(B2_MAX_POLYGON_VERTICES);
+var localPolyB = new b2Polygon(B2_MAX_POLYGON_VERTICES);
 var p3 = new b2Vec2();
 var sfA = new b2Transform();
 function b2CollidePolygons(polygonA, xfA, polygonB, xfB, manifold) {
@@ -12497,11 +12481,11 @@ function b2CollideSegmentAndPolygon(segmentA, xfA, polygonB, xfB, manifold) {
   const polygonA = b2MakeCapsule(segmentA.point1, segmentA.point2, 0);
   return b2CollidePolygons(polygonA, xfA, polygonB, xfB, manifold);
 }
-function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xfB, manifold) {
+function b2CollideChainSegmentAndCircle(chainSegmentA, xfA, circleB, xfB, manifold) {
   b2InvMulTransformsOut(xfA, xfB, xf);
   const pB = b2TransformPoint(xf, circleB.center);
-  const p14 = smoothSegmentA.segment.point1;
-  const p23 = smoothSegmentA.segment.point2;
+  const p14 = chainSegmentA.segment.point1;
+  const p23 = chainSegmentA.segment.point2;
   const e = b2Sub(p23, p14);
   const offset = b2Dot(b2RightPerp(e), b2Sub(pB, p14));
   if (offset < 0) {
@@ -12511,14 +12495,14 @@ function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xfB, mani
   const v = b2Dot(e, b2Sub(pB, p14));
   let pA;
   if (v <= 0) {
-    const prevEdge = b2Sub(p14, smoothSegmentA.ghost1);
+    const prevEdge = b2Sub(p14, chainSegmentA.ghost1);
     const uPrev = b2Dot(prevEdge, b2Sub(pB, p14));
     if (uPrev <= 0) {
       return manifold.clear();
     }
     pA = p14;
   } else if (u <= 0) {
-    const nextEdge = b2Sub(smoothSegmentA.ghost2, p23);
+    const nextEdge = b2Sub(chainSegmentA.ghost2, p23);
     const vNext = b2Dot(nextEdge, b2Sub(pB, p23));
     if (vNext > 0) {
       return manifold.clear();
@@ -12554,9 +12538,9 @@ function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xfB, mani
   manifold.pointCount = 1;
   return manifold;
 }
-function b2CollideSmoothSegmentAndCapsule(segmentA, xfA, capsuleB, xfB, cache, manifold) {
+function b2CollideChainSegmentAndCapsule(segmentA, xfA, capsuleB, xfB, cache, manifold) {
   const polyB = b2MakeCapsule(capsuleB.center1, capsuleB.center2, capsuleB.radius);
-  return b2CollideSmoothSegmentAndPolygon(segmentA, xfA, polyB, xfB, cache, manifold);
+  return b2CollideChainSegmentAndPolygon(segmentA, xfA, polyB, xfB, cache, manifold);
 }
 function b2ClipSegments(a1, a2, b1, b2, normal, ra, rb, id1, id2, manifold) {
   const tangent = b2LeftPerp(normal);
@@ -12626,7 +12610,7 @@ function b2ClassifyNormal(params, normal) {
     }
   }
 }
-var b2SmoothSegmentParams = class {
+var b2ChainSegmentParams = class {
   constructor() {
     this.edge1 = new b2Vec2();
     this.normal0 = new b2Vec2();
@@ -12635,31 +12619,31 @@ var b2SmoothSegmentParams = class {
     this.convex2 = false;
   }
 };
-function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, cache, manifold) {
+function b2CollideChainSegmentAndPolygon(chainSegmentA, xfA, polygonB, xfB, cache, manifold) {
   b2InvMulTransformsOut(xfA, xfB, xf);
   const centroidB = b2TransformPoint(xf, polygonB.centroid);
   const radiusB = polygonB.radius;
-  const p14 = smoothSegmentA.segment.point1;
-  const p23 = smoothSegmentA.segment.point2;
+  const p14 = chainSegmentA.segment.point1;
+  const p23 = chainSegmentA.segment.point2;
   const edge1 = b2Normalize(b2Sub(p23, p14));
-  const smoothParams = new b2SmoothSegmentParams();
-  smoothParams.edge1 = edge1.clone();
+  const chainParams = new b2ChainSegmentParams();
+  chainParams.edge1 = edge1.clone();
   const convexTol = 0.01;
-  const edge0 = b2Normalize(b2Sub(p14, smoothSegmentA.ghost1));
-  smoothParams.normal0 = b2RightPerp(edge0);
-  smoothParams.convex1 = b2Cross(edge0, edge1) >= convexTol;
-  const edge2 = b2Normalize(b2Sub(smoothSegmentA.ghost2, p23));
-  smoothParams.normal2 = b2RightPerp(edge2);
-  smoothParams.convex2 = b2Cross(edge1, edge2) >= convexTol;
+  const edge0 = b2Normalize(b2Sub(p14, chainSegmentA.ghost1));
+  chainParams.normal0 = b2RightPerp(edge0);
+  chainParams.convex1 = b2Cross(edge0, edge1) >= convexTol;
+  const edge2 = b2Normalize(b2Sub(chainSegmentA.ghost2, p23));
+  chainParams.normal2 = b2RightPerp(edge2);
+  chainParams.convex2 = b2Cross(edge1, edge2) >= convexTol;
   const normal1 = b2RightPerp(edge1);
   const behind1 = b2Dot(normal1, b2Sub(centroidB, p14)) < 0;
   let behind0 = true;
   let behind2 = true;
-  if (smoothParams.convex1) {
-    behind0 = b2Dot(smoothParams.normal0, b2Sub(centroidB, p14)) < 0;
+  if (chainParams.convex1) {
+    behind0 = b2Dot(chainParams.normal0, b2Sub(centroidB, p14)) < 0;
   }
-  if (smoothParams.convex2) {
-    behind2 = b2Dot(smoothParams.normal2, b2Sub(centroidB, p23)) < 0;
+  if (chainParams.convex2) {
+    behind2 = b2Dot(chainParams.normal2, b2Sub(centroidB, p23)) < 0;
   }
   if (behind1 && behind0 && behind2) {
     return manifold.clear();
@@ -12672,7 +12656,7 @@ function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, ca
     normals[i] = b2RotateVector(xf.q, polygonB.normals[i]);
   }
   const input = new b2DistanceInput();
-  input.proxyA = b2MakeProxy([smoothSegmentA.segment.point1, smoothSegmentA.segment.point2], 2, 0);
+  input.proxyA = b2MakeProxy([chainSegmentA.segment.point1, chainSegmentA.segment.point2], 2, 0);
   input.proxyB = b2MakeProxy(vertices, count, 0);
   input.transformA = new b2Transform(new b2Vec2(0, 0), new b2Rot(1, 0));
   input.transformB = new b2Transform(new b2Vec2(0, 0), new b2Rot(1, 0));
@@ -12681,8 +12665,8 @@ function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, ca
   if (output.distance > radiusB + b2_speculativeDistance) {
     return manifold.clear();
   }
-  const n0 = smoothParams.convex1 ? smoothParams.normal0 : normal1;
-  const n2 = smoothParams.convex2 ? smoothParams.normal2 : normal1;
+  const n0 = chainParams.convex1 ? chainParams.normal0 : normal1;
+  const n2 = chainParams.convex2 ? chainParams.normal2 : normal1;
   let incidentIndex = -1;
   let incidentNormal = -1;
   if (behind1 == false && output.distance > 0.1 * b2_linearSlop) {
@@ -12690,7 +12674,7 @@ function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, ca
       const pA = output.pointA;
       const pB = output.pointB;
       const normal = b2Normalize(b2Sub(pB, pA));
-      const type = b2ClassifyNormal(smoothParams, normal);
+      const type = b2ClassifyNormal(chainParams, normal);
       if (type == b2NormalType.b2_normalSkip) {
         return manifold.clear();
       }
@@ -12722,7 +12706,7 @@ function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, ca
         let dot2 = b2Dot(normalB, normals[ib22]);
         const ib = dot1 > dot2 ? ib12 : ib22;
         normalB = normals[ib];
-        const type = b2ClassifyNormal(smoothParams, b2Neg(normalB));
+        const type = b2ClassifyNormal(chainParams, b2Neg(normalB));
         if (type == b2NormalType.b2_normalSkip) {
           return manifold.clear();
         }
@@ -12776,10 +12760,10 @@ function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, ca
         incidentIndex = i;
       }
     }
-    if (smoothParams.convex1) {
+    if (chainParams.convex1) {
       let s0 = Number.MAX_VALUE;
       for (let i = 0; i < count; ++i) {
-        const s = b2Dot(smoothParams.normal0, b2Sub(vertices[i], p14));
+        const s = b2Dot(chainParams.normal0, b2Sub(vertices[i], p14));
         if (s < s0) {
           s0 = s;
         }
@@ -12789,10 +12773,10 @@ function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, ca
         incidentIndex = -1;
       }
     }
-    if (smoothParams.convex2) {
+    if (chainParams.convex2) {
       let s2 = Number.MAX_VALUE;
       for (let i = 0; i < count; ++i) {
-        const s = b2Dot(smoothParams.normal2, b2Sub(vertices[i], p23));
+        const s = b2Dot(chainParams.normal2, b2Sub(vertices[i], p23));
         if (s < s2) {
           s2 = s;
         }
@@ -12806,7 +12790,7 @@ function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, ca
     let referenceIndex = -1;
     for (let i = 0; i < count; ++i) {
       const n = normals[i];
-      const type = b2ClassifyNormal(smoothParams, b2Neg(n));
+      const type = b2ClassifyNormal(chainParams, b2Neg(n));
       if (type != b2NormalType.b2_normalAdmit) {
         continue;
       }
@@ -13014,14 +12998,14 @@ function b2SegmentAndCapsuleManifold(shapeA, xfA, shapeB, xfB, cache, manifold) 
 function b2SegmentAndPolygonManifold(shapeA, xfA, shapeB, xfB, cache, manifold) {
   return b2CollideSegmentAndPolygon(shapeA.segment, xfA, shapeB.polygon, xfB, manifold);
 }
-function b2SmoothSegmentAndCircleManifold(shapeA, xfA, shapeB, xfB, cache, manifold) {
-  return b2CollideSmoothSegmentAndCircle(shapeA.smoothSegment, xfA, shapeB.circle, xfB, manifold);
+function b2ChainSegmentAndCircleManifold(shapeA, xfA, shapeB, xfB, cache, manifold) {
+  return b2CollideChainSegmentAndCircle(shapeA.chainSegment, xfA, shapeB.circle, xfB, manifold);
 }
-function b2SmoothSegmentAndCapsuleManifold(shapeA, xfA, shapeB, xfB, cache, manifold) {
-  return b2CollideSmoothSegmentAndCapsule(shapeA.smoothSegment, xfA, shapeB.capsule, xfB, cache, manifold);
+function b2ChainSegmentAndCapsuleManifold(shapeA, xfA, shapeB, xfB, cache, manifold) {
+  return b2CollideChainSegmentAndCapsule(shapeA.chainSegment, xfA, shapeB.capsule, xfB, cache, manifold);
 }
-function b2SmoothSegmentAndPolygonManifold(shapeA, xfA, shapeB, xfB, cache, manifold) {
-  return b2CollideSmoothSegmentAndPolygon(shapeA.smoothSegment, xfA, shapeB.polygon, xfB, cache, manifold);
+function b2ChainSegmentAndPolygonManifold(shapeA, xfA, shapeB, xfB, cache, manifold) {
+  return b2CollideChainSegmentAndPolygon(shapeA.chainSegment, xfA, shapeB.polygon, xfB, cache, manifold);
 }
 function b2AddType(fcn, type1, type2) {
   s_registers[type1][type2].fcn = fcn;
@@ -13042,9 +13026,9 @@ function b2InitializeContactRegisters() {
     b2AddType(b2SegmentAndCircleManifold, b2ShapeType.b2_segmentShape, b2ShapeType.b2_circleShape);
     b2AddType(b2SegmentAndCapsuleManifold, b2ShapeType.b2_segmentShape, b2ShapeType.b2_capsuleShape);
     b2AddType(b2SegmentAndPolygonManifold, b2ShapeType.b2_segmentShape, b2ShapeType.b2_polygonShape);
-    b2AddType(b2SmoothSegmentAndCircleManifold, b2ShapeType.b2_smoothSegmentShape, b2ShapeType.b2_circleShape);
-    b2AddType(b2SmoothSegmentAndCapsuleManifold, b2ShapeType.b2_smoothSegmentShape, b2ShapeType.b2_capsuleShape);
-    b2AddType(b2SmoothSegmentAndPolygonManifold, b2ShapeType.b2_smoothSegmentShape, b2ShapeType.b2_polygonShape);
+    b2AddType(b2ChainSegmentAndCircleManifold, b2ShapeType.b2_chainSegmentShape, b2ShapeType.b2_circleShape);
+    b2AddType(b2ChainSegmentAndCapsuleManifold, b2ShapeType.b2_chainSegmentShape, b2ShapeType.b2_capsuleShape);
+    b2AddType(b2ChainSegmentAndPolygonManifold, b2ShapeType.b2_chainSegmentShape, b2ShapeType.b2_polygonShape);
     s_initialized = true;
   }
 }
@@ -13548,7 +13532,7 @@ function b2BroadPhase_RebuildTrees(bp) {
 }
 
 // src/world_c.js
-var b2_maxWorlds = 32;
+var B2_MAX_WORLDS = 32;
 var b2SetType = {
   b2_staticSet: 0,
   b2_disabledSet: 1,
@@ -13660,7 +13644,7 @@ function b2CreateWorldArray() {
     return;
   }
   b2_worlds = [];
-  for (let i = 0; i < b2_maxWorlds; i++) {
+  for (let i = 0; i < B2_MAX_WORLDS; i++) {
     b2_worlds[i] = new b2World();
     b2_worlds[i].inUse = false;
   }
@@ -14121,9 +14105,9 @@ function b2DrawShape(draw, shape, transform, color) {
         }
       }
       break;
-    case b2ShapeType.b2_smoothSegmentShape:
+    case b2ShapeType.b2_chainSegmentShape:
       {
-        const segment = shape.smoothSegment.segment;
+        const segment = shape.chainSegment.segment;
         b2TransformPointOut(xf2, segment.point1, p13);
         b2TransformPointOut(xf2, segment.point2, p22);
         if (!shape.imageNoDebug) {
@@ -14224,7 +14208,7 @@ function b2DrawWithBounds(world, draw) {
     b2DynamicTree_Query(
       world.broadPhase.trees[i],
       draw.drawingBounds,
-      b2_defaultMaskBits,
+      B2_DEFAULT_MASK_BITS,
       DrawQueryCallback,
       drawContext
     );
@@ -14534,7 +14518,7 @@ function b2World_IsValid(id) {
   if (id === void 0) {
     return false;
   }
-  if (id.index1 < 1 || b2_maxWorlds < id.index1) {
+  if (id.index1 < 1 || B2_MAX_WORLDS < id.index1) {
     return false;
   }
   const world = b2_worlds[id.index1 - 1];
@@ -14550,7 +14534,7 @@ function b2Body_IsValid(id) {
   if (!(id instanceof b2BodyId)) {
     return false;
   }
-  if (id.world0 < 0 || b2_maxWorlds <= id.world0) {
+  if (id.world0 < 0 || B2_MAX_WORLDS <= id.world0) {
     return false;
   }
   const world = b2_worlds[id.world0];
@@ -14573,7 +14557,7 @@ function b2Shape_IsValid(id) {
   if (id === void 0) {
     return false;
   }
-  if (b2_maxWorlds <= id.world0) {
+  if (B2_MAX_WORLDS <= id.world0) {
     return false;
   }
   const world = b2_worlds[id.world0];
@@ -14594,7 +14578,7 @@ function b2Chain_IsValid(id) {
   if (id === void 0) {
     return false;
   }
-  if (id.world0 < 0 || b2_maxWorlds <= id.world0) {
+  if (id.world0 < 0 || B2_MAX_WORLDS <= id.world0) {
     return false;
   }
   const world = b2_worlds[id.world0];
@@ -14615,7 +14599,7 @@ function b2Joint_IsValid(id) {
   if (id === void 0) {
     return false;
   }
-  if (id.world0 < 0 || b2_maxWorlds <= id.world0) {
+  if (id.world0 < 0 || B2_MAX_WORLDS <= id.world0) {
     return false;
   }
   const world = b2_worlds[id.world0];
@@ -14810,7 +14794,9 @@ function RayCastCallback(input, proxyId, shapeId, context) {
   if (output.hit) {
     const id = new b2ShapeId(shapeId + 1, world.worldId, shape.revision);
     const fraction = worldContext.fcn(id, output.point, output.normal, output.fraction, worldContext.userContext);
-    worldContext.fraction = fraction;
+    if (fraction >= 0 && fraction <= 1) {
+      worldContext.fraction = fraction;
+    }
     return fraction;
   }
   return input.maxFraction;
@@ -15044,7 +15030,7 @@ function b2World_Explode(worldId, position, radius, magnitude) {
   b2DynamicTree_Query(
     world.broadPhase.trees[b2BodyType.b2_dynamicBody],
     aabb,
-    b2_defaultMaskBits,
+    B2_DEFAULT_MASK_BITS,
     ExplosionCallback,
     explosionContext
   );
@@ -15822,7 +15808,7 @@ function CreateBoxPolygon(data) {
   return { bodyId, shapeId, object: box };
 }
 function CreateNGonPolygon(data) {
-  if (data.sides < 3 || data.sides > b2_maxPolygonVertices) {
+  if (data.sides < 3 || data.sides > B2_MAX_POLYGON_VERTICES) {
     return null;
   }
   const bodyDef = data.bodyDef || b2DefaultBodyDef();
@@ -15858,7 +15844,7 @@ function CreateNGonPolygon(data) {
   return { bodyId, shapeId, object: nGon };
 }
 function CreatePolygon(data) {
-  if (data.vertices.length < 3 || data.vertices.length > b2_maxPolygonVertices) {
+  if (data.vertices.length < 3 || data.vertices.length > B2_MAX_POLYGON_VERTICES) {
     return null;
   }
   const bodyDef = data.bodyDef || b2DefaultBodyDef();
@@ -16261,7 +16247,6 @@ export {
   b2Body_EnableSleep,
   b2Body_GetAngularDamping,
   b2Body_GetAngularVelocity,
-  b2Body_GetAutomaticMass,
   b2Body_GetContactCapacity,
   b2Body_GetContactData,
   b2Body_GetGravityScale,
@@ -16294,7 +16279,6 @@ export {
   b2Body_IsValid,
   b2Body_SetAngularDamping,
   b2Body_SetAngularVelocity,
-  b2Body_SetAutomaticMass,
   b2Body_SetAwake,
   b2Body_SetBullet,
   b2Body_SetFixedRotation,
@@ -16310,6 +16294,7 @@ export {
   b2CastOutput,
   b2ChainDef,
   b2ChainId,
+  b2ChainSegment,
   b2Chain_IsValid,
   b2Chain_SetFriction,
   b2Chain_SetRestitution,
@@ -16319,6 +16304,9 @@ export {
   b2ClampInt,
   b2CollideCapsuleAndCircle,
   b2CollideCapsules,
+  b2CollideChainSegmentAndCapsule,
+  b2CollideChainSegmentAndCircle,
+  b2CollideChainSegmentAndPolygon,
   b2CollideCircles,
   b2CollidePolygonAndCapsule,
   b2CollidePolygonAndCircle,
@@ -16326,9 +16314,6 @@ export {
   b2CollideSegmentAndCapsule,
   b2CollideSegmentAndCircle,
   b2CollideSegmentAndPolygon,
-  b2CollideSmoothSegmentAndCapsule,
-  b2CollideSmoothSegmentAndCircle,
-  b2CollideSmoothSegmentAndPolygon,
   b2ComputeAngularVelocity,
   b2ComputeCapsuleAABB,
   b2ComputeCapsuleMass,
@@ -16600,6 +16585,7 @@ export {
   b2Shape_GetAABB,
   b2Shape_GetBody,
   b2Shape_GetCapsule,
+  b2Shape_GetChainSegment,
   b2Shape_GetCircle,
   b2Shape_GetClosestPoint,
   b2Shape_GetContactCapacity,
@@ -16611,7 +16597,6 @@ export {
   b2Shape_GetPolygon,
   b2Shape_GetRestitution,
   b2Shape_GetSegment,
-  b2Shape_GetSmoothSegment,
   b2Shape_GetType,
   b2Shape_GetUserData,
   b2Shape_IsSensor,
@@ -16629,7 +16614,6 @@ export {
   b2Shape_TestPoint,
   b2Simplex,
   b2SleepMilliseconds,
-  b2SmoothSegment,
   b2Solve22,
   b2Sub,
   b2Sweep,
