@@ -2503,7 +2503,12 @@ function RayCastCallback(input, proxyId, shapeId, context)
     {
         const id = new b2ShapeId(shapeId + 1, world.worldId, shape.revision);
         const fraction = worldContext.fcn(id, output.point, output.normal, output.fraction, worldContext.userContext);
-        worldContext.fraction = fraction;
+
+        // The user may return -1 to skip this shape
+        if (fraction >= 0.0 && fraction <= 1.0)
+        {
+            worldContext.fraction = fraction;
+        }
 
         return fraction;
     }

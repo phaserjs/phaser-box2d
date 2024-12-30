@@ -1321,7 +1321,7 @@ export function b2DynamicTree_RayCast(tree, input, maskBits, callback, context)
                 return;
             }
 
-            if (0.0 < value && value < maxFraction)
+            if (0.0 < value && value <= maxFraction)
             {
                 // Update segment bounding box.
                 maxFraction = value;
