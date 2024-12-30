@@ -363,7 +363,7 @@ export function b2CreateBody(worldId, def)
         fixedRotation: def.fixedRotation,
         isSpeedCapped: false,
         isMarked: false,
-        automaticMass: def.automaticMass
+        updateBodyMass: def.updateBodyMass
     });
 
     // dynamic and kinematic bodies that are enabled need an island
