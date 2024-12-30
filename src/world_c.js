@@ -1079,9 +1079,9 @@ export function b2DrawShape(draw, shape, transform, color)
 
             break;
 
-        case b2ShapeType.b2_smoothSegmentShape:
+        case b2ShapeType.b2_chainSegmentShape:
             {
-                const segment = shape.smoothSegment.segment;
+                const segment = shape.chainSegment.segment;
                 b2TransformPointOut(xf, segment.point1, p1);
                 b2TransformPointOut(xf, segment.point2, p2);
 

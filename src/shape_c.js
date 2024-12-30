@@ -26,7 +26,7 @@ import {
 } from './include/math_functions_h.js';
 import { b2AllocId, b2FreeId } from './include/id_pool_h.js';
 import { b2BodyType, b2DefaultShapeDef, b2ShapeType } from './include/types_h.js';
-import { b2CastOutput, b2Circle, b2DistanceCache, b2DistanceInput, b2DistanceProxy, b2MassData, b2RayCastInput, b2Segment, b2SmoothSegment } from './include/collision_h.js';
+import { b2CastOutput, b2ChainSegment, b2Circle, b2DistanceCache, b2DistanceInput, b2DistanceProxy, b2MassData, b2RayCastInput, b2Segment } from './include/collision_h.js';
 import { b2ChainId, b2ShapeId, b2WorldId } from './include/id_h.js';
 import { b2ChainShape, b2Shape, b2ShapeExtent } from './include/shape_h.js';
 import {
@@ -141,8 +141,8 @@ function b2CreateShapeInternal(world, body, transform, def, geometry, shapeType)
 
             break;
 
-        case b2ShapeType.b2_smoothSegmentShape:
-            shape.smoothSegment = geometry;
+        case b2ShapeType.b2_chainSegmentShape:
+            shape.chainSegment = geometry;
 
             break;
 
@@ -454,7 +454,7 @@ export function b2CreateChain(bodyId, def)
 
     const n = def.count;
     const points = def.points;
-    let smoothSegment;
+    let chainSegment;
 
     if (def.isLoop)
     {
@@ -465,37 +465,37 @@ export function b2CreateChain(bodyId, def)
 
         for (let i = 0; i < n - 2; ++i)
         {
-            smoothSegment = new b2SmoothSegment();
-            smoothSegment.ghost1 = points[prevIndex].clone();
-            smoothSegment.segment = new b2Segment();
-            smoothSegment.segment.point1 = points[i].clone();
-            smoothSegment.segment.point2 = points[i + 1].clone();
-            smoothSegment.ghost2 = points[i + 2].clone();
-            smoothSegment.chainId = chainId;
+            chainSegment = new b2ChainSegment();
+            chainSegment.ghost1 = points[prevIndex].clone();
+            chainSegment.segment = new b2Segment();
+            chainSegment.segment.point1 = points[i].clone();
+            chainSegment.segment.point2 = points[i + 1].clone();
+            chainSegment.ghost2 = points[i + 2].clone();
+            chainSegment.chainId = chainId;
             prevIndex = i;
 
-            const shape = b2CreateShapeInternal(world, body, transform, shapeDef, smoothSegment, b2ShapeType.b2_smoothSegmentShape);
+            const shape = b2CreateShapeInternal(world, body, transform, shapeDef, chainSegment, b2ShapeType.b2_chainSegmentShape);
             chainShape.shapeIndices[i] = shape.id;
         }
 
-        smoothSegment = new b2SmoothSegment();
-        smoothSegment.ghost1 = points[n - 3].clone();
-        smoothSegment.segment = new b2Segment();
-        smoothSegment.segment.point1 = points[n - 2].clone();
-        smoothSegment.segment.point2 = points[n - 1].clone();
-        smoothSegment.ghost2 = points[0].clone();
-        smoothSegment.chainId = chainId;
-        let shape = b2CreateShapeInternal(world, body, transform, shapeDef, smoothSegment, b2ShapeType.b2_smoothSegmentShape);
+        chainSegment = new b2ChainSegment();
+        chainSegment.ghost1 = points[n - 3].clone();
+        chainSegment.segment = new b2Segment();
+        chainSegment.segment.point1 = points[n - 2].clone();
+        chainSegment.segment.point2 = points[n - 1].clone();
+        chainSegment.ghost2 = points[0].clone();
+        chainSegment.chainId = chainId;
+        let shape = b2CreateShapeInternal(world, body, transform, shapeDef, chainSegment, b2ShapeType.b2_chainSegmentShape);
         chainShape.shapeIndices[n - 2] = shape.id;
 
-        smoothSegment = new b2SmoothSegment();
-        smoothSegment.ghost1 = points[n - 2].clone();
-        smoothSegment.segment = new b2Segment();
-        smoothSegment.segment.point1 = points[n - 1].clone();
-        smoothSegment.segment.point2 = points[0].clone();
-        smoothSegment.ghost2 = points[1].clone();
-        smoothSegment.chainId = chainId;
-        shape = b2CreateShapeInternal(world, body, transform, shapeDef, smoothSegment, b2ShapeType.b2_smoothSegmentShape);
+        chainSegment = new b2ChainSegment();
+        chainSegment.ghost1 = points[n - 2].clone();
+        chainSegment.segment = new b2Segment();
+        chainSegment.segment.point1 = points[n - 1].clone();
+        chainSegment.segment.point2 = points[0].clone();
+        chainSegment.ghost2 = points[1].clone();
+        chainSegment.chainId = chainId;
+        shape = b2CreateShapeInternal(world, body, transform, shapeDef, chainSegment, b2ShapeType.b2_chainSegmentShape);
         chainShape.shapeIndices[n - 1] = shape.id;
     }
     else
@@ -505,15 +505,15 @@ export function b2CreateChain(bodyId, def)
 
         for (let i = 0; i < n - 3; ++i)
         {
-            smoothSegment = new b2SmoothSegment();
-            smoothSegment.ghost1 = points[i].clone();
-            smoothSegment.segment = new b2Segment();
-            smoothSegment.segment.point1 = points[i + 1].clone();
-            smoothSegment.segment.point2 = points[i + 2].clone();
-            smoothSegment.ghost2 = points[i + 3].clone();
-            smoothSegment.chainId = chainId;
+            chainSegment = new b2ChainSegment();
+            chainSegment.ghost1 = points[i].clone();
+            chainSegment.segment = new b2Segment();
+            chainSegment.segment.point1 = points[i + 1].clone();
+            chainSegment.segment.point2 = points[i + 2].clone();
+            chainSegment.ghost2 = points[i + 3].clone();
+            chainSegment.chainId = chainId;
 
-            const shape = b2CreateShapeInternal(world, body, transform, shapeDef, smoothSegment, b2ShapeType.b2_smoothSegmentShape);
+            const shape = b2CreateShapeInternal(world, body, transform, shapeDef, chainSegment, b2ShapeType.b2_chainSegmentShape);
             chainShape.shapeIndices[i] = shape.id;
         }
     }
@@ -605,8 +605,8 @@ export function b2ComputeShapeAABB(shape, xf)
         case b2ShapeType.b2_segmentShape:
             return b2ComputeSegmentAABB(shape.segment, xf);
 
-        case b2ShapeType.b2_smoothSegmentShape:
-            return b2ComputeSegmentAABB(shape.smoothSegment.segment, xf);
+        case b2ShapeType.b2_chainSegmentShape:
+            return b2ComputeSegmentAABB(shape.chainSegment.segment, xf);
 
         default:
             console.assert(false);
@@ -631,8 +631,8 @@ export function b2GetShapeCentroid(shape)
         case b2ShapeType.b2_segmentShape:
             return b2Lerp(shape.segment.point1, shape.segment.point2, 0.5);
 
-        case b2ShapeType.b2_smoothSegmentShape:
-            return b2Lerp(shape.smoothSegment.segment.point1, shape.smoothSegment.segment.point2, 0.5);
+        case b2ShapeType.b2_chainSegmentShape:
+            return b2Lerp(shape.chainSegment.segment.point1, shape.chainSegment.segment.point2, 0.5);
 
         default:
             return new b2Vec2(0, 0);
@@ -671,8 +671,8 @@ export function b2GetShapePerimeter(shape)
         case b2ShapeType.b2_segmentShape:
             return 2.0 * b2Length(b2Sub(shape.segment.point1, shape.segment.point2));
 
-        case b2ShapeType.b2_smoothSegmentShape:
-            return 2.0 * b2Length(b2Sub(shape.smoothSegment.segment.point1, shape.smoothSegment.segment.point2));
+        case b2ShapeType.b2_chainSegmentShape:
+            return 2.0 * b2Length(b2Sub(shape.chainSegment.segment.point1, shape.chainSegment.segment.point2));
 
         default:
             return 0.0;
@@ -756,11 +756,11 @@ export function b2ComputeShapeExtent(shape, localCenter)
 
             break;
 
-        case b2ShapeType.b2_smoothSegmentShape:
+        case b2ShapeType.b2_chainSegmentShape:
             {
                 extent.minExtent = 0.0;
-                const c1 = b2Sub(shape.smoothSegment.segment.point1, localCenter);
-                const c2 = b2Sub(shape.smoothSegment.segment.point2, localCenter);
+                const c1 = b2Sub(shape.chainSegment.segment.point1, localCenter);
+                const c2 = b2Sub(shape.chainSegment.segment.point2, localCenter);
                 extent.maxExtent = Math.sqrt(Math.max(b2LengthSquared(c1), b2LengthSquared(c2)));
             }
 
@@ -810,8 +810,8 @@ export function b2RayCastShape(input, shape, transform)
 
             break;
 
-        case b2ShapeType.b2_smoothSegmentShape:
-            output = b2RayCastSegment(localInput, shape.smoothSegment.segment, true);
+        case b2ShapeType.b2_chainSegmentShape:
+            output = b2RayCastSegment(localInput, shape.chainSegment.segment, true);
 
             break;
 
@@ -864,8 +864,8 @@ export function b2ShapeCastShape(input, shape, transform)
 
             break;
 
-        case b2ShapeType.b2_smoothSegmentShape:
-            output = b2ShapeCastSegment(localInput, shape.smoothSegment.segment);
+        case b2ShapeType.b2_chainSegmentShape:
+            output = b2ShapeCastSegment(localInput, shape.chainSegment.segment);
 
             break;
 
@@ -915,8 +915,8 @@ export function b2MakeShapeDistanceProxy(shape)
         case b2ShapeType.b2_segmentShape:
             return b2MakeProxy([ shape.segment.point1, shape.segment.point2 ], 2, 0.0);
 
-        case b2ShapeType.b2_smoothSegmentShape:
-            return b2MakeProxy([ shape.smoothSegment.segment.point1.clone(), shape.smoothSegment.segment.point2.clone() ], 2, 0.0);
+        case b2ShapeType.b2_chainSegmentShape:
+            return b2MakeProxy([ shape.chainSegment.segment.point1.clone(), shape.chainSegment.segment.point2.clone() ], 2, 0.0);
 
         default:
             console.assert(false);
@@ -1090,8 +1090,8 @@ export function b2Shape_RayCast(shapeId, origin, translation)
 
             break;
 
-        case b2ShapeType.b2_smoothSegmentShape:
-            output = b2RayCastSegment(input, shape.smoothSegment.segment, true);
+        case b2ShapeType.b2_chainSegmentShape:
+            output = b2RayCastSegment(input, shape.chainSegment.segment, true);
 
             break;
 
@@ -1575,20 +1575,20 @@ export function b2Shape_GetSegment(shapeId)
 }
 
 /**
- * Gets the smooth segment data from a shape identified by its ID.
- * @function b2Shape_GetSmoothSegment
+ * Gets the chain segment data from a shape identified by its ID.
+ * @function b2Shape_GetChainSegment
  * @param {Object} shapeId - An object containing the shape identifier and world reference.
  * @param {number} shapeId.world0 - The world identifier.
- * @returns {Object} The smooth segment data associated with the shape.
- * @throws {Error} Throws an assertion error if the shape type is not b2_smoothSegmentShape.
+ * @returns {Object} The chain segment data associated with the shape.
+ * @throws {Error} Throws an assertion error if the shape type is not b2_chainSegmentShape.
  */
-export function b2Shape_GetSmoothSegment(shapeId)
+export function b2Shape_GetChainSegment(shapeId)
 {
     const world = b2GetWorld(shapeId.world0);
     const shape = b2GetShape(world, shapeId);
-    console.assert(shape.type === b2ShapeType.b2_smoothSegmentShape);
+    console.assert(shape.type === b2ShapeType.b2_chainSegmentShape);
 
-    return shape.smoothSegment;
+    return shape.chainSegment;
 }
 
 /**
@@ -1746,10 +1746,10 @@ export function b2Shape_SetPolygon(shapeId, polygon)
  * @function b2Shape_GetParentChain
  * @param {b2ShapeId} shapeId - The identifier of the shape to check for parent chain
  * @returns {b2ChainId} A b2ChainId object. Returns an empty b2ChainId (default values) if the shape
- * is not a smooth segment shape or has no parent chain
+ * is not a chain segment shape or has no parent chain
  * @description
- * Retrieves the parent chain identifier for a given shape if it is a smooth segment shape
- * and has an associated chain. The function checks if the shape is of type b2_smoothSegmentShape
+ * Retrieves the parent chain identifier for a given shape if it is a chain segment shape
+ * and has an associated chain. The function checks if the shape is of type b2_chainSegmentShape
  * and has a valid chain reference before returning the chain identifier.
  */
 export function b2Shape_GetParentChain(shapeId)
@@ -1757,9 +1757,9 @@ export function b2Shape_GetParentChain(shapeId)
     const world = b2GetWorld(shapeId.world0);
     const shape = b2GetShape(world, shapeId);
 
-    if (shape.type === b2ShapeType.b2_smoothSegmentShape)
+    if (shape.type === b2ShapeType.b2_chainSegmentShape)
     {
-        const chainId = shape.smoothSegment.chainId;
+        const chainId = shape.chainSegment.chainId;
 
         if (chainId !== B2_NULL_INDEX)
         {

@@ -12,16 +12,16 @@ import { b2AllocId, b2FreeId } from './include/id_pool_h.js';
 import {
     b2CollideCapsuleAndCircle,
     b2CollideCapsules,
+    b2CollideChainSegmentAndCapsule,
+    b2CollideChainSegmentAndCircle,
+    b2CollideChainSegmentAndPolygon,
     b2CollideCircles,
     b2CollidePolygonAndCapsule,
     b2CollidePolygonAndCircle,
     b2CollidePolygons,
     b2CollideSegmentAndCapsule,
     b2CollideSegmentAndCircle,
-    b2CollideSegmentAndPolygon,
-    b2CollideSmoothSegmentAndCapsule,
-    b2CollideSmoothSegmentAndCircle,
-    b2CollideSmoothSegmentAndPolygon
+    b2CollideSegmentAndPolygon
 } from './include/manifold_h.js';
 import { b2ContactEndTouchEvent, b2SensorEndTouchEvent, b2ShapeType } from './include/types_h.js';
 import { b2DistanceCache, b2DistanceInput, b2Manifold } from './include/collision_h.js';
@@ -204,19 +204,19 @@ export function b2SegmentAndPolygonManifold(shapeA, xfA, shapeB, xfB, cache, man
     return b2CollideSegmentAndPolygon(shapeA.segment, xfA, shapeB.polygon, xfB, manifold);
 }
 
-export function b2SmoothSegmentAndCircleManifold(shapeA, xfA, shapeB, xfB, cache, manifold)
+export function b2ChainSegmentAndCircleManifold(shapeA, xfA, shapeB, xfB, cache, manifold)
 {
-    return b2CollideSmoothSegmentAndCircle(shapeA.smoothSegment, xfA, shapeB.circle, xfB, manifold);
+    return b2CollideChainSegmentAndCircle(shapeA.chainSegment, xfA, shapeB.circle, xfB, manifold);
 }
 
-export function b2SmoothSegmentAndCapsuleManifold(shapeA, xfA, shapeB, xfB, cache, manifold)
+export function b2ChainSegmentAndCapsuleManifold(shapeA, xfA, shapeB, xfB, cache, manifold)
 {
-    return b2CollideSmoothSegmentAndCapsule(shapeA.smoothSegment, xfA, shapeB.capsule, xfB, cache, manifold);
+    return b2CollideChainSegmentAndCapsule(shapeA.chainSegment, xfA, shapeB.capsule, xfB, cache, manifold);
 }
 
-export function b2SmoothSegmentAndPolygonManifold(shapeA, xfA, shapeB, xfB, cache, manifold)
+export function b2ChainSegmentAndPolygonManifold(shapeA, xfA, shapeB, xfB, cache, manifold)
 {
-    return b2CollideSmoothSegmentAndPolygon(shapeA.smoothSegment, xfA, shapeB.polygon, xfB, cache, manifold);
+    return b2CollideChainSegmentAndPolygon(shapeA.chainSegment, xfA, shapeB.polygon, xfB, cache, manifold);
 }
 
 export function b2AddType(fcn, type1, type2)
@@ -247,9 +247,9 @@ export function b2InitializeContactRegisters()
         b2AddType(b2SegmentAndCircleManifold, b2ShapeType.b2_segmentShape, b2ShapeType.b2_circleShape);
         b2AddType(b2SegmentAndCapsuleManifold, b2ShapeType.b2_segmentShape, b2ShapeType.b2_capsuleShape);
         b2AddType(b2SegmentAndPolygonManifold, b2ShapeType.b2_segmentShape, b2ShapeType.b2_polygonShape);
-        b2AddType(b2SmoothSegmentAndCircleManifold, b2ShapeType.b2_smoothSegmentShape, b2ShapeType.b2_circleShape);
-        b2AddType(b2SmoothSegmentAndCapsuleManifold, b2ShapeType.b2_smoothSegmentShape, b2ShapeType.b2_capsuleShape);
-        b2AddType(b2SmoothSegmentAndPolygonManifold, b2ShapeType.b2_smoothSegmentShape, b2ShapeType.b2_polygonShape);
+        b2AddType(b2ChainSegmentAndCircleManifold, b2ShapeType.b2_chainSegmentShape, b2ShapeType.b2_circleShape);
+        b2AddType(b2ChainSegmentAndCapsuleManifold, b2ShapeType.b2_chainSegmentShape, b2ShapeType.b2_capsuleShape);
+        b2AddType(b2ChainSegmentAndPolygonManifold, b2ShapeType.b2_chainSegmentShape, b2ShapeType.b2_polygonShape);
         s_initialized = true;
     }
 }

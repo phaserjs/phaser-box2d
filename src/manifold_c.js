@@ -1357,13 +1357,13 @@ export function b2CollideSegmentAndPolygon(segmentA, xfA, polygonB, xfB, manifol
     return b2CollidePolygons(polygonA, xfA, polygonB, xfB, manifold);
 }
 
-// Assuming similar structures exist for b2Manifold, b2Transform, b2SmoothSegment, b2Circle, etc.
+// Assuming similar structures exist for b2Manifold, b2Transform, b2ChainSegment, b2Circle, etc.
 /**
- * @function b2CollideSmoothSegmentAndCircle
+ * @function b2CollideChainSegmentAndCircle
  * @description
- * Computes collision detection between a smooth line segment and a circle.
- * @param {Object} smoothSegmentA - A smooth segment with properties segment (containing point1 and point2) and ghost points (ghost1, ghost2)
- * @param {Object} xfA - Transform for smooth segment containing position (p) and rotation (q)
+ * Computes collision detection between a chain segment and a circle.
+ * @param {Object} chainSegmentA - A chain segment with properties segment (containing point1 and point2) and ghost points (ghost1, ghost2)
+ * @param {Object} xfA - Transform for chain segment containing position (p) and rotation (q)
  * @param {Object} circleB - Circle object with center point and radius
  * @param {Object} xfB - Transform for circle containing position (p) and rotation (q)
  * @param {Object} manifold - Contact manifold to store collision results
@@ -1376,7 +1376,7 @@ export function b2CollideSegmentAndPolygon(segmentA, xfA, polygonB, xfB, manifol
  * - id: contact ID
  * - pointCount: number of contact points
  */
-export function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xfB, manifold)
+export function b2CollideChainSegmentAndCircle(chainSegmentA, xfA, circleB, xfB, manifold)
 {
     // let manifold = new b2Manifold();
 
@@ -1385,8 +1385,8 @@ export function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xf
     // Compute circle in frame of segment
     const pB = b2TransformPoint(xf, circleB.center);
 
-    const p1 = smoothSegmentA.segment.point1;
-    const p2 = smoothSegmentA.segment.point2;
+    const p1 = chainSegmentA.segment.point1;
+    const p2 = chainSegmentA.segment.point2;
     const e = b2Sub(p2, p1);
 
     // Normal points to the right
@@ -1408,7 +1408,7 @@ export function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xf
     {
         // Behind point1?
         // Is pB in the Voronoi region of the previous edge?
-        const prevEdge = b2Sub(p1, smoothSegmentA.ghost1);
+        const prevEdge = b2Sub(p1, chainSegmentA.ghost1);
         const uPrev = b2Dot(prevEdge, b2Sub(pB, p1));
 
         if (uPrev <= 0.0)
@@ -1421,7 +1421,7 @@ export function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xf
     else if (u <= 0.0)
     {
         // Ahead of point2?
-        const nextEdge = b2Sub(smoothSegmentA.ghost2, p2);
+        const nextEdge = b2Sub(chainSegmentA.ghost2, p2);
         const vNext = b2Dot(nextEdge, b2Sub(pB, p2));
 
         // Is pB in the Voronoi region of the next edge?
@@ -1480,11 +1480,11 @@ export function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xf
 }
 
 /**
- * @function b2CollideSmoothSegmentAndCapsule
+ * @function b2CollideChainSegmentAndCapsule
  * @description
- * Computes collision between a smooth segment and a capsule by converting the capsule
+ * Computes collision between a chain segment and a capsule by converting the capsule
  * to a polygon and delegating to the segment-polygon collision function.
- * @param {b2SmoothSegment} segmentA - The smooth segment shape
+ * @param {b2ChainSegment} segmentA - The chain segment shape
  * @param {b2Transform} xfA - Transform for segmentA
  * @param {b2Capsule} capsuleB - The capsule shape defined by two centers and a radius
  * @param {b2Transform} xfB - Transform for capsuleB
@@ -1492,11 +1492,11 @@ export function b2CollideSmoothSegmentAndCircle(smoothSegmentA, xfA, circleB, xf
  * @param {b2Manifold} manifold - Contact manifold to store collision results
  * @returns {void}
  */
-export function b2CollideSmoothSegmentAndCapsule(segmentA, xfA, capsuleB, xfB, cache, manifold)
+export function b2CollideChainSegmentAndCapsule(segmentA, xfA, capsuleB, xfB, cache, manifold)
 {
     const polyB = b2MakeCapsule(capsuleB.center1, capsuleB.center2, capsuleB.radius);
 
-    return b2CollideSmoothSegmentAndPolygon(segmentA, xfA, polyB, xfB, cache, manifold);
+    return b2CollideChainSegmentAndPolygon(segmentA, xfA, polyB, xfB, cache, manifold);
 }
 
 function b2ClipSegments(a1, a2, b1, b2, normal, ra, rb, id1, id2, manifold)
@@ -1618,7 +1618,7 @@ function b2ClassifyNormal(params, normal)
     }
 }
 
-class b2SmoothSegmentParams
+class b2ChainSegmentParams
 {
     constructor()
     {
@@ -1632,8 +1632,8 @@ class b2SmoothSegmentParams
 };
 
 /**
- * @function b2CollideSmoothSegmentAndPolygon
- * @param {b2SmoothSegment} smoothSegmentA - The smooth segment shape A
+ * @function b2CollideChainSegmentAndPolygon
+ * @param {b2ChainSegment} chainSegmentA - The chain segment shape A
  * @param {b2Transform} xfA - Transform for shape A
  * @param {b2Polygon} polygonB - The polygon shape B
  * @param {b2Transform} xfB - Transform for shape B
@@ -1641,48 +1641,48 @@ class b2SmoothSegmentParams
  * @param {b2Manifold} manifold - The contact manifold to populate
  * @returns {b2Manifold} The populated contact manifold
  * @description
- * Computes the collision manifold between a smooth segment (a segment with rounded corners)
+ * Computes the collision manifold between a chain segment (a segment with rounded corners)
  * and a polygon. The function handles edge cases including convex/concave corners and
  * determines contact points and normals. The manifold is populated with contact points
  * and can contain 0, 1 or 2 contact points depending on the collision configuration.
  */
-export function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, xfB, cache, manifold)
+export function b2CollideChainSegmentAndPolygon(chainSegmentA, xfA, polygonB, xfB, cache, manifold)
 {
     b2InvMulTransformsOut(xfA, xfB, xf);
 
     const centroidB = b2TransformPoint(xf, polygonB.centroid);
     const radiusB = polygonB.radius;
 
-    const p1 = smoothSegmentA.segment.point1;
-    const p2 = smoothSegmentA.segment.point2;
+    const p1 = chainSegmentA.segment.point1;
+    const p2 = chainSegmentA.segment.point2;
 
     const edge1 = b2Normalize(b2Sub(p2, p1));
 
-    const smoothParams = new b2SmoothSegmentParams();
-    smoothParams.edge1 = edge1.clone();
+    const chainParams = new b2ChainSegmentParams();
+    chainParams.edge1 = edge1.clone();
 
     const convexTol = 0.01;
-    const edge0 = b2Normalize(b2Sub(p1, smoothSegmentA.ghost1));
-    smoothParams.normal0 = b2RightPerp(edge0);
-    smoothParams.convex1 = b2Cross(edge0, edge1) >= convexTol;
+    const edge0 = b2Normalize(b2Sub(p1, chainSegmentA.ghost1));
+    chainParams.normal0 = b2RightPerp(edge0);
+    chainParams.convex1 = b2Cross(edge0, edge1) >= convexTol;
 
-    const edge2 = b2Normalize(b2Sub(smoothSegmentA.ghost2, p2));
-    smoothParams.normal2 = b2RightPerp(edge2);
-    smoothParams.convex2 = b2Cross(edge1, edge2) >= convexTol;
+    const edge2 = b2Normalize(b2Sub(chainSegmentA.ghost2, p2));
+    chainParams.normal2 = b2RightPerp(edge2);
+    chainParams.convex2 = b2Cross(edge1, edge2) >= convexTol;
 
     const normal1 = b2RightPerp(edge1);
     const behind1 = b2Dot(normal1, b2Sub(centroidB, p1)) < 0.0;
     let behind0 = true;
     let behind2 = true;
 
-    if (smoothParams.convex1)
+    if (chainParams.convex1)
     {
-        behind0 = b2Dot(smoothParams.normal0, b2Sub(centroidB, p1)) < 0.0;
+        behind0 = b2Dot(chainParams.normal0, b2Sub(centroidB, p1)) < 0.0;
     }
 
-    if (smoothParams.convex2)
+    if (chainParams.convex2)
     {
-        behind2 = b2Dot(smoothParams.normal2, b2Sub(centroidB, p2)) < 0.0;
+        behind2 = b2Dot(chainParams.normal2, b2Sub(centroidB, p2)) < 0.0;
     }
 
     if (behind1 && behind0 && behind2)
@@ -1701,7 +1701,7 @@ export function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, 
     }
 
     const input = new b2DistanceInput();
-    input.proxyA = b2MakeProxy([ smoothSegmentA.segment.point1, smoothSegmentA.segment.point2 ], 2, 0.0);
+    input.proxyA = b2MakeProxy([ chainSegmentA.segment.point1, chainSegmentA.segment.point2 ], 2, 0.0);
     input.proxyB = b2MakeProxy(vertices, count, 0.0);
     input.transformA = new b2Transform(new b2Vec2(0, 0), new b2Rot(1, 0));
     input.transformB = new b2Transform(new b2Vec2(0, 0), new b2Rot(1, 0));
@@ -1714,8 +1714,8 @@ export function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, 
         return manifold.clear();
     }
 
-    const n0 = smoothParams.convex1 ? smoothParams.normal0 : normal1;
-    const n2 = smoothParams.convex2 ? smoothParams.normal2 : normal1;
+    const n0 = chainParams.convex1 ? chainParams.normal0 : normal1;
+    const n2 = chainParams.convex2 ? chainParams.normal2 : normal1;
 
     let incidentIndex = -1;
     let incidentNormal = -1;
@@ -1729,7 +1729,7 @@ export function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, 
 
             const normal = b2Normalize(b2Sub(pB, pA));
 
-            const type = b2ClassifyNormal(smoothParams, normal);
+            const type = b2ClassifyNormal(chainParams, normal);
 
             if (type == b2NormalType.b2_normalSkip)
             {
@@ -1786,7 +1786,7 @@ export function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, 
 
                 normalB = normals[ib];
 
-                const type = b2ClassifyNormal(smoothParams, b2Neg(normalB));
+                const type = b2ClassifyNormal(chainParams, b2Neg(normalB));
 
                 if (type == b2NormalType.b2_normalSkip)
                 {
@@ -1880,13 +1880,13 @@ export function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, 
         }
 
         // Check convex neighbor for edge separation
-        if (smoothParams.convex1)
+        if (chainParams.convex1)
         {
             let s0 = Number.MAX_VALUE;
 
             for (let i = 0; i < count; ++i)
             {
-                const s = b2Dot(smoothParams.normal0, b2Sub(vertices[i], p1));
+                const s = b2Dot(chainParams.normal0, b2Sub(vertices[i], p1));
 
                 if (s < s0)
                 {
@@ -1901,13 +1901,13 @@ export function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, 
             }
         }
 
-        if (smoothParams.convex2)
+        if (chainParams.convex2)
         {
             let s2 = Number.MAX_VALUE;
 
             for (let i = 0; i < count; ++i)
             {
-                const s = b2Dot(smoothParams.normal2, b2Sub(vertices[i], p2));
+                const s = b2Dot(chainParams.normal2, b2Sub(vertices[i], p2));
 
                 if (s < s2)
                 {
@@ -1930,7 +1930,7 @@ export function b2CollideSmoothSegmentAndPolygon(smoothSegmentA, xfA, polygonB, 
         {
             const n = normals[i];
 
-            const type = b2ClassifyNormal(smoothParams, b2Neg(n));
+            const type = b2ClassifyNormal(chainParams, b2Neg(n));
 
             if (type != b2NormalType.b2_normalAdmit)
             {

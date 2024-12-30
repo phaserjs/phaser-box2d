@@ -176,7 +176,7 @@ export class b2Segment
     }
 }
 
-export class b2SmoothSegment
+export class b2ChainSegment
 {
     constructor()
     {

@@ -179,7 +179,7 @@ export {
     b2Shape_AreHitEventsEnabled,
     b2Shape_GetCircle,
     b2Shape_GetSegment,
-    b2Shape_GetSmoothSegment,
+    b2Shape_GetChainSegment,
     b2Shape_GetCapsule,
     b2Shape_GetPolygon,
     b2Shape_SetCircle,
@@ -355,9 +355,9 @@ export {
     b2CollidePolygonAndCapsule,
     b2CollideSegmentAndCircle,
     b2CollideSegmentAndPolygon,
-    b2CollideSmoothSegmentAndCircle,
-    b2CollideSmoothSegmentAndCapsule,
-    b2CollideSmoothSegmentAndPolygon
+    b2CollideChainSegmentAndCircle,
+    b2CollideChainSegmentAndCapsule,
+    b2CollideChainSegmentAndPolygon
 } from './include/manifold_h.js';
 
 export {
@@ -575,7 +575,7 @@ export {
     b2Capsule,
     b2Polygon,
     b2Segment,
-    b2SmoothSegment
+    b2ChainSegment
 } from './include/collision_h.js';
 
 export {

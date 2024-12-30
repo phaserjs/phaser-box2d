@@ -693,11 +693,11 @@ export function b2ContinuousQueryCallback(proxyId, shapeId, context)
         }
     }
 
-    if (shape.type === b2ShapeType.b2_smoothSegmentShape)
+    if (shape.type === b2ShapeType.b2_chainSegmentShape)
     {
         const transform = bodySim.transform;
-        const p1 = b2TransformPoint(transform, shape.smoothSegment.segment.point1);
-        const p2 = b2TransformPoint(transform, shape.smoothSegment.segment.point2);
+        const p1 = b2TransformPoint(transform, shape.chainSegment.segment.point1);
+        const p2 = b2TransformPoint(transform, shape.chainSegment.segment.point2);
 
         // let e = b2Sub(p2, p1);
         const eX = p2.x - p1.x;

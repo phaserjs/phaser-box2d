@@ -27,7 +27,7 @@ export const b2ShapeType = {
     b2_capsuleShape: 1,
     b2_segmentShape: 2,
     b2_polygonShape: 3,
-    b2_smoothSegmentShape: 4,
+    b2_chainSegmentShape: 4,
     b2_shapeTypeCount: 5
 };
 

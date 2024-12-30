@@ -6,7 +6,7 @@
  */
 
 import { b2AABB, b2Vec2 } from './math_functions_h.js';
-import { b2Capsule, b2Circle, b2Polygon, b2Segment, b2SmoothSegment } from './collision_h.js';
+import { b2Capsule, b2ChainSegment, b2Circle, b2Polygon, b2Segment } from './collision_h.js';
 import { b2Filter, b2ShapeType } from './types_h.js';
 
 export class b2Shape
@@ -35,7 +35,7 @@ export class b2Shape
         this.circle = new b2Circle();
         this.polygon = new b2Polygon();
         this.segment = new b2Segment();
-        this.smoothSegment = new b2SmoothSegment();
+        this.chainSegment = new b2ChainSegment();
 
         this.revision = 0;
         this.isSensor = false;
@@ -117,7 +117,7 @@ export {
     b2Shape_GetPolygon,
     b2Shape_GetRestitution,
     b2Shape_GetSegment,
-    b2Shape_GetSmoothSegment,
+    b2Shape_GetChainSegment,
     b2Shape_GetType,
     b2Shape_GetUserData,
     b2Shape_IsSensor,
