@@ -1,7 +1,7 @@
 /**
  * @license
  * Phaser Box2D v1.1.0
- * Monday, 30 December 2024 at 17:51
+ * Wednesday 1 January 2025 at 15:55
  * 
  * This library includes code that is ported from the original C version. The original C code is Copyright 2023 Erin Catto
  * and was released under the MIT license. The JavaScript port of the C code along with all additional code is
