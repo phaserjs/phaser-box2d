@@ -67,10 +67,10 @@ https://www.npmjs.com/package/phaser-box2d
 
 The Phaser Box2D library includes code that is:
 
-Copyright 2023 Erin Catto, released under the MIT license.
-Copyright 2024 Phaser Studio Inc, released under the MIT license.
+Copyright 2023 Erin Catto, released under the MIT license.  
+Copyright 2025 Phaser Studio Inc, released under the MIT license.  
 
-The Getting Started Guide, Examples and API Documentation are Copyright 2024 Phaser Studio Inc and are not for commercial use or distribution.
+The Getting Started Guide, Examples and API Documentation are Copyright 2025 Phaser Studio Inc and are not for commercial use or distribution.
 
 ## Conversion Notes
 
