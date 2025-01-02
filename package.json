@@ -28,6 +28,8 @@
     "builddocs": "documentation build --config documentation.yml src/** -f html -o docs --theme docs-theme/index.js"
   },
   "devDependencies": {
+    "cdt2d": "^1.0.0",
+    "eslint": "^9.17.0",
     "@eslint/js": "^9.17.0",
     "boxen": "^8.0.1",
     "chalk": "^5.4.1",
@@ -46,9 +48,5 @@
     "highlight.js": "^11.11.0",
     "jsdoc": "^4.0.4",
     "terser": "^5.37.0"
-  },
-  "dependencies": {
-    "cdt2d": "^1.0.0",
-    "eslint": "^9.17.0"
   }
 }
