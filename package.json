@@ -19,7 +19,7 @@
   "author": "Phaser Studio <support@phaser.io> (https://phaser.io)",
   "type": "module",
   "types": "types",
-  "main": "src/main-prod.js",
+  "main": "dist/PhaserBox2D.js",
   "scripts": {
     "docs": "node docs.mjs",
     "dev": "node overwatch/index.mjs",
