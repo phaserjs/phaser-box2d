@@ -1,0 +1,1 @@
+export { b2Island, b2IslandSim, b2CreateIsland, b2DestroyIsland, b2GetIsland, b2LinkContact, b2UnlinkContact, b2LinkJoint, b2UnlinkJoint, b2MergeAwakeIslands, b2SplitIsland, b2ValidateIsland } from "../island_c.js";

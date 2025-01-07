@@ -18,26 +18,28 @@
   "license": "MIT",
   "author": "Phaser Studio <support@phaser.io> (https://phaser.io)",
   "type": "module",
-  "main": "index.js",
+  "types": "types",
+  "main": "src/main-prod.js",
   "scripts": {
     "docs": "node docs.mjs",
     "dev": "node overwatch/index.mjs",
     "build": "node overwatch/ProdBuild.mjs",
     "lint": "eslint --config eslint.config.js",
     "lintfix": "eslint --fix --config eslint.config.js",
-    "builddocs": "documentation build --config documentation.yml src/** -f html -o docs --theme docs-theme/index.js"
+    "builddocs": "documentation build --config documentation.yml src/** -f html -o docs --theme docs-theme/index.js",
+    "buildtypes": "tsc --allowJs --declaration --emitDeclarationOnly --outDir types src/main-prod.js"
   },
   "devDependencies": {
-    "cdt2d": "^1.0.0",
-    "eslint": "^9.17.0",
     "@eslint/js": "^9.17.0",
     "boxen": "^8.0.1",
+    "cdt2d": "^1.0.0",
     "chalk": "^5.4.1",
     "chalk-template": "^1.1.0",
     "chokidar": "^4.0.3",
     "documentation": "^14.0.3",
     "esbuild": "^0.24.2",
     "esbuild-plugin-import": "^0.0.1",
+    "eslint": "^9.17.0",
     "eslint-plugin-import": "^2.31.0",
     "filesize": "^10.1.6",
     "fs-extra": "^11.2.0",
@@ -47,6 +49,7 @@
     "gzip-size": "^7.0.0",
     "highlight.js": "^11.11.0",
     "jsdoc": "^4.0.4",
-    "terser": "^5.37.0"
+    "terser": "^5.37.0",
+    "typescript": "^5.7.2"
   }
 }
