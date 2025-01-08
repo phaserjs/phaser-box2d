@@ -13,7 +13,7 @@ import {
     b2SetBitCountAndClear
 } from '../bitset_c.js';
 
-// Bit set provides fast operations on large arrays of bits
+// Bit set provides fast operations on large arrays of bits.
 export class b2BitSet
 {
     constructor()

@@ -176,7 +176,7 @@ function b2CreateShapeInternal(world, body, transform, def, geometry, shapeType)
     if (body.setIndex != b2SetType.b2_disabledSet)
     {
         const proxyType = body.type;
-        b2CreateShapeProxy(shape, world.broadPhase, proxyType, transform, def.forceContactCreation);
+        b2CreateShapeProxy(shape, world.broadPhase, proxyType, transform, def.forceContactCreation || def.isSensor);
     }
 
     if (body.headShapeId != B2_NULL_INDEX)
