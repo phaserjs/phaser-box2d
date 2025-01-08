@@ -31,9 +31,9 @@
 
 ## Box2D Upstream Checklist
 
-✔️ = The upstream commit is 100% integrated
-🔎 = The upstream commit hasn't yet been looked at
-💻 = The upstream commit has been partially integrated
+✔️ = The upstream commit is 100% integrated  
+🔎 = The upstream commit hasn't yet been looked at  
+💻 = The upstream commit has been partially integrated  
 
 | Status | Commit | Description | Details |
 | ------ | ------ | ----------- | ------- |
