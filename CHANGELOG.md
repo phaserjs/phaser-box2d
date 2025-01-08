@@ -35,6 +35,10 @@
 🔎 = The upstream commit hasn't yet been looked at  
 💻 = The upstream commit has been partially integrated  
 
+When converting a commit it's at your discretion if you want to include the asserts and/or comments from upstream. In some cases, they can be useful (which is why they're in some areas of the current code), but they're computationally expensive for testing. The production build strips them out, the dev build does not.
+
+We're happy to consider a commit as fully completed even if it has assets or comments not moved over. Matching the API 1:1 is more important.
+
 | Status | Commit | Description | Details |
 | ------ | ------ | ----------- | ------- |
 | ✔️ | [ec0e21c](https://github.com/erincatto/box2d/commit/ec0e21c8a3810228854230984aa0cbf73790e203) | Update to Version 3 (#769) | The base library is built from this release |
