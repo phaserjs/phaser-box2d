@@ -69,5 +69,5 @@ export function b2SetAssertFcn(assertFcn)
  */
 export function b2GetVersion()
 {
-    return new b2Version(3, 0, 0);
+    return new b2Version(3, 0, 1);
 }
