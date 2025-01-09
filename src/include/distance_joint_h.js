@@ -12,7 +12,7 @@ export {
     b2DistanceJoint_GetCurrentLength,
     b2DistanceJoint_EnableSpring, b2DistanceJoint_IsSpringEnabled,
     b2DistanceJoint_SetSpringHertz, b2DistanceJoint_SetSpringDampingRatio,
-    b2DistanceJoint_GetSpringHertz, b2DistanceJoint_GetDampingRatio,
+    b2DistanceJoint_GetSpringHertz, b2DistanceJoint_GetSpringDampingRatio,
     b2DistanceJoint_EnableMotor, b2DistanceJoint_IsMotorEnabled,
     b2DistanceJoint_SetMotorSpeed, b2DistanceJoint_GetMotorSpeed,
     b2DistanceJoint_GetMotorForce, b2DistanceJoint_SetMaxMotorForce, b2DistanceJoint_GetMaxMotorForce,
