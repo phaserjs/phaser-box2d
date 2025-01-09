@@ -6,7 +6,7 @@
  */
 
 import { B2_MAX_POLYGON_VERTICES, b2Capsule, b2Circle } from './include/collision_h.js';
-import { b2Add, b2Distance, b2RelativeAngle, b2MakeRot, b2Transform, b2Vec2 } from './include/math_functions_h.js';
+import { b2Add, b2Distance, b2RelativeAngle, b2Rot, b2MakeRot, b2Transform, b2Vec2 } from './include/math_functions_h.js';
 import
 {
     b2BodyType,

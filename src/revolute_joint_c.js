@@ -699,7 +699,7 @@ export function b2DrawRevoluteJoint(draw, base, transformA, transformB, drawSize
 
     const angle = b2RelativeAngle(transformB.q, transformA.q);
 
-    const rot = b2MakeRot(angle)
+    const rot = b2MakeRot(angle);
     const r = new b2Vec2(L * rot.c, L * rot.s);
 
     const pC = b2Add(pB, r);

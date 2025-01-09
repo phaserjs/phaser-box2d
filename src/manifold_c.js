@@ -22,7 +22,6 @@ import {
     b2MulSV,
     b2Neg,
     b2Normalize,
-    b2NormalizeChecked,
     b2RightPerp,
     b2Rot,
     b2RotateVector,
