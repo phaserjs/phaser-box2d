@@ -184,6 +184,9 @@ export class b2ShapeDef
         this.density = 0;
         this.filter = new b2Filter();
         this.customColor = b2HexColor.b2_colorAqua; // .b2_colorAliceBlue;
+
+        // / Sensors do not collide with other sensors and do not have continuous collision.
+        // / Instead use a ray or shape cast for those scenarios.
         this.isSensor = false;
 
         // / Enable sensor events for this shape. Only applies to kinematic and dynamic bodies. Ignored for sensors.
