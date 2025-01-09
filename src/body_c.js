@@ -1627,15 +1627,15 @@ export function b2Body_GetMass(bodyId)
 }
 
 /**
- * Gets the inertia tensor value for a specified body.
- * @function b2Body_GetInertiaTensor
+ * Get the rotational inertia of the body, typically in kg*m^2
+ * @function b2Body_GetRotationalInertia
  * @param {b2BodyId} bodyId - The ID of the body to get the inertia tensor from.
  * @returns {number} The inertia tensor value of the body.
  * @description
  * Retrieves the rotational inertia value from a body's simulation data using the body's ID.
  * The inertia tensor represents the body's resistance to rotational acceleration.
  */
-export function b2Body_GetInertiaTensor(bodyId)
+export function b2Body_GetRotationalInertia(bodyId)
 {
     const world = b2GetWorld(bodyId.world0);
     const body = b2GetBodyFullId(world, bodyId);

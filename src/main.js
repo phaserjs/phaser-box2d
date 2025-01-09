@@ -106,7 +106,7 @@ export {
     b2Body_ApplyForceToCenter,
     b2Body_ApplyLinearImpulseToCenter,
     b2Body_GetMass,
-    b2Body_GetInertiaTensor,
+    b2Body_GetRotationalInertia,
     b2Body_GetLocalCenterOfMass,
     b2Body_GetWorldCenterOfMass,
     b2Body_SetMassData,
