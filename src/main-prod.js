@@ -226,7 +226,7 @@ export {
     b2DistanceJoint_IsSpringEnabled,
     b2DistanceJoint_SetSpringHertz,
     b2DistanceJoint_SetSpringDampingRatio,
-    b2DistanceJoint_GetHertz,
+    b2DistanceJoint_GetSpringHertz,
     b2DistanceJoint_GetDampingRatio,
     b2DistanceJoint_EnableLimit,
     b2DistanceJoint_IsLimitEnabled,
