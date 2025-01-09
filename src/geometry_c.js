@@ -18,7 +18,6 @@ import {
     b2IsValid,
     b2Length,
     b2Lerp,
-    b2MakeRot,
     b2Max,
     b2Min,
     b2MulAdd,
@@ -276,18 +275,18 @@ export function b2MakeRoundedBox(hx, hy, radius)
  * @param {number} hx - Half-width of the box along the x-axis
  * @param {number} hy - Half-height of the box along the y-axis
  * @param {b2Vec2} center - The center position of the box
- * @param {number} angle - The rotation angle of the box in radians
+ * @param {b2Rot} rotation - The 2D rotation of the box
  * @returns {b2Polygon} A polygon shape representing the box with 4 vertices and normals
  * @description
  * Creates a b2Polygon representing a rectangle with the given dimensions. The box is centered
  * at the specified position and rotated by the given angle. The resulting polygon includes
  * 4 vertices, 4 normals, and has its centroid set to the center position.
  */
-export function b2MakeOffsetBox(hx, hy, center, angle = 0)
+export function b2MakeOffsetBox(hx, hy, center, rotation)
 {
     const xf = new b2Transform();
     xf.p = center;
-    xf.q = b2MakeRot(angle);
+    xf.q = rotation;
 
     const shape = new b2Polygon();
     shape.count = 4;
