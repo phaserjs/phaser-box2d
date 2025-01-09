@@ -2005,17 +2005,17 @@ export function b2Body_IsSleepEnabled(bodyId)
  * Sets the sleep threshold velocity for a body.
  * @function b2Body_SetSleepThreshold
  * @param {b2BodyId} bodyId - The identifier for the body to modify.
- * @param {number} sleepVelocity - The velocity threshold below which the body can sleep.
+ * @param {number} sleepThreshold - The velocity threshold below which the body can sleep.
  * @returns {void}
  * @description
  * Sets the minimum velocity threshold that determines when a body can transition to a sleeping state.
  * When a body's velocity falls below this threshold, it becomes eligible for sleeping.
  */
-export function b2Body_SetSleepThreshold(bodyId, sleepVelocity)
+export function b2Body_SetSleepThreshold(bodyId, sleepThreshold)
 {
     const world = b2GetWorld(bodyId.world0);
     const body = b2GetBodyFullId(world, bodyId);
-    body.sleepThreshold = sleepVelocity;
+    body.sleepThreshold = sleepThreshold;
 }
 
 /**
