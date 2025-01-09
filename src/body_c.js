@@ -12,7 +12,7 @@ import { b2AllocId, b2FreeId } from './include/id_pool_h.js';
 import { b2BodyId, b2JointId, b2ShapeId } from './include/id_h.js';
 import { b2ComputeShapeAABB, b2ComputeShapeExtent, b2ComputeShapeMass, b2CreateShapeProxy, b2DestroyShapeProxy } from './include/shape_h.js';
 import { b2ContactFlags, b2DestroyContact, b2GetContactSim } from './include/contact_h.js';
-import { b2CreateIsland, b2DestroyIsland, b2LinkJoint, b2SplitIsland, b2UnlinkJoint, b2ValidateIsland } from './include/island_h.js';
+import { b2CreateIsland, b2DestroyIsland, b2LinkJoint, b2MergeAwakeIslands, b2SplitIsland, b2UnlinkJoint, b2ValidateIsland } from './include/island_h.js';
 import { b2DestroyJointInternal, b2GetJoint } from './include/joint_h.js';
 import { b2DestroySolverSet, b2SolverSet, b2TransferBody, b2TransferJoint, b2TrySleepIsland, b2WakeSolverSet } from './include/solver_set_h.js';
 import { b2GetWorld, b2GetWorldLocked } from './include/world_h.js';
@@ -1561,14 +1561,15 @@ export function b2Body_SetType(bodyId, type)
                 continue;
             }
 
-            b2LinkJoint(world, joint);
+            b2LinkJoint(world, joint, false);
         }
+
+        b2MergeAwakeIslands(world);
     }
 
     // Body type affects the mass
     b2UpdateBodyMassData(world, body);
 
-    b2ValidateConnectivity(world);
     b2ValidateSolverSets(world);
 }
 
@@ -2208,6 +2209,7 @@ export function b2Body_Enable(bodyId)
 
     // Transfer joints. If the other body is disabled, don't transfer.
     // If the other body is sleeping, wake it.
+    const mergeIslands = false;
     let jointKey = body.headJointKey;
 
     while (jointKey !== B2_NULL_INDEX)
@@ -2253,11 +2255,13 @@ export function b2Body_Enable(bodyId)
         // Now that the joint is in the correct set, I can link the joint in the island.
         if (jointSetId !== b2SetType.b2_staticSet)
         {
-            b2LinkJoint(world, joint);
+            b2LinkJoint(world, joint, mergeIslands);
         }
     }
 
-    b2ValidateConnectivity(world);
+    // Now merge islands
+    b2MergeAwakeIslands(world);
+
     b2ValidateSolverSets(world);
 }
 

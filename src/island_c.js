@@ -326,7 +326,7 @@ function b2AddJointToIsland(world, islandId, joint)
     b2ValidateIsland(world, islandId);
 }
 
-export function b2LinkJoint(world, joint)
+export function b2LinkJoint(world, joint, mergeIslands)
 {
     const bodyA = b2GetBody(world, joint.edges[0].bodyId);
     const bodyB = b2GetBody(world, joint.edges[1].bodyId);
@@ -408,6 +408,15 @@ export function b2LinkJoint(world, joint)
     else
     {
         b2AddJointToIsland(world, islandIdB, joint);
+    }
+
+    // Joints need to have islands merged immediately when they are created
+    // to keep the island graph valid.
+    // However, when a body type is being changed the merge can be deferred until
+    // all joints are linked.
+    if (mergeIslands)
+    {
+        b2MergeAwakeIslands(world);
     }
 }
 

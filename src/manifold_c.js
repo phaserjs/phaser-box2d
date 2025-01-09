@@ -54,7 +54,8 @@ const q2 = new b2Vec2();
 
 function b2MakeCapsule(p1, p2, radius)
 {
-    const axis = b2NormalizeChecked(b2Sub(p2, p1));
+    const d = b2Sub(p2, p1);
+    const axis = b2Normalize(d);
     const normal = b2RightPerp(axis);
 
     const shape = new b2Polygon();

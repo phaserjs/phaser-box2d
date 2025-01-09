@@ -416,7 +416,8 @@ export function b2CreateJoint(world, bodyA, bodyB, userData, drawSize, type, col
     if (joint.setIndex > b2SetType.b2_disabledSet)
     {
         // Add edge to island graph
-        b2LinkJoint(world, joint);
+        const mergeIslands = true;
+        b2LinkJoint(world, joint, mergeIslands);
     }
 
     b2ValidateSolverSets(world);
@@ -987,7 +988,10 @@ export function b2DestroyJointInternal(world, joint, wakeBodies)
 
     bodyB.jointCount -= 1;
 
-    b2UnlinkJoint(world, joint);
+    if (joint.islandId != B2_NULL_INDEX)
+    {
+        b2UnlinkJoint(world, joint);
+    }
 
     // Remove joint from solver set that owns it
     const setIndex = joint.setIndex;

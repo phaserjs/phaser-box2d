@@ -10,6 +10,7 @@ import {
     b2ClampFloat,
     b2Cross,
     b2CrossSV,
+    b2MakeRot,
     b2MulAdd,
     b2MulSV,
     b2MulSub,
@@ -698,7 +699,9 @@ export function b2DrawRevoluteJoint(draw, base, transformA, transformB, drawSize
 
     const angle = b2RelativeAngle(transformB.q, transformA.q);
 
-    const r = new b2Vec2(L * Math.cos(angle), L * Math.sin(angle));
+    const rot = b2MakeRot(angle)
+    const r = new b2Vec2(L * rot.c, L * rot.s);
+
     const pC = b2Add(pB, r);
     draw.DrawSegment(pB, pC, c1, draw.context);
 
@@ -712,13 +715,18 @@ export function b2DrawRevoluteJoint(draw, base, transformA, transformB, drawSize
     // let upperAngle = joint.upperAngle + joint.referenceAngle;
 
     // if (joint.enableLimit) {
-    //     let rlo = new b2Vec2(L * Math.cos(lowerAngle), L * Math.sin(lowerAngle));
-    //     let rhi = new b2Vec2(L * Math.cos(upperAngle), L * Math.sin(upperAngle));
+    //     const rotLo = b2MakeRot(lowerAngle);
+    //     const rlo = new b2Vec2(L * rotLo.c, L * rotLo.s);
+    //     const rotHi = b2MakeRot(upperAngle);
+    //     const rhi = new b2Vec2(L * rotHi.c, L * rotHi.s);
+
 
     //     draw.DrawSegment(pB, b2Add(pB, rlo), c2, draw.context);
     //     draw.DrawSegment(pB, b2Add(pB, rhi), c3, draw.context);
 
-    //     let ref = new b2Vec2(L * Math.cos(joint.referenceAngle), L * Math.sin(joint.referenceAngle));
+    //     const rotRef = b2MakeRot(joint.referenceAngle);
+    //     const ref = new b2Vec2(L * rotRef.c, L * rotRef.s);
+
     //     draw.DrawSegment(pB, b2Add(pB, ref), b2HexColor.b2_colorBlue, draw.context);
     // }
 
