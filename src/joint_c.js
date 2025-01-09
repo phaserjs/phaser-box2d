@@ -264,7 +264,7 @@ export function b2CreateJoint(world, bodyA, bodyB, userData, drawSize, type, col
 
     // Create joint id and joint
     const jointId = b2AllocId(world.jointIdPool);
-    console.assert(jointId != B2_NULL_INDEX);
+    console.assert(jointId !== B2_NULL_INDEX);
 
     // console.warn("create jointId " + jointId + " world joints " +  world.jointArray.length + ", for body " + bodyIdA + " joined to " + bodyIdB);
     while (jointId >= world.jointArray.length)
@@ -988,7 +988,7 @@ export function b2DestroyJointInternal(world, joint, wakeBodies)
 
     bodyB.jointCount -= 1;
 
-    if (joint.islandId != B2_NULL_INDEX)
+    if (joint.islandId !== B2_NULL_INDEX)
     {
         b2UnlinkJoint(world, joint);
     }
