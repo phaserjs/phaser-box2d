@@ -2,6 +2,14 @@
 
 ## Next - Unreleased
 
+* add `b2World_IsSleepingEnabled`
+* add `b2World_IsContinuousEnabled`
+* add `b2World_GetRestitutionThreshold`
+* add `b2World_GetHitEventThreshold`
+* add `b2World_IsWarmStartingEnabled`
+* remove `b2DebugDraw.DrawCapsule`
+* 
+
 * `b2Shape_RayCast(b2ShapeId shapeId, b2Vec2 origin, b2Vec2 translation)` -> `b2Shape_RayCast(b2ShapeId shapeId, b2RayCastInput* input)`
 * remove `b2GetOwnerTransform`
 * `b2Body_GetInertiaTensor` -> `b2Body_GetRotationalInertia`

@@ -78,7 +78,6 @@ export function CreateDebugDraw(canvas, ctx, scale = 20.0)
     const draw = new b2DebugDraw();
 
     if (disableDrawing) {
-        draw.DrawCapsule = () => { return; }
         draw.DrawCircle = () => { return; }
         draw.DrawPoint = () => { return; }
         draw.DrawPolygon = () => { return; }

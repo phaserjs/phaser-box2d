@@ -2082,6 +2082,73 @@ export function b2World_EnableSleeping(worldId, flag)
     }
 }
 
+
+
+/**
+ * @function b2World_IsSleepingEnabled
+ * @summary Is body sleeping enabled?
+ * @param {b2WorldId} worldId - The identifier of the Box2D world.
+ * @returns {boolean} True if sleeping is enabled for the world, false otherwise.
+ */
+export function b2World_IsSleepingEnabled(worldId)
+{
+    const world = b2GetWorldFromId(worldId);
+    return world.enableSleep;
+}
+
+
+/**
+ * @function b2World_IsContinuousEnabled
+ * @summary Is continuous collision enabled?
+ * @param {b2WorldId} worldId - The identifier of the Box2D world.
+ * @returns {boolean} True if continuous collision is enabled for the world, false otherwise.
+ */
+export function b2World_IsContinuousEnabled(worldId)
+{
+    const world = b2GetWorldFromId(worldId);
+    return world.enableContinuous;
+}
+
+
+/**
+ * @function b2World_GetRestitutionThreshold
+ * @summary Get the the restitution speed threshold. Typically in meters per second.
+ * @param {b2WorldId} worldId - The identifier of the Box2D world.
+ * @returns {number} float
+ */
+export function b2World_GetRestitutionThreshold(worldId)
+{
+    const world = b2GetWorldFromId(worldId);
+    return world.restitutionThreshold;
+}
+
+
+/**
+ * @function b2World_GetHitEventThreshold
+ * @summary Get the the hit event speed threshold. Typically in meters per second.
+ * @param {b2WorldId} worldId - The identifier of the Box2D world.
+ * @returns {number} float
+ */
+export function b2World_GetHitEventThreshold(worldId)
+{
+    const world = b2GetWorldFromId(worldId);
+    return world.hitEventThreshold;
+}
+
+
+/**
+ * @function b2World_IsWarmStartingEnabled
+ * @summary Is constraint warm starting enabled?
+ * @param {b2WorldId} worldId - The identifier of the Box2D world.
+ * @returns {boolean} True if constraint warm starting is enabled for the world, false otherwise.
+ */
+export function b2World_IsWarmStartingEnabled(worldId)
+{
+    const world = b2GetWorldFromId(worldId);
+    return world.enableWarmStarting;
+}
+
+
 /**
  * @function b2World_EnableWarmStarting
  * @param {b2WorldId} worldId - The identifier for the Box2D world instance

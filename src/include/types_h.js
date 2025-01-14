@@ -880,7 +880,6 @@ export class b2DebugDraw
         this.DrawCircle = null;
         this.DrawImageCircle = null;
         this.DrawSolidCircle = null;
-        this.DrawCapsule = null;
         this.DrawImageCapsule = null;
         this.DrawSolidCapsule = null;
         this.DrawSegment = null;
