@@ -68,10 +68,6 @@ function b2GetShape(world, shapeId)
     return shape;
 }
 
-export function b2GetOwnerTransform(world, shape)
-{
-    return b2GetBodyTransform(world, shape.bodyId);
-}
 
 function b2GetChainShape(world, chainId)
 {
@@ -1019,7 +1015,7 @@ export function b2Shape_TestPoint(shapeId, point)
     const world = b2GetWorld(shapeId.world0);
     const shape = b2GetShape(world, shapeId);
 
-    const transform = b2GetOwnerTransform(world, shape);
+    const transform = b2GetBodyTransform(world, shape.bodyId);
     const localPoint = b2InvTransformPoint(transform, point);
 
     switch (shape.type)
@@ -1038,14 +1034,14 @@ export function b2Shape_TestPoint(shapeId, point)
     }
 }
 
+
 /**
  * @function b2Shape_RayCast
  * @description
  * Performs a ray cast against a shape in world space, transforming the input/output
  * between local and world coordinates.
  * @param {b2ShapeId} shapeId - The identifier for the shape to test
- * @param {b2Vec2} origin - The starting point of the ray in world coordinates
- * @param {b2Vec2} translation - The direction and length of the ray in world coordinates
+ * @param {b2RayCastInput} input - The ray to cast, in world coordinates
  * @returns {b2CastOutput} The ray cast results containing:
  * - hit: boolean indicating if the ray intersects the shape
  * - point: intersection point in world coordinates (if hit is true)
@@ -1053,45 +1049,46 @@ export function b2Shape_TestPoint(shapeId, point)
  * - fraction: fraction of translation where intersection occurs (if hit is true)
  * @throws {Error} Throws assertion error if shape type is invalid
  */
-export function b2Shape_RayCast(shapeId, origin, translation)
+export function b2Shape_RayCast(shapeId, input)
 {
     const world = b2GetWorld(shapeId.world0);
     const shape = b2GetShape(world, shapeId);
 
-    const transform = b2GetOwnerTransform(world, shape);
+    const transform = b2GetBodyTransform(world, shape.bodyId);
 
     // input in local coordinates
-    const input = new b2RayCastInput();
-    input.maxFraction = 1.0;
-    input.origin = b2InvTransformPoint(transform, origin);
-    input.translation = b2InvRotateVector(transform.q, translation);
+    const localInput = new b2RayCastInput();
+    localInput.origin = b2InvTransformPoint(transform, input.origin);
+    localInput.translation = b2InvRotateVector(transform.q, input.translation);
+    localInput.maxFraction = input.maxFraction;
+
 
     let output = new b2CastOutput(rayNormal, rayPoint);
 
     switch (shape.type)
     {
         case b2ShapeType.b2_capsuleShape:
-            output = b2RayCastCapsule(input, shape.capsule);
+            output = b2RayCastCapsule(localInput, shape.capsule);
 
             break;
 
         case b2ShapeType.b2_circleShape:
-            output = b2RayCastCircle(input, shape.circle);
+            output = b2RayCastCircle(localInput, shape.circle);
 
             break;
 
         case b2ShapeType.b2_segmentShape:
-            output = b2RayCastSegment(input, shape.segment, false);
+            output = b2RayCastSegment(localInput, shape.segment, false);
 
             break;
 
         case b2ShapeType.b2_polygonShape:
-            output = b2RayCastPolygon(input, shape.polygon);
+            output = b2RayCastPolygon(localInput, shape.polygon);
 
             break;
 
         case b2ShapeType.b2_chainSegmentShape:
-            output = b2RayCastSegment(input, shape.chainSegment.segment, true);
+            output = b2RayCastSegment(localInput, shape.chainSegment.segment, true);
 
             break;
 
@@ -1110,6 +1107,7 @@ export function b2Shape_RayCast(shapeId, origin, translation)
 
     return output;
 }
+
 
 /**
  * @function b2Shape_SetDensity

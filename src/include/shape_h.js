@@ -93,7 +93,6 @@ export {
     b2MakeShapeDistanceProxy,
     b2RayCastShape,
     b2ShapeCastShape,
-    b2GetOwnerTransform,
     b2Shape_AreContactEventsEnabled,
     b2Shape_AreHitEventsEnabled,
     b2Shape_ArePreSolveEventsEnabled,

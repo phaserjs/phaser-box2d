@@ -2,6 +2,8 @@
 
 ## Next - Unreleased
 
+* `b2Shape_RayCast(b2ShapeId shapeId, b2Vec2 origin, b2Vec2 translation)` -> `b2Shape_RayCast(b2ShapeId shapeId, b2RayCastInput* input)`
+* remove `b2GetOwnerTransform`
 * `b2Body_GetInertiaTensor` -> `b2Body_GetRotationalInertia`
 * `b2DistanceJoint_GetHertz` -> `b2DistanceJoint_GetSpringHertz`
 * `b2DistanceJoint_GetDampingRatio` -> `b2DistanceJoint_GetSpringDampingRatio
