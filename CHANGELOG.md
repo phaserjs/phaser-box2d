@@ -1,5 +1,16 @@
 # Phaser Box2D Change Log
 
+## Next - Unreleased
+
+* `b2Body_GetInertiaTensor` -> `b2Body_GetRotationalInertia`
+* `b2DistanceJoint_GetHertz` -> `b2DistanceJoint_GetSpringHertz`
+* `b2DistanceJoint_GetDampingRatio` -> `b2DistanceJoint_GetSpringDampingRatio
+* `b2MakeOffsetBox`: make last argument required and a `b2Rot` rather than an `angle`
+* update box2d version returned by `b2GetVersion`: `3.0.0` -> `3.1.0`
+
+
+
+
 ## Version 1.1.0 - December 30th 2024
 
 * The `b2CastOutput` function now takes two `b2Vec` instances, `rayPoint` and `rayNormal`. These are now passed in from locally cached values where-ever `b2ShapeCast` is called. This prevents a crash when `b2TransformPoint` is called on the `output.point` which was previously null.
