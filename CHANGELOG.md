@@ -11,7 +11,8 @@
 
 ## Version 1.2.0 - January 8th 2025
 
-* Sensor shapes now always generate events when created
+* Sensor shapes now always generate events when created.
+* Thanks to @mikuso for creating the first pass at TypeScript definitions.
 
 
 ## Version 1.1.0 - December 30th 2024
