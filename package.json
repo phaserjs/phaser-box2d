@@ -18,7 +18,7 @@
   "license": "MIT",
   "author": "Phaser Studio <support@phaser.io> (https://phaser.io)",
   "type": "module",
-  "types": "types",
+  "types": "types/main-prod.d.ts",
   "main": "dist/PhaserBox2D.js",
   "scripts": {
     "docs": "node docs.mjs",
