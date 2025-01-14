@@ -122,7 +122,7 @@ export {
     b2Body_GetTransform, b2Body_ApplyTorque, b2Body_GetWorldPoint, b2Body_GetWorldVector,
     b2Body_GetLinearDamping, b2Body_SetLinearDamping, b2Body_GetLinearVelocity, b2Body_SetLinearVelocity, b2Body_ApplyLinearImpulse, b2Body_ApplyLinearImpulseToCenter,
     b2Body_GetAngularVelocity, b2Body_SetAngularVelocity, b2Body_ApplyAngularImpulse,
-    b2Body_GetInertiaTensor, b2Body_GetLocalCenterOfMass, b2Body_GetWorldCenterOfMass,
+    b2Body_GetRotationalInertia, b2Body_GetLocalCenterOfMass, b2Body_GetWorldCenterOfMass,
     b2Body_ApplyMassFromShapes, b2Body_SetAngularDamping, b2Body_GetAngularDamping, b2Body_SetGravityScale, b2Body_GetGravityScale,
     b2Body_EnableSleep, b2Body_IsSleepEnabled, b2Body_SetSleepThreshold, b2Body_GetSleepThreshold,
     b2Body_Enable, b2Body_Disable,

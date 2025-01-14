@@ -265,12 +265,12 @@ export function b2DistanceJoint_SetSpringDampingRatio(jointId, dampingRatio)
 
 /**
  * Gets the hertz frequency parameter of a distance joint.
- * @function b2DistanceJoint_GetHertz
+ * @function b2DistanceJoint_GetSpringHertz
  * @param {number} jointId - The identifier for the distance joint.
  * @returns {number} The hertz frequency value of the distance joint.
  * @throws {Error} If the joint is not a distance joint or the jointId is invalid.
  */
-export function b2DistanceJoint_GetHertz(jointId)
+export function b2DistanceJoint_GetSpringHertz(jointId)
 {
     const base = b2GetJointSimCheckType(jointId, b2JointType.b2_distanceJoint);
     const joint = base.distanceJoint;
@@ -280,12 +280,12 @@ export function b2DistanceJoint_GetHertz(jointId)
 
 /**
  * Gets the damping ratio of a distance joint.
- * @function b2DistanceJoint_GetDampingRatio
+ * @function b2DistanceJoint_GetSpringDampingRatio
  * @param {number} jointId - The identifier for the distance joint.
  * @returns {number} The damping ratio of the distance joint.
  * @throws {Error} If the joint is not a distance joint or the jointId is invalid.
  */
-export function b2DistanceJoint_GetDampingRatio(jointId)
+export function b2DistanceJoint_GetSpringDampingRatio(jointId)
 {
     const base = b2GetJointSimCheckType(jointId, b2JointType.b2_distanceJoint);
     const joint = base.distanceJoint;
