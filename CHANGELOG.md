@@ -7,10 +7,6 @@
 * `b2DistanceJoint_GetDampingRatio` -> `b2DistanceJoint_GetSpringDampingRatio
 * `b2MakeOffsetBox`: make last argument required and a `b2Rot` rather than an `angle`
 * update box2d version returned by `b2GetVersion`: `3.0.0` -> `3.1.0`
-
-
-## Version 1.2.0 - January 8th 2025
-
 * Sensor shapes now always generate events when created.
 * Thanks to @mikuso for creating the first pass at TypeScript definitions.
 
