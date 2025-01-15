@@ -30,7 +30,7 @@ import { b2PrepareWeldJoint, b2SolveWeldJoint, b2WarmStartWeldJoint } from "./in
 
 import { b2BufferMove } from "./include/broad_phase_h.js";
 import { b2DestroyContact } from "./include/contact_h.js";
-import { b2JointId } from "./include/id_h.js";
+import { b2JointId, b2WorldId } from "./include/id_h.js";
 
 /**
  * @namespace Joint
@@ -1057,6 +1057,20 @@ export function b2DestroyJoint(jointId)
     const joint = b2GetJointFullId(world, jointId);
     b2DestroyJointInternal(world, joint, true);
 }
+
+
+/**
+ * Get the world that owns this joint
+ * @function b2Chain_GetSegments
+ * @param {b2JointId} jointId - The identifier for the joint
+ * @returns {b2WorldId}
+ */
+export function b2Joint_GetWorld(jointId)
+{
+    const world = b2GetWorld(jointId.world0);
+    return new b2WorldId(jointId.world0 + 1, world.revision);
+}
+
 
 /**
  * Gets the type of a joint from its ID.

@@ -469,6 +469,7 @@ export {
     b2GetJointSim, b2GetJointSimCheckType,
     b2PrepareOverflowJoints, b2WarmStartOverflowJoints, b2SolveOverflowJoints,
     b2CreateRevoluteJoint, b2CreateWheelJoint, b2CreateWeldJoint, b2CreatePrismaticJoint, b2CreateDistanceJoint, b2CreateMotorJoint, b2CreateMouseJoint,
+    b2Joint_GetWorld,
     b2Joint_WakeBodies, b2Joint_GetBodyA, b2Joint_GetBodyB, b2Joint_GetCollideConnected, b2Joint_GetConstraintForce, b2Joint_GetConstraintTorque, b2Joint_GetLocalAnchorA, b2Joint_GetLocalAnchorB,
     b2Joint_GetType, b2Joint_GetUserData, b2Joint_SetUserData, b2Joint_SetCollideConnected,
     b2DefaultDistanceJointDef,b2DefaultMotorJointDef,b2DefaultMouseJointDef,b2DefaultPrismaticJointDef,b2DefaultRevoluteJointDef,b2DefaultWeldJointDef,b2DefaultWheelJointDef

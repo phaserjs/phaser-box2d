@@ -939,6 +939,13 @@ export function b2Shape_GetBody(shapeId)
     return b2MakeBodyId(world, shape.bodyId);
 }
 
+// 
+/**
+ * @function b2Shape_GetWorld
+ * @summary Get the world that owns this shape
+ * @param {b2ShapeId} shapeId - The ID of the shape to query.
+ * @returns {b2WorldId} The ID of the world that owns the shape.
+ */
 export function b2Shape_GetWorld(shapeId)
 {
     const world = b2GetWorld(shapeId.world0);
@@ -1770,6 +1777,59 @@ export function b2Shape_GetParentChain(shapeId)
 
     return new b2ChainId();
 }
+
+
+/**
+ * Get the world that owns this chain shape
+ * @function b2Chain_GetWorld
+ * @param {b2ChainId} chainId - The identifier for the chain
+ * @returns {b2WorldId}
+ */
+export function b2Chain_GetWorld( b2ChainId chainId )
+{
+    const world = b2GetWorld(chainId.world0);
+    return new b2WorldId(chainId.world0 + 1, world.revision);
+}
+
+
+/**
+ * Get the number of segments on this chain.
+ * @function b2Chain_GetSegmentCount
+ * @param {b2ChainId} chainId - The identifier for the chain
+ * @returns {number}
+ */
+export function b2Chain_GetSegmentCount(chainId)
+{
+    const world = b2GetWorldLocked(chainId.world0);
+    const chainShape = b2GetChainShape(world, chainId);
+    return chainShape.count;
+}
+
+
+/**
+ * Fill a user array with chain segment shape ids up to the specified capacity. 
+ * @function b2Chain_GetSegments
+ * @param {b2ChainId} chainId - The identifier for the chain
+ * @param {b2ShapeId} segmentArray - list of segment shapes for this chain
+ * @param {number} capacity - 
+ * @returns {number} The actual number of segments returned.
+ */
+export function b2Chain_GetSegments(chainId, segmentArray, capacity)
+{
+    const world = b2GetWorldLocked(chainId.world0);
+    const chainShape = b2GetChainShape(world, chainId);
+    const count = Math.min(chainShape.count, capacity);
+
+    for (let i=0; i < count; ++i)
+    {
+        const shapeId = chainShape.shapeIndices[i];
+        const shape = world.shapeArray[shapeId];
+        segmentArray[i] = new b2ShapeId(shapeId + 1, chainId.world0, shape.revision);
+    }
+
+    return count;
+}
+
 
 /**
  * Sets the friction value for all shapes in a chain.
