@@ -1785,7 +1785,7 @@ export function b2Shape_GetParentChain(shapeId)
  * @param {b2ChainId} chainId - The identifier for the chain
  * @returns {b2WorldId}
  */
-export function b2Chain_GetWorld( b2ChainId chainId )
+export function b2Chain_GetWorld(chainId)
 {
     const world = b2GetWorld(chainId.world0);
     return new b2WorldId(chainId.world0 + 1, world.revision);
