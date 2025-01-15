@@ -2,6 +2,10 @@
 
 ## Next - Unreleased
 
+* add `b2Joint_GetWorld`
+* add `b2Chain_GetWorld`
+* add `b2Chain_GetSegmentCount`
+* add `b2Chain_GetSegments`
 * add `b2World_IsSleepingEnabled`
 * add `b2World_IsContinuousEnabled`
 * add `b2World_GetRestitutionThreshold`
