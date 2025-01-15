@@ -64,13 +64,13 @@ We're happy to consider a commit as fully completed even if it has asserts or co
 | ✔️ | [8e7a17c](https://github.com/erincatto/box2d/commit/8e7a17c5c942dbf2fdea8b9d09983410dcc0429d) | Update README.md | Done |
 | ✔️ | [2b880d1](https://github.com/erincatto/box2d/commit/2b880d1264f1493f50bee3906b7d48ecdae4fc6e) | Fix null being passed to memcpy (#770) | Done |
 | ✔️ | [0e333ff](https://github.com/erincatto/box2d/commit/0e333fff0669afac5d9416e21f22adccada11755) | Custom SSE2 and Neon (#772) | Done |
-| 🔎 | [9314f30](https://github.com/erincatto/box2d/commit/9314f303a7cdd6171f7ae06cd1bbf110efffe3cc) | Cross platform determinism (#773) | Pending |
+| 🔎 | [9314f30](https://github.com/erincatto/box2d/commit/9314f303a7cdd6171f7ae06cd1bbf110efffe3cc) | Cross platform determinism (#773) | Done - skipped custom trig functions (unneeded for determinism in js) |
 | ✔️ | [5fdbbc8](https://github.com/erincatto/box2d/commit/5fdbbc815684421513faebee10e20aad6e8b6365) | Misc Issues (#783) | Done |
 | ✔️ | [e6cbbfc](https://github.com/erincatto/box2d/commit/e6cbbfc85eb781f36dbcea316c355fb4748dabff) | Linux gcc fixes (#784) | Done |
-| 🔎 | [d323a0e](https://github.com/erincatto/box2d/commit/d323a0e7cebb8bdcd63ebc600107b577225c521f) | Cross platform random numbers for samples (#785) | TODO: b2Shape_RayCast now uses b2RayCastInput |
-| 🔎 | [c69eee4](https://github.com/erincatto/box2d/commit/c69eee4b2f76a19d8b556c92fcd64c742879fc52) | Update AMD benchmarks (#787) | TODO: IsSleepingEnabled |
+| 🔎 | [d323a0e](https://github.com/erincatto/box2d/commit/d323a0e7cebb8bdcd63ebc600107b577225c521f) | Cross platform random numbers for samples (#785) | Done |
+| 🔎 | [c69eee4](https://github.com/erincatto/box2d/commit/c69eee4b2f76a19d8b556c92fcd64c742879fc52) | Update AMD benchmarks (#787) | Done |
 | 🔎 | [c56a76d](https://github.com/erincatto/box2d/commit/c56a76daa50726d2e47aad6bb648473ee14d822e) | Array refactor (#796) | Pending |
-| 🔎 | [df7373c](https://github.com/erincatto/box2d/commit/df7373c08a41b7a4ba6edd5d4be200675a948176) | New capsule collider (#804) | Pending |
+| 🔎 | [df7373c](https://github.com/erincatto/box2d/commit/df7373c08a41b7a4ba6edd5d4be200675a948176) | New capsule collider (#804) | Done |
 | 🔎 | [67b9835](https://github.com/erincatto/box2d/commit/67b98356074805ffdf43160a18390dd76b6bf550) | Fix missing hit events (#808) | Pending |
 | 🔎 | [e7cb9f0](https://github.com/erincatto/box2d/commit/e7cb9f0b80420a865f11c0bbf37c3ebbe31629d2) | Explosion features (#810) | Pending |
 | 🔎 | [b864f53](https://github.com/erincatto/box2d/commit/b864f533c3d851d5c7b55fd6fb4bac00466ff854) | Friction and restitution mixing rules (#811) | Pending |

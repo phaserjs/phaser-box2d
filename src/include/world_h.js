@@ -20,6 +20,7 @@ export {
     b2World_SetContactTuning, b2World_SetJointTuning, b2World_SetPreSolveCallback, b2World_SetCustomFilterCallback,
     b2World_SetGravity, b2World_SetHitEventThreshold, b2World_SetRestitutionThreshold,
     b2World_IsValid, b2Joint_IsValid,
+    b2World_IsSleepingEnabled,
     b2World_EnableSleeping, b2World_EnableContinuous, b2World_IsContinuousEnabled, b2World_GetRestitutionThreshold,
     b2World_GetHitEventThreshold, b2World_EnableWarmStarting, b2World_IsWarmStartingEnabled,
     b2ValidateConnectivity, b2ValidateSolverSets, b2ValidateContacts,
