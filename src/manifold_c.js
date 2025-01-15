@@ -753,6 +753,9 @@ export function b2CollideCapsules(capsuleA, xfA, capsuleB, xfB, manifold)
     return;
 }
 
+
+// initialized here, used as a static variable to avoid allocating memory on every 
+// call to b2CollideSegmentAndCapsule
 const constCapsule = new b2Capsule();
 
 /**
@@ -773,7 +776,7 @@ export function b2CollideSegmentAndCapsule(segmentA, xfA, capsuleB, xfB, manifol
     constCapsule.center2 = segmentA.point2;
     constCapsule.radius = 0;
 
-    return b2CollideCapsules(constCapsule, xfA, capsuleB, xfB);
+    return b2CollideCapsules(constCapsule, xfA, capsuleB, xfB, manifold);
 }
 
 /**
