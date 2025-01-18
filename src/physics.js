@@ -1066,7 +1066,10 @@ export function CreatePolygonFromVertices (data)
             b2CreatePolygonShape(body.bodyId, shapeDef, nGon);
         }
     });
+
+    return body;
 }
+
 
 /**
  * Creates a polygon from PhysicsEditor XML data and attaches it to a body.
@@ -1180,6 +1183,7 @@ export function CreatePhysicsEditorShape (data)
         }
     });
 }
+
 
 /**
  * @typedef {Object} RevoluteJointConfig
