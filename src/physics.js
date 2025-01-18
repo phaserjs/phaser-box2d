@@ -993,7 +993,7 @@ export function CreatePolygonFromEarcut (data)
 /**
  * Creates a polygon from Vertex and Index data and attaches it to a body.
  * @param {PolygonVertexConfig} data - Configuration for the polygon.
- * @returns {b2BodyId} The created polygon's body ID.
+ * @returns {{bodyId: b2BodyId, shapeId: b2ShapeId, object: b2Polygon}} The created polygon's body ID, shape ID, and object.
  * @memberof Physics
  */
 export function CreatePolygonFromVertices (data)
