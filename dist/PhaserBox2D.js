@@ -1,7 +1,7 @@
 /**
  * @license
  * Phaser Box2D v1.1.0
- * Tuesday, 14 January 2025 at 17:39
+ * Saturday, 18 January 2025 at 09:17
  * 
  * This library includes code that is ported from the original C version. The original C code is Copyright 2023 Erin Catto
  * and was released under the MIT license. The JavaScript port of the C code along with all additional code is
@@ -15975,6 +15975,7 @@ function CreatePolygonFromVertices(data) {
       b2CreatePolygonShape(body.bodyId, shapeDef, nGon);
     }
   });
+  return body;
 }
 function CreatePhysicsEditorShape(data) {
   const key = data.key;
