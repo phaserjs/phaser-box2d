@@ -1788,6 +1788,7 @@ export function b2Shape_GetParentChain(shapeId)
 export function b2Chain_GetWorld(chainId)
 {
     const world = b2GetWorld(chainId.world0);
+
     return new b2WorldId(chainId.world0 + 1, world.revision);
 }
 
@@ -1802,6 +1803,7 @@ export function b2Chain_GetSegmentCount(chainId)
 {
     const world = b2GetWorldLocked(chainId.world0);
     const chainShape = b2GetChainShape(world, chainId);
+
     return chainShape.count;
 }
 

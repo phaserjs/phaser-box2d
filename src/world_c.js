@@ -2093,6 +2093,7 @@ export function b2World_EnableSleeping(worldId, flag)
 export function b2World_IsSleepingEnabled(worldId)
 {
     const world = b2GetWorldFromId(worldId);
+
     return world.enableSleep;
 }
 
@@ -2106,6 +2107,7 @@ export function b2World_IsSleepingEnabled(worldId)
 export function b2World_IsContinuousEnabled(worldId)
 {
     const world = b2GetWorldFromId(worldId);
+
     return world.enableContinuous;
 }
 
@@ -2119,6 +2121,7 @@ export function b2World_IsContinuousEnabled(worldId)
 export function b2World_GetRestitutionThreshold(worldId)
 {
     const world = b2GetWorldFromId(worldId);
+
     return world.restitutionThreshold;
 }
 
@@ -2132,6 +2135,7 @@ export function b2World_GetRestitutionThreshold(worldId)
 export function b2World_GetHitEventThreshold(worldId)
 {
     const world = b2GetWorldFromId(worldId);
+
     return world.hitEventThreshold;
 }
 
@@ -2145,6 +2149,7 @@ export function b2World_GetHitEventThreshold(worldId)
 export function b2World_IsWarmStartingEnabled(worldId)
 {
     const world = b2GetWorldFromId(worldId);
+
     return world.enableWarmStarting;
 }
 

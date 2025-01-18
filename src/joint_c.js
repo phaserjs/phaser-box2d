@@ -1068,6 +1068,7 @@ export function b2DestroyJoint(jointId)
 export function b2Joint_GetWorld(jointId)
 {
     const world = b2GetWorld(jointId.world0);
+
     return new b2WorldId(jointId.world0 + 1, world.revision);
 }
 
