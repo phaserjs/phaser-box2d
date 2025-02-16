@@ -395,7 +395,7 @@ function b2SolveSimplex2(s)
     {
         s.v2.a = 1.0;
         s.count = 1;
-        s.v1 = s.v2;
+        s.v1 = s.v2.clone();
 
         return;
     }
