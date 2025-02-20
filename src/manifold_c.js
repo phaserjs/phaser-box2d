@@ -773,7 +773,7 @@ export function b2CollideSegmentAndCapsule(segmentA, xfA, capsuleB, xfB, manifol
     constCapsule.center2 = segmentA.point2;
     constCapsule.radius = 0;
 
-    return b2CollideCapsules(constCapsule, xfA, capsuleB, xfB);
+    return b2CollideCapsules(constCapsule, xfA, capsuleB, xfB, manifold);
 }
 
 /**
@@ -1970,7 +1970,7 @@ export function b2CollideChainSegmentAndPolygon(chainSegmentA, xfA, polygonB, xf
             {
                 if (b2Dot(n2, n) < b2Dot(normal1, n))
                 {
-                    return manifold.clear(0);
+                    return manifold.clear();
                 }
             }
 
