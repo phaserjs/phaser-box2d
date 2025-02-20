@@ -2426,7 +2426,7 @@ export function b2World_OverlapCapsule(worldId, capsule, transform, filter, fcn,
     worldContext.world = world;
     worldContext.fcn = fcn;
     worldContext.filter = filter;
-    worldContext.proxy = b2MakeProxy(capsule.center, 2, capsule.radius);
+    worldContext.proxy = b2MakeProxy(capsule.center1, 2, capsule.radius);
     worldContext.transform = transform;
     worldContext.userContext = context;
 
