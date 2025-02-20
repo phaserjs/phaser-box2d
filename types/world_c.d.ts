@@ -496,6 +496,12 @@ export function b2ValidateContacts(world: any): void;
 /**
  * @namespace World
  */
+/**
+ * @import {b2WorldDef, b2DebugDraw, b2QueryFilter} from './include/types_h.js'
+ * @import {b2ChainId, b2JointId} from './include/id_h.js'
+ * @import {b2PreSolveFcn, b2CastResultFcn, b2OverlapResultFcn, b2CustomFilterFcn} from './include/types_h.js'
+ * @import {b2TreeStats, b2Circle, b2Capsule, b2Polygon} from './include/collision_h.js'
+ */
 export const B2_MAX_WORLDS: 32;
 export namespace b2SetType {
     let b2_staticSet: number;
@@ -508,9 +514,11 @@ export class b2World {
     broadPhase: b2BroadPhase;
     constraintGraph: b2ConstraintGraph;
     bodyArray: any[];
-    solverSetArray: any[];
+    /** @type {b2SolverSet[]} */
+    solverSetArray: b2SolverSet[];
     jointArray: any[];
-    contactArray: any[];
+    /** @type {b2Contact[]} */
+    contactArray: b2Contact[];
     islandArray: any[];
     shapeArray: any[];
     chainArray: any[];
@@ -558,17 +566,32 @@ export class b2TaskContext {
     splitSleepTime: number;
     splitIslandId: number;
 }
+import type { b2WorldDef } from './include/types_h.js';
 import { b2WorldId } from './include/id_h.js';
+import type { b2DebugDraw } from './include/types_h.js';
 import { b2BodyEvents } from './include/types_h.js';
 import { b2SensorEvents } from './include/types_h.js';
 import { b2ContactEvents } from './include/types_h.js';
 import { b2BodyId } from './include/id_h.js';
 import { b2ShapeId } from './include/id_h.js';
+import type { b2ChainId } from './include/id_h.js';
+import type { b2JointId } from './include/id_h.js';
 import { b2AABB } from './include/math_functions_h.js';
+import type { b2QueryFilter } from './include/types_h.js';
+import type { b2OverlapResultFcn } from './include/types_h.js';
+import type { b2Circle } from './include/collision_h.js';
 import { b2Transform } from './include/math_functions_h.js';
+import type { b2Capsule } from './include/collision_h.js';
+import type { b2Polygon } from './include/collision_h.js';
 import { b2Vec2 } from './include/math_functions_h.js';
+import type { b2CastResultFcn } from './include/types_h.js';
+import type { b2TreeStats } from './include/collision_h.js';
 import { b2RayResult } from './include/types_h.js';
+import type { b2PreSolveFcn } from './include/types_h.js';
+import type { b2CustomFilterFcn } from './include/types_h.js';
 import { b2StackAllocator } from './include/stack_allocator_h.js';
 import { b2BroadPhase } from './include/broad_phase_h.js';
 import { b2ConstraintGraph } from './include/constraint_graph_h.js';
+import { b2SolverSet } from './include/solver_set_h.js';
+import { b2Contact } from './include/contact_h.js';
 import { b2BitSet } from './include/bitset_h.js';

@@ -92,12 +92,15 @@ export function UpdateWorldSprites(worldId: number): void;
  * Converts a Box2D Body's position and rotation to a Sprite's position and rotation.
  *
  * This is called automatically by `UpdateWorldSprites`.
- *
  * @export
- * @param {b2Body} body
+ * @param {{ bodyId: { world0: number; }; }} body
  * @param {Sprite} sprite
  */
-export function BodyToSprite(body: b2Body, sprite: Sprite): void;
+export function BodyToSprite(body: {
+    bodyId: {
+        world0: number;
+    };
+}, sprite: Sprite): void;
 /**
  * @typedef {Object} Sprite
  * @property {number} x - The x position of the sprite.
@@ -156,10 +159,10 @@ export function CreateWorld(data: WorldConfig): {
  * Steps a physics world to match fixedTimeStep.
  * Returns the average time spent in the step function.
  *
- * @param {WorldConfig} data - Configuration for the world.
+ * @param {WorldStepConfig} data - Configuration for the world.
  * @returns {number} totalTime - Time spent processing the step function, in seconds.
  */
-export function WorldStep(data: WorldConfig): number;
+export function WorldStep(data: WorldStepConfig): number;
 /**
  * @typedef {Object} ChainConfig
  * @property {b2WorldId} worldId - ID for the world.
@@ -179,7 +182,7 @@ export function WorldStep(data: WorldConfig): number;
  * @typedef {Object} BodyCapsule
  * @property {b2BodyId} bodyId - ID for the body to attach the capsule to.
  * @property {b2ShapeId} shapeId - ID for the shape to attach the capsule to.
- * @propery {b2Capsule} object - The capsule object to attach.
+ * @property {b2Capsule} object - The capsule object to attach.
  */
 /**
  * Creates a chain of capsules with each one linked to the previous and next one.
@@ -345,7 +348,7 @@ export function CreatePolygon(data: PolygonConfig): {
  * @property {number} [friction] - Friction of the polygon.
  * @property {number} [restitution=0.1] - Restitution of the polygon.
  * @property {any} [color] - Custom color for the polygon.
- * @property {number[]} indices - List of indices to the vertices for the polygon.
+ * @property {number[][]} indices - List of indices to the vertices for the polygon.
  * @property {number[]} vertices - List of vertices for the polygon in number pairs [x0,y0, x1,y1, ... xN,yN].
  * @property {b2Vec2} vertexOffset - Offset to recenter the vertices if they are not zero based.
  * @property {b2Vec2} vertexScale - Scale for the vertices, defaults to 1, 1.
@@ -666,6 +669,10 @@ export type BodyCapsule = {
      * - ID for the shape to attach the capsule to.
      */
     shapeId: b2ShapeId;
+    /**
+     * - The capsule object to attach.
+     */
+    object: b2Capsule;
 };
 export type CircleConfig = {
     /**
@@ -1037,7 +1044,7 @@ export type PolygonVertexConfig = {
     /**
      * - List of indices to the vertices for the polygon.
      */
-    indices: number[];
+    indices: number[][];
     /**
      * - List of vertices for the polygon in number pairs [x0,y0, x1,y1, ... xN,yN].
      */
@@ -1474,7 +1481,17 @@ export type WorldStepConfig = {
 };
 import { b2Vec2 } from './include/math_functions_h.js';
 import { b2Rot } from './include/math_functions_h.js';
+import type { b2Body } from './include/body_h.js';
+import type { b2BodyId } from './include/id_h.js';
+import type { b2ShapeId } from './include/id_h.js';
+import type { b2Polygon } from './include/collision_h.js';
 import { b2Circle } from './include/collision_h.js';
+import type { b2WorldId } from './include/id_h.js';
+import type { b2JointId } from './include/id_h.js';
+import type { b2WorldDef } from './include/types_h.js';
+import { b2Capsule } from './include/collision_h.js';
+import type { b2BodyDef } from './include/types_h.js';
+import type { b2ShapeDef } from './include/types_h.js';
 import { b2RevoluteJointDef } from './include/types_h.js';
 import { b2WeldJointDef } from './include/types_h.js';
 import { b2DistanceJointDef } from './include/types_h.js';

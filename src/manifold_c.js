@@ -42,6 +42,10 @@ import { resetProperties } from './body_c.js';
  * @namespace Manifold
  */
 
+/**
+ * @import {b2Segment, b2Circle, b2ChainSegment, b2DistanceCache, b2Manifold} from './include/collision_h.js'
+ */
+
 const B2_MAKE_ID = (A, B) => ((A & 0xFF) << 8) | (B & 0xFF);
 
 const xf = new b2Transform(new b2Vec2(), new b2Rot());
@@ -762,7 +766,14 @@ const constCapsule = new b2Capsule();
  * @param {b2Transform} xfA - Transform for segmentA containing position and rotation
  * @param {b2Capsule} capsuleB - A capsule shape defined by two points and a radius
  * @param {b2Transform} xfB - Transform for capsuleB containing position and rotation
- * @returns {b2Manifold} Collision manifold containing contact points and normal
+ * @param {b2Manifold} manifold - Output collision manifold
+ * @returns {void} Modifies the manifold parameter with collision data:
+ * - normalX/Y: Collision normal vector
+ * - pointCount: Number of contact points (0-2)
+ * - points[]: Contact point data including:
+ * - anchorA/B: Contact points in local coordinates
+ * - separation: Penetration depth
+ * - id: Contact ID
  * @description
  * Converts the segment to a zero-radius capsule and delegates to b2CollideCapsules
  * for the actual collision computation.
@@ -1488,9 +1499,9 @@ export function b2CollideChainSegmentAndCircle(chainSegmentA, xfA, circleB, xfB,
  * @param {b2Transform} xfA - Transform for segmentA
  * @param {b2Capsule} capsuleB - The capsule shape defined by two centers and a radius
  * @param {b2Transform} xfB - Transform for capsuleB
- * @param {b2SimplexCache} cache - Simplex cache for persistent contact information
+ * @param {b2DistanceCache} cache - Simplex cache for persistent contact information
  * @param {b2Manifold} manifold - Contact manifold to store collision results
- * @returns {void}
+ * @returns {b2Manifold} - Modified manifold
  */
 export function b2CollideChainSegmentAndCapsule(segmentA, xfA, capsuleB, xfB, cache, manifold)
 {

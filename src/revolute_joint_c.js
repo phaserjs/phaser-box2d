@@ -10,6 +10,7 @@ import {
     b2ClampFloat,
     b2Cross,
     b2CrossSV,
+    b2Mat22,
     b2MulAdd,
     b2MulSV,
     b2MulSub,
@@ -31,6 +32,10 @@ import { b2MakeSoft } from './include/solver_h.js';
 
 /**
  * @namespace RevoluteJoint
+ */
+
+/**
+ * @import {b2JointId} from './include/id_h.js'
  */
 
 /**
@@ -626,10 +631,10 @@ export function b2SolveRevoluteJoint(base, context, useBias)
             impulseScale = context.jointSoftness.impulseScale;
         }
 
-        const K = {
-            cx: new b2Vec2(0, 0),
-            cy: new b2Vec2(0, 0)
-        };
+        const K = new b2Mat22(
+            new b2Vec2(0, 0),
+            new b2Vec2(0, 0)
+        );
         K.cx.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
         K.cy.x = -rA.y * rA.x * iA - rB.y * rB.x * iB;
         K.cx.y = K.cy.x;

@@ -1,6 +1,9 @@
 /**
  * @namespace Aabb
  */
+/**
+ * @import {b2AABB} from './include/math_functions_h.js'
+ */
 export function b2Perimeter(a: any): number;
 export function b2EnlargeAABB(a: any, b: any): boolean;
 export function b2AABB_Overlaps(a: any, b: any): boolean;
@@ -16,4 +19,5 @@ export function b2AABB_Overlaps(a: any, b: any): boolean;
  * 3. The height (upperBoundY - lowerBoundY) is non-negative
  * 4. All coordinate values are valid numbers
  */
-export function b2AABB_IsValid(aabb: b2AABB): boolean;
+export function b2AABB_IsValid(aabb: b2Math.b2AABB): boolean;
+import * as b2Math from './include/math_functions_h.js';

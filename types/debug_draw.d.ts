@@ -20,23 +20,27 @@
  */
 export function CreateDebugDraw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale?: number): b2DebugDraw;
 /**
+ * @callback RAFCallback
+ * @param {number} deltaTime - Time elapsed since last frame in seconds, capped at 0.1s
+ * @param {number} totalTime - Total accumulated time in seconds
+ * @param {number} currentFps - Current frames per second, updated once per second
+ * @returns {void}
+ */
+/**
  * @function RAF
  * @summary Implements a requestAnimationFrame loop with timing and FPS tracking
- * @param {function} callback - Function to call each frame with signature (deltaTime, totalTime, currentFps)
- * @param {number} callback.deltaTime - Time elapsed since last frame in seconds, capped at 0.1s
- * @param {number} callback.totalTime - Total accumulated time in seconds
- * @param {number} callback.currentFps - Current frames per second, updated once per second
+ * @param {RAFCallback} callback - Function to call each frame with signature (deltaTime, totalTime, currentFps)
  * @description
  * Creates an animation loop using requestAnimationFrame that tracks timing information
  * and FPS. The callback is invoked each frame with the time delta, total time, and
  * current FPS. Frame delta time is capped at 100ms to avoid large time steps.
  */
-export function RAF(callback: Function): void;
+export function RAF(callback: RAFCallback): void;
 /**
  * Attach a graphic image to a physics body
  * @function AttachImage
  * @param {number} worldId - The ID of the Box2D world
- * @param {number} bodyId - The ID of the body to attach the image to
+ * @param {b2BodyId} bodyId - The ID of the body to attach the image to
  * @param {string} path - Directory path where the image is located
  * @param {string} imgName - Name of the image file
  * @param {b2Vec2} [drawOffset=null] - Offset vector for drawing the image
@@ -49,7 +53,7 @@ export function RAF(callback: Function): void;
  * asynchronously and sets up drawing parameters including offset, scale, and source
  * rectangle coordinates. The image is stored in the shape's properties for later rendering.
  */
-export function AttachImage(worldId: number, bodyId: number, path: string, imgName: string, drawOffset?: b2Vec2, drawScale?: b2Vec2, sourcePosition?: b2Vec2, sourceSize?: b2Vec2): any;
+export function AttachImage(worldId: number, bodyId: b2BodyId, path: string, imgName: string, drawOffset?: b2Vec2, drawScale?: b2Vec2, sourcePosition?: b2Vec2, sourceSize?: b2Vec2): any;
 /**
  * @function ConvertScreenToWorld
  * @description
@@ -77,5 +81,7 @@ export function ConvertScreenToWorld(canvas: HTMLCanvasElement, drawScale: numbe
  * screen pixels.
  */
 export function ConvertWorldToScreen(canvas: HTMLCanvasElement, drawScale: number, pw: b2Vec2): b2Vec2;
+export type RAFCallback = (deltaTime: number, totalTime: number, currentFps: number) => void;
 import { b2DebugDraw } from './include/types_h.js';
+import { b2BodyId } from './main.js';
 import { b2Vec2 } from './include/math_functions_h.js';

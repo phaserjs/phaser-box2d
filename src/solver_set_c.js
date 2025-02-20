@@ -38,6 +38,10 @@ import { b2ClearBit } from './include/bitset_h.js';
  * @namespace SolverSet
  */
 
+/**
+ * @import {b2World} from './include/world_h.js'
+ */
+
 // This holds solver set data. The following sets are used:
 // - static set for all static bodies (no contacts or joints)
 // - active set for all active bodies with body states (no contacts or joints)
@@ -90,6 +94,10 @@ export function b2DestroySolverSet(world, setIndex)
     world.solverSetArray[setIndex] = set;
 }
 
+/**
+ * @param {b2World} world
+ * @param {number} setIndex
+ */
 export function b2WakeSolverSet(world, setIndex)
 {
     console.assert(setIndex >= b2SetType.b2_firstSleepingSet);
@@ -172,8 +180,8 @@ export function b2WakeSolverSet(world, setIndex)
     {
         const contactSim = set.contacts.data[i];
         const contact = contacts[contactSim.contactId];
-        console.assert(contact.flags & b2ContactFlags.b2_contactTouchingFlag);
-        console.assert(contactSim.simFlags & b2ContactSimFlags.b2_simTouchingFlag);
+        console.assert(!!(contact.flags & b2ContactFlags.b2_contactTouchingFlag));
+        console.assert(!!(contactSim.simFlags & b2ContactSimFlags.b2_simTouchingFlag));
         console.assert(contactSim.manifold.pointCount > 0);
         console.assert(contact.setIndex === setIndex);
         b2AddContactToGraph(world, contactSim, contact);

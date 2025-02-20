@@ -12,6 +12,10 @@ import { b2IsNormalized, b2Length, b2Vec2, eps } from "./include/math_functions_
  */
 
 /**
+ * @import {b2Rot} from './include/math_functions_h.js'
+ */
+
+/**
  * @summary Checks if a number is valid (finite and not NaN).
  * @function b2IsValid
  * @param {number} a - The number to validate.
@@ -39,7 +43,7 @@ export function b2Vec2_IsValid(v)
 /**
  * Validates a 2D rotation object.
  * @function b2Rot_IsValid
- * @param {b2Rot} q4 - A rotation object containing sine (s) and cosine (c) components
+ * @param {b2Rot} q - A rotation object containing sine (s) and cosine (c) components
  * @returns {boolean} True if the rotation is valid, false otherwise
  * @description
  * Checks if a b2Rot object is valid by verifying:

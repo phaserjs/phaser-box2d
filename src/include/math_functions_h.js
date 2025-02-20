@@ -635,8 +635,8 @@ function b2Distance(a, b)
 /**
  * @function b2DistanceSquared
  * @summary Calculates the squared distance between two 2D points.
- * @param {b2Vec2} a - The first 2D vector point
- * @param {b2Vec2} b - The second 2D vector point
+ * @param {b2Vec2 | {x: number, y: number}} a - The first 2D vector point
+ * @param {b2Vec2 | {x: number, y: number}} b - The second 2D vector point
  * @returns {number} The squared distance between points a and b
  * @description
  * Computes the squared Euclidean distance between two points without taking the square root.

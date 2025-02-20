@@ -45,6 +45,10 @@ import { b2ValidateHull } from './include/hull_h.js';
  */
 
 /**
+ * @import {b2Hull, b2RayCastInput, b2Segment, b2ShapeCastInput} from './include/collision_h.js'
+ */
+
+/**
  * Validates a ray cast input structure.
  * @function b2IsValidRay
  * @param {b2RayCastInput} input - The ray cast input to validate, containing:
@@ -537,7 +541,7 @@ export function b2ComputePolygonMass(shape, density)
  * @function b2ComputeCircleAABB
  * @summary Computes an Axis-Aligned Bounding Box (AABB) for a circle shape after applying a transform.
  * @param {b2Circle} shape - The circle shape containing center point and radius.
- * @param {b2Transform} xf2 - The transform to be applied, consisting of a position (p) and rotation (q).
+ * @param {b2Transform} xf - The transform to be applied, consisting of a position (p) and rotation (q).
  * @returns {b2AABB} An AABB object defined by minimum and maximum points that bound the transformed circle.
  * @description
  * Calculates the AABB by transforming the circle's center point using the provided transform
@@ -559,7 +563,7 @@ export function b2ComputeCircleAABB(shape, xf)
  * @function b2ComputeCapsuleAABB
  * @summary Computes an Axis-Aligned Bounding Box (AABB) for a capsule shape.
  * @param {b2Capsule} shape - A capsule shape defined by two centers and a radius.
- * @param {b2Transform} xf2 - A transform containing position and rotation to be applied to the capsule.
+ * @param {b2Transform} xf - A transform containing position and rotation to be applied to the capsule.
  * @returns {b2AABB} An AABB that encompasses the transformed capsule shape.
  * @description
  * Calculates the minimum and maximum bounds of a capsule after applying a transform.
@@ -587,7 +591,7 @@ export function b2ComputeCapsuleAABB(shape, xf)
  * Computes the Axis-Aligned Bounding Box (AABB) for a polygon shape after applying a transform.
  * The AABB includes the polygon's radius in its calculations.
  * @param {b2Polygon} shape - The polygon shape containing vertices and radius
- * @param {b2Transform} xf2 - The transform to apply, consisting of position (p) and rotation (q)
+ * @param {b2Transform} xf - The transform to apply, consisting of position (p) and rotation (q)
  * @returns {b2AABB} An AABB object with lower and upper bounds that encompass the transformed polygon
  */
 export function b2ComputePolygonAABB(shape, xf)
@@ -634,7 +638,7 @@ export function b2ComputePolygonAABB(shape, xf)
  * @summary Computes an Axis-Aligned Bounding Box (AABB) for a line segment.
  * @function b2ComputeSegmentAABB
  * @param {b2Segment} shape - A line segment defined by two points (point1 and point2)
- * @param {b2Transform} xf2 - A transform containing position and rotation to be applied to the segment
+ * @param {b2Transform} xf - A transform containing position and rotation to be applied to the segment
  * @returns {b2AABB} An AABB that contains the transformed line segment
  * @description
  * Transforms the segment's endpoints using the provided transform, then creates an AABB

@@ -13,6 +13,7 @@ import {
     b2CrossSV,
     b2GetInverse22,
     b2LengthSquared,
+    b2Mat22,
     b2MulAdd,
     b2MulMV,
     b2MulSV,
@@ -33,6 +34,10 @@ import { b2SetType } from './include/world_h.js';
 
 /**
  * @namespace MotorJoint
+ */
+
+/**
+ * @import {b2JointId} from './include/id_h.js'
  */
 
 /**
@@ -251,10 +256,10 @@ export function b2PrepareMotorJoint(base, context)
     joint.deltaAngle = b2UnwindAngle(joint.deltaAngle);
     const rA = joint.anchorA;
     const rB = joint.anchorB;
-    const K = {
-        cx: new b2Vec2(0, 0),
-        cy: new b2Vec2(0, 0)
-    };
+    const K = new b2Mat22(
+        new b2Vec2(0, 0),
+        new b2Vec2(0, 0)
+    );
     K.cx.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
     K.cx.y = -rA.y * rA.x * iA - rB.y * rB.x * iB;
     K.cy.x = K.cx.y;

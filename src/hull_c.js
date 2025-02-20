@@ -15,6 +15,10 @@ import { b2_linearSlop } from './include/core_h.js';
  * @namespace Hull
  */
 
+/**
+ * @import {b2Vec2} from './include/math_functions_h.js'
+ */
+
 // quickhull recursion
 function b2RecurseHull(p1, p2, ps, count)
 {
