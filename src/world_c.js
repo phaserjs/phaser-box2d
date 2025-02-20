@@ -72,6 +72,13 @@ import { b2HexColor } from './include/types_h.js';
  * @namespace World
  */
 
+/**
+ * @import {b2WorldDef, b2DebugDraw, b2QueryFilter} from './include/types_h.js'
+ * @import {b2ChainId, b2JointId} from './include/id_h.js'
+ * @import {b2PreSolveFcn, b2CastResultFcn, b2OverlapResultFcn, b2CustomFilterFcn} from './include/types_h.js'
+ * @import {b2TreeStats, b2Circle, b2Capsule, b2Polygon} from './include/collision_h.js'
+ */
+
 export const B2_MAX_WORLDS = 32;
 
 export const b2SetType =
@@ -92,12 +99,16 @@ export class b2World
     bodyArray = [];
 
     // solverSetIdPool = new b2IdPool();
+
+    /** @type {b2SolverSet[]} */
     solverSetArray = [];
 
     // jointIdPool = new b2IdPool();
     jointArray = [];
 
     // contactIdPool = new b2IdPool();
+
+    /** @type {b2Contact[]} */
     contactArray = [];
 
     // islandIdPool = new b2IdPool();

@@ -58,6 +58,12 @@ import { b2MakeProxy, b2ShapeDistance } from './include/distance_h.js';
  * @namespace Shape
  */
 
+/**
+ * @import {b2BodyId} from './include/id_h.js'
+ * @import {b2ShapeDef, b2ChainDef, b2Filter} from './include/types_h.js'
+ * @import {b2Capsule, b2Polygon, b2Manifold} from './include/collision_h.js'
+ */
+
 function b2GetShape(world, shapeId)
 {
     const id = shapeId.index1 - 1;
