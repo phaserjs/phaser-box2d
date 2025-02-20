@@ -775,6 +775,47 @@ export class b2QueryFilter {
     categoryBits: number;
     maskBits: number;
 }
+/**
+ * Prototype for a contact filter callback.
+ * This is called when a contact pair is considered for collision. This allows you to
+ * perform custom logic to prevent collision between shapes. This is only called if
+ * one of the two shapes has custom filtering enabled.
+ *
+ * **Notes:**
+ * - This function must be thread-safe.
+ * - This is only called if one of the two shapes has enabled custom filtering.
+ * - This is called only for awake dynamic bodies.
+ */
+export type b2CustomFilterFcn = (shapeIdA: b2ShapeId, shapeIdB: b2ShapeId, context: any) => boolean;
+/**
+ * Prototype for a pre-solve callback.
+ * This is called after a contact is updated. This allows you to inspect a
+ * contact before it goes to the solver. If you are careful, you can modify the
+ * contact manifold (e.g., modify the normal).
+ *
+ * **Notes:**
+ * - This function must be thread-safe.
+ * - This is only called if the shape has enabled pre-solve events.
+ * - This is called only for awake dynamic bodies.
+ * - This is not called for sensors.
+ * - The supplied manifold has impulse values from the previous step.
+ */
+export type b2PreSolveFcn = (shapeIdA: b2ShapeId, shapeIdB: b2ShapeId, manifold: b2Manifold, context: any) => boolean;
+/**
+ * Prototype callback for overlap queries.
+ * Called for each shape found in the query.
+ */
+export type b2OverlapResultFcn = (shapeId: b2ShapeId, context: any) => boolean;
+/**
+ * Prototype callback for ray casts.
+ * Called for each shape found in the query. You control how the ray cast proceeds by returning a float:
+ *
+ * - `-1`: Ignore this shape and continue.
+ * - `0`: Terminate the ray cast.
+ * - `fraction`: Clip the ray to this point.
+ * - `1`: Don't clip the ray and continue.
+ */
+export type b2CastResultFcn = (shapeId: b2ShapeId, point: b2Vec2, normal: b2Vec2, fraction: number, context: any) => number;
 import { b2Vec2 } from './math_functions_h.js';
 import { b2Rot } from './math_functions_h.js';
 import { b2AABB } from './math_functions_h.js';

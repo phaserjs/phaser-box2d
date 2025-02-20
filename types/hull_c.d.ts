@@ -27,4 +27,5 @@ export function b2ComputeHull(points: b2Vec2[], count: number): b2Hull;
  * @throws {Warning} Console warnings are issued explaining validation failures
  */
 export function b2ValidateHull(hull: b2Hull): boolean;
+import type { b2Vec2 } from './include/math_functions_h.js';
 import { b2Hull } from './include/collision_h.js';

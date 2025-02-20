@@ -391,14 +391,20 @@ export function b2Distance(a: b2Vec2, b: b2Vec2): number;
 /**
  * @function b2DistanceSquared
  * @summary Calculates the squared distance between two 2D points.
- * @param {b2Vec2} a - The first 2D vector point
- * @param {b2Vec2} b - The second 2D vector point
+ * @param {b2Vec2 | {x: number, y: number}} a - The first 2D vector point
+ * @param {b2Vec2 | {x: number, y: number}} b - The second 2D vector point
  * @returns {number} The squared distance between points a and b
  * @description
  * Computes the squared Euclidean distance between two points without taking the square root.
  * The calculation is (b.x - a.x)² + (b.y - a.y)²
  */
-export function b2DistanceSquared(a: b2Vec2, b: b2Vec2): number;
+export function b2DistanceSquared(a: b2Vec2 | {
+    x: number;
+    y: number;
+}, b: b2Vec2 | {
+    x: number;
+    y: number;
+}): number;
 /**
  * Creates a new b2Rot object representing a 2D rotation.
  * @function b2MakeRot

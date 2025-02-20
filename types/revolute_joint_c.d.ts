@@ -2,6 +2,9 @@
  * @namespace RevoluteJoint
  */
 /**
+ * @import {b2JointId} from './include/id_h.js'
+ */
+/**
  * @function b2RevoluteJoint_EnableSpring
  * @description
  * Enables or disables the spring functionality of a revolute joint.
@@ -191,4 +194,5 @@ export function b2PrepareRevoluteJoint(base: any, context: any): void;
 export function b2WarmStartRevoluteJoint(base: any, context: any): void;
 export function b2SolveRevoluteJoint(base: any, context: any, useBias: any): void;
 export function b2DrawRevoluteJoint(draw: any, base: any, transformA: any, transformB: any, drawSize: any): void;
+import type { b2JointId } from './include/id_h.js';
 import { b2Vec2 } from './include/math_functions_h.js';

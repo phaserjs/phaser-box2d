@@ -5,10 +5,10 @@ export function b2PolygonAndCircleManifold(shapeA: any, xfA: any, shapeB: any, x
 export function b2PolygonAndCapsuleManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): b2Manifold;
 export function b2PolygonManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): b2Manifold;
 export function b2SegmentAndCircleManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): b2Manifold;
-export function b2SegmentAndCapsuleManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): b2Manifold;
+export function b2SegmentAndCapsuleManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): void;
 export function b2SegmentAndPolygonManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): b2Manifold;
 export function b2ChainSegmentAndCircleManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): any;
-export function b2ChainSegmentAndCapsuleManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): void;
+export function b2ChainSegmentAndCapsuleManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): b2Manifold;
 export function b2ChainSegmentAndPolygonManifold(shapeA: any, xfA: any, shapeB: any, xfB: any, cache: any, manifold: any): b2Manifold;
 export function b2AddType(fcn: any, type1: any, type2: any): void;
 export function b2InitializeContactRegisters(): void;

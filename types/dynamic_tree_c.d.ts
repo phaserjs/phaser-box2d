@@ -38,7 +38,7 @@ export function b2RemoveLeaf(tree: any, leaf: any): void;
  * @returns {number} The ID of the created proxy node
  * @throws {Error} Throws assertion error if AABB bounds are outside valid range
  */
-export function b2DynamicTree_CreateProxy(tree: b2DynamicTree, aabb: b2AABB, categoryBits: number, userData: number): number;
+export function b2DynamicTree_CreateProxy(tree: b2DynamicTree, aabb: b2Math.b2AABB, categoryBits: number, userData: number): number;
 /**
  * @function b2DynamicTree_DestroyProxy
  * @summary Removes and frees a proxy from the dynamic tree.
@@ -79,7 +79,7 @@ export function b2DynamicTree_GetProxyCount(tree: b2DynamicTree): number;
  * - The proxyId is out of bounds
  * - The node at proxyId is not a leaf node
  */
-export function b2DynamicTree_MoveProxy(tree: b2DynamicTree, proxyId: number, aabb: b2AABB): void;
+export function b2DynamicTree_MoveProxy(tree: b2DynamicTree, proxyId: number, aabb: b2Math.b2AABB): void;
 /**
  * @function b2DynamicTree_EnlargeProxy
  * @description
@@ -96,7 +96,7 @@ export function b2DynamicTree_MoveProxy(tree: b2DynamicTree, proxyId: number, aa
  * - The node is not a leaf
  * - The new AABB is contained within the old one
  */
-export function b2DynamicTree_EnlargeProxy(tree: b2DynamicTree, proxyId: number, aabb: b2AABB): void;
+export function b2DynamicTree_EnlargeProxy(tree: b2DynamicTree, proxyId: number, aabb: b2Math.b2AABB): void;
 /**
  * @summary Gets the height of a dynamic tree
  * @function b2DynamicTree_GetHeight
@@ -161,7 +161,7 @@ export function b2DynamicTree_RebuildBottomUp(tree: b2DynamicTree): void;
  * Updates the axis-aligned bounding boxes (AABBs) of all nodes in the tree by
  * subtracting the newOrigin vector from both their lower and upper bounds.
  */
-export function b2DynamicTree_ShiftOrigin(tree: b2DynamicTree, newOrigin: b2Vec2): void;
+export function b2DynamicTree_ShiftOrigin(tree: b2DynamicTree, newOrigin: b2Math.b2Vec2): void;
 /**
  * @function b2DynamicTree_GetByteCount
  * @summary Calculates the approximate memory usage of a dynamic tree in bytes.
@@ -187,7 +187,7 @@ export function b2DynamicTree_GetByteCount(tree: b2DynamicTree): number;
  * @param {*} context - User context data passed to the callback function
  * @returns {void}
  */
-export function b2DynamicTree_Query(tree: b2DynamicTree, aabb: b2AABB, maskBits: number, callback: Function, context: any): void;
+export function b2DynamicTree_Query(tree: b2DynamicTree, aabb: b2Math.b2AABB, maskBits: number, callback: Function, context: any): void;
 export function b2DynamicTree_QueryAll(tree: any, aabb: any, context: any): void;
 /**
  * @summary Performs a ray cast query on a dynamic tree
@@ -239,3 +239,6 @@ export function b2DynamicTree_ShapeCast(tree: b2DynamicTree, input: b2ShapeCastI
  */
 export function b2DynamicTree_Rebuild(tree: b2DynamicTree): number;
 import { b2DynamicTree } from './include/dynamic_tree_h.js';
+import * as b2Math from './include/math_functions_h.js';
+import type { b2RayCastInput } from './include/collision_h.js';
+import type { b2ShapeCastInput } from './include/collision_h.js';
