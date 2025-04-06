@@ -62,7 +62,7 @@ export async function RunBuild (mode)
     else if (mode === 'prod')
     {
         SetBuildPaths(
-            `src${path.sep}main-prod.js`,
+            `src${path.sep}main.js`,
             `${process.cwd()}${path.sep}dist${path.sep}`
         );
 

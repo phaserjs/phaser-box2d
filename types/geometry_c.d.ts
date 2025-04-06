@@ -84,14 +84,14 @@ export function b2MakeRoundedBox(hx: number, hy: number, radius: number): b2Poly
  * @param {number} hx - Half-width of the box along the x-axis
  * @param {number} hy - Half-height of the box along the y-axis
  * @param {b2Vec2} center - The center position of the box
- * @param {number} angle - The rotation angle of the box in radians
+ * @param {b2Rot} rotation - The 2D rotation of the box
  * @returns {b2Polygon} A polygon shape representing the box with 4 vertices and normals
  * @description
  * Creates a b2Polygon representing a rectangle with the given dimensions. The box is centered
  * at the specified position and rotated by the given angle. The resulting polygon includes
  * 4 vertices, 4 normals, and has its centroid set to the center position.
  */
-export function b2MakeOffsetBox(hx: number, hy: number, center: b2Vec2, angle?: number): b2Polygon;
+export function b2MakeOffsetBox(hx: number, hy: number, center: b2Vec2, rotation: b2Rot): b2Polygon;
 /**
  * @function b2TransformPolygon
  * @summary Transforms a polygon by applying a rigid body transformation.
@@ -337,6 +337,7 @@ export function b2ShapeCastPolygon(input: b2ShapeCastInput, shape: b2Polygon): b
 import { b2Polygon } from './include/collision_h.js';
 import { b2Transform } from './include/math_functions_h.js';
 import { b2Vec2 } from './include/math_functions_h.js';
+import { b2Rot } from './include/math_functions_h.js';
 import { b2Circle } from './include/collision_h.js';
 import { b2MassData } from './include/collision_h.js';
 import { b2Capsule } from './include/collision_h.js';

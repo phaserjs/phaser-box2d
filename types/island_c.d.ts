@@ -3,7 +3,7 @@ export function b2DestroyIsland(world: any, islandId: any): void;
 export function b2GetIsland(world: any, islandId: any): any;
 export function b2LinkContact(world: any, contact: any): void;
 export function b2UnlinkContact(world: any, contact: any): void;
-export function b2LinkJoint(world: any, joint: any): void;
+export function b2LinkJoint(world: any, joint: any, mergeIslands: any): void;
 export function b2UnlinkJoint(world: any, joint: any): void;
 export function b2MergeAwakeIslands(world: any): void;
 export function b2SplitIsland(world: any, baseId: any): void;

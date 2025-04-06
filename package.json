@@ -27,7 +27,7 @@
     "lint": "eslint --config eslint.config.js",
     "lintfix": "eslint --fix --config eslint.config.js",
     "builddocs": "documentation build --config documentation.yml src/** -f html -o docs --theme docs-theme/index.js",
-    "buildtypes": "tsc --allowJs --declaration --emitDeclarationOnly --outDir types src/main-prod.js"
+    "buildtypes": "tsc --allowJs --declaration --emitDeclarationOnly --outDir types src/main.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
