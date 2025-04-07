@@ -649,3 +649,11 @@ export class b2TreeNode
         this.enlarged = false;
     }
 }
+
+
+/**
+ * These are performance results returned by dynamic tree queries.
+ * @typedef {Object} b2TreeStats
+ * @property {number} nodeVisits - Number of internal nodes visited during the query.
+ * @property {number} leafVisits - Number of leaf nodes visited during the query.
+ */

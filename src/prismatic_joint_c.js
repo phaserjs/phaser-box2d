@@ -35,6 +35,10 @@ import { b2MakeSoft } from './include/solver_h.js';
  */
 
 /**
+ * @import {b2JointId} from './include/id_h.js'
+ */
+
+/**
  * @function b2PrismaticJoint_EnableSpring
  * @summary Enables or disables the spring functionality of a prismatic joint.
  * @param {b2JointId} jointId - The identifier of the prismatic joint to modify.

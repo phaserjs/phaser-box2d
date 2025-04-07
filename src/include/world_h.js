@@ -5,6 +5,10 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
+/**
+ * @import {b2WorldId} from './id_h.js'
+ */
+
 export const b2_maxWorkers = 1;
 
 export {
@@ -29,13 +33,12 @@ export {
  * @summary Gets the performance profile data for a Box2D world.
  * @function b2World_GetProfile
  * @param {b2WorldId} worldId - The identifier of the Box2D world.
- * @returns {b2Profile} A profile object containing performance metrics.
+ * @returns {void} A profile object containing performance metrics.
  * @description
  * This function returns performance profiling data for a Box2D world.
  * Not supported in Phaser Box2D JS implementation.
- * @throws {Error} Outputs a console warning indicating lack of support in Phaser Box2D JS.
  */
-export function b2World_GetProfile()
+export function b2World_GetProfile(worldId)
 {
     console.warn("b2World_GetProfile not supported");
 }
@@ -44,12 +47,12 @@ export function b2World_GetProfile()
  * Gets the current counters from a Box2D world instance.
  * @function b2World_GetCounters
  * @param {b2WorldId} worldId - The ID of the Box2D world instance.
- * @returns {b2Counters} An object containing various Box2D performance counters.
+ * @returns {void} An object containing various Box2D performance counters.
  * @description
  * This function is not supported in the Phaser Box2D JS implementation and will
  * generate a console warning when called.
  */
-export function b2World_GetCounters()
+export function b2World_GetCounters(worldId)
 {
     console.warn("b2World_GetCounters not supported");
 }
@@ -63,7 +66,7 @@ export function b2World_GetCounters()
  * This function is a stub that displays a warning message indicating that memory statistics
  * dumping is not supported in the Phaser Box2D JavaScript implementation.
  */
-export function b2World_DumpMemoryStats()
+export function b2World_DumpMemoryStats(worldId)
 {
     console.warn("b2World_DumpMemoryStats not supported");
 }

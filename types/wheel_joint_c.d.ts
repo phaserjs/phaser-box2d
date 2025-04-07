@@ -2,6 +2,9 @@
  * @namespace WheelJoint
  */
 /**
+ * @import {b2JointId} from './include/id_h.js'
+ */
+/**
  * @function b2WheelJoint_EnableSpring
  * @description
  * Enables or disables the spring functionality of a wheel joint. When the spring state
@@ -181,3 +184,4 @@ export function b2PrepareWheelJoint(base: any, context: any): void;
 export function b2WarmStartWheelJoint(base: any, context: any): void;
 export function b2SolveWheelJoint(base: any, context: any, useBias: any): void;
 export function b2DrawWheelJoint(draw: any, base: any, transformA: any, transformB: any): void;
+import type { b2JointId } from './include/id_h.js';

@@ -33,6 +33,10 @@ import { b2SetType } from './include/world_h.js';
  */
 
 /**
+ * @import {b2JointId} from './include/id_h.js'
+ */
+
+/**
  * Sets the linear frequency (hertz) for a weld joint.
  * @function b2WeldJoint_SetLinearHertz
  * @param {b2JointId} jointId - The identifier for the weld joint to modify

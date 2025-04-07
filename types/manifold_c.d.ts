@@ -67,12 +67,19 @@ export function b2CollideCapsules(capsuleA: b2Capsule, xfA: b2Transform, capsule
  * @param {b2Transform} xfA - Transform for segmentA containing position and rotation
  * @param {b2Capsule} capsuleB - A capsule shape defined by two points and a radius
  * @param {b2Transform} xfB - Transform for capsuleB containing position and rotation
- * @returns {b2Manifold} Collision manifold containing contact points and normal
+ * @param {b2Manifold} manifold - Output collision manifold
+ * @returns {void} Modifies the manifold parameter with collision data:
+ * - normalX/Y: Collision normal vector
+ * - pointCount: Number of contact points (0-2)
+ * - points[]: Contact point data including:
+ * - anchorA/B: Contact points in local coordinates
+ * - separation: Penetration depth
+ * - id: Contact ID
  * @description
  * Converts the segment to a zero-radius capsule and delegates to b2CollideCapsules
  * for the actual collision computation.
  */
-export function b2CollideSegmentAndCapsule(segmentA: b2Segment, xfA: b2Transform, capsuleB: b2Capsule, xfB: b2Transform, manifold: any): b2Manifold;
+export function b2CollideSegmentAndCapsule(segmentA: b2Segment, xfA: b2Transform, capsuleB: b2Capsule, xfB: b2Transform, manifold: b2Manifold): void;
 /**
  * @function b2CollidePolygonAndCapsule
  * @description
@@ -157,11 +164,11 @@ export function b2CollideChainSegmentAndCircle(chainSegmentA: any, xfA: any, cir
  * @param {b2Transform} xfA - Transform for segmentA
  * @param {b2Capsule} capsuleB - The capsule shape defined by two centers and a radius
  * @param {b2Transform} xfB - Transform for capsuleB
- * @param {b2SimplexCache} cache - Simplex cache for persistent contact information
+ * @param {b2DistanceCache} cache - Simplex cache for persistent contact information
  * @param {b2Manifold} manifold - Contact manifold to store collision results
- * @returns {void}
+ * @returns {b2Manifold} - Modified manifold
  */
-export function b2CollideChainSegmentAndCapsule(segmentA: b2ChainSegment, xfA: b2Transform, capsuleB: b2Capsule, xfB: b2Transform, cache: b2SimplexCache, manifold: b2Manifold): void;
+export function b2CollideChainSegmentAndCapsule(segmentA: b2ChainSegment, xfA: b2Transform, capsuleB: b2Capsule, xfB: b2Transform, cache: b2DistanceCache, manifold: b2Manifold): b2Manifold;
 /**
  * @function b2CollideChainSegmentAndPolygon
  * @param {b2ChainSegment} chainSegmentA - The chain segment shape A
@@ -178,6 +185,11 @@ export function b2CollideChainSegmentAndCapsule(segmentA: b2ChainSegment, xfA: b
  * and can contain 0, 1 or 2 contact points depending on the collision configuration.
  */
 export function b2CollideChainSegmentAndPolygon(chainSegmentA: b2ChainSegment, xfA: b2Transform, polygonB: b2Polygon, xfB: b2Transform, cache: b2DistanceCache, manifold: b2Manifold): b2Manifold;
+import type { b2Circle } from './include/collision_h.js';
 import { b2Transform } from './include/math_functions_h.js';
+import type { b2Manifold } from './include/collision_h.js';
 import { b2Capsule } from './include/collision_h.js';
 import { b2Polygon } from './include/collision_h.js';
+import type { b2Segment } from './include/collision_h.js';
+import type { b2ChainSegment } from './include/collision_h.js';
+import type { b2DistanceCache } from './include/collision_h.js';

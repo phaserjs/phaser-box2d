@@ -18,6 +18,11 @@ import { b2TreeNode } from './include/collision_h.js';
  * @namespace DynamicTree
  */
 
+/**
+ * @import {b2AABB, b2Vec2} from './include/math_functions_h.js'
+ * @import {b2RayCastInput, b2ShapeCastInput} from './include/collision_h.js'
+ */
+
 const B2_TREE_STACK_SIZE = 1024;
 
 function b2IsLeaf(node)

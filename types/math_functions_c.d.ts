@@ -2,6 +2,9 @@
  * @namespace MathFunctions
  */
 /**
+ * @import {b2Rot} from './include/math_functions_h.js'
+ */
+/**
  * @summary Checks if a number is valid (finite and not NaN).
  * @function b2IsValid
  * @param {number} a - The number to validate.
@@ -21,7 +24,7 @@ export function b2Vec2_IsValid(v: b2Vec2): boolean;
 /**
  * Validates a 2D rotation object.
  * @function b2Rot_IsValid
- * @param {b2Rot} q4 - A rotation object containing sine (s) and cosine (c) components
+ * @param {b2Rot} q - A rotation object containing sine (s) and cosine (c) components
  * @returns {boolean} True if the rotation is valid, false otherwise
  * @description
  * Checks if a b2Rot object is valid by verifying:
@@ -29,7 +32,7 @@ export function b2Vec2_IsValid(v: b2Vec2): boolean;
  * 2. Both sine and cosine components contain valid numbers
  * 3. The rotation is properly normalized (s² + c² = 1)
  */
-export function b2Rot_IsValid(q: any): boolean;
+export function b2Rot_IsValid(q: b2Rot): boolean;
 /**
  * @function b2Normalize
  * @summary Normalizes a 2D vector to unit length.
@@ -64,3 +67,4 @@ export function b2GetLengthAndNormalize(v: b2Vec2): {
     normal: b2Vec2;
 };
 import { b2Vec2 } from "./include/math_functions_h.js";
+import type { b2Rot } from './include/math_functions_h.js';

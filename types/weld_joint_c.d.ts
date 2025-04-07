@@ -2,6 +2,9 @@
  * @namespace WeldJoint
  */
 /**
+ * @import {b2JointId} from './include/id_h.js'
+ */
+/**
  * Sets the linear frequency (hertz) for a weld joint.
  * @function b2WeldJoint_SetLinearHertz
  * @param {b2JointId} jointId - The identifier for the weld joint to modify
@@ -75,4 +78,5 @@ export function b2GetWeldJointTorque(world: any, base: any): number;
 export function b2PrepareWeldJoint(base: any, context: any): void;
 export function b2WarmStartWeldJoint(base: any, context: any): void;
 export function b2SolveWeldJoint(base: any, context: any, useBias: any): void;
+import type { b2JointId } from './include/id_h.js';
 import { b2Vec2 } from './include/math_functions_h.js';

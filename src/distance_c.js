@@ -53,6 +53,10 @@ import { b2_linearSlop } from './include/core_h.js';
  */
 
 /**
+ * @import {b2ShapeCastPairInput, b2TOIInput} from './include/collision_h'
+ */
+
+/**
  * @function b2GetSweepTransform
  * @summary Computes an interpolated transform at a specified time during a sweep motion.
  * @param {b2Sweep} sweep - A sweep object containing initial (c1, q1) and final (c2, q2)

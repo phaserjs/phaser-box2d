@@ -1,6 +1,10 @@
 /**
  * @namespace Body
  */
+/**
+ * @import {b2WorldId} from './include/id_h.js'
+ * @import {b2BodyDef, b2ContactData} from './include/types_h.js'
+ */
 export function b2MakeSweep(bodySim: any, out: any): any;
 export function b2GetBody(world: any, bodyId: any): any;
 export function b2GetBodyFullId(world: any, bodyId: any): any;
@@ -376,15 +380,15 @@ export function b2Body_GetUserData(bodyId: b2BodyId): object;
  */
 export function b2Body_GetMass(bodyId: b2BodyId): number;
 /**
- * Gets the inertia tensor value for a specified body.
- * @function b2Body_GetInertiaTensor
+ * Get the rotational inertia of the body, typically in kg*m^2
+ * @function b2Body_GetRotationalInertia
  * @param {b2BodyId} bodyId - The ID of the body to get the inertia tensor from.
  * @returns {number} The inertia tensor value of the body.
  * @description
  * Retrieves the rotational inertia value from a body's simulation data using the body's ID.
  * The inertia tensor represents the body's resistance to rotational acceleration.
  */
-export function b2Body_GetInertiaTensor(bodyId: b2BodyId): number;
+export function b2Body_GetRotationalInertia(bodyId: b2BodyId): number;
 /**
  * Gets the local center of mass for a body.
  * @function b2Body_GetLocalCenterOfMass
@@ -558,13 +562,13 @@ export function b2Body_IsSleepEnabled(bodyId: b2BodyId): boolean;
  * Sets the sleep threshold velocity for a body.
  * @function b2Body_SetSleepThreshold
  * @param {b2BodyId} bodyId - The identifier for the body to modify.
- * @param {number} sleepVelocity - The velocity threshold below which the body can sleep.
+ * @param {number} sleepThreshold - The velocity threshold below which the body can sleep.
  * @returns {void}
  * @description
  * Sets the minimum velocity threshold that determines when a body can transition to a sleeping state.
  * When a body's velocity falls below this threshold, it becomes eligible for sleeping.
  */
-export function b2Body_SetSleepThreshold(bodyId: b2BodyId, sleepVelocity: number): void;
+export function b2Body_SetSleepThreshold(bodyId: b2BodyId, sleepThreshold: number): void;
 /**
  * Gets the sleep threshold value for a body.
  * @function b2Body_GetSleepThreshold
@@ -711,6 +715,9 @@ export function b2Body_GetJoints(bodyId: b2BodyId, jointArray: b2JointId[], capa
 export function b2ShouldBodiesCollide(world: any, bodyA: any, bodyB: any): boolean;
 export function resetProperties(obj: any): void;
 import { b2BodyId } from './include/id_h.js';
+import type { b2WorldId } from './include/id_h.js';
+import type { b2BodyDef } from './include/types_h.js';
+import type { b2ContactData } from './include/types_h.js';
 import { b2AABB } from './include/math_functions_h.js';
 import { b2Vec2 } from './include/math_functions_h.js';
 import { b2Rot } from './include/math_functions_h.js';

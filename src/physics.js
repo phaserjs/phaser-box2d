@@ -35,6 +35,13 @@ import { b2ComputeHull } from './include/hull_h.js';
  * @namespace Physics
  */
 
+/**
+ * @import {b2WorldDef, b2ShapeDef, b2BodyDef} from './include/types_h.js'
+ * @import {b2ShapeId, b2WorldId, b2BodyId, b2JointId} from './include/id_h.js'
+ * @import {b2Polygon} from './include/collision_h.js'
+ * @import {b2Body} from './include/body_h.js'
+ */
+
 // local 
 
 function setIfDef (obj, prop, value)
@@ -222,9 +229,8 @@ export function UpdateWorldSprites (worldId)
  * Converts a Box2D Body's position and rotation to a Sprite's position and rotation.
  * 
  * This is called automatically by `UpdateWorldSprites`.
- *
  * @export
- * @param {b2Body} body
+ * @param {{ bodyId: { world0: number; }; }} body
  * @param {Sprite} sprite
  */
 export function BodyToSprite (body, sprite)
@@ -353,7 +359,7 @@ let _accumulator = 0;
  * Steps a physics world to match fixedTimeStep.
  * Returns the average time spent in the step function.
  * 
- * @param {WorldConfig} data - Configuration for the world.
+ * @param {WorldStepConfig} data - Configuration for the world.
  * @returns {number} totalTime - Time spent processing the step function, in seconds.
  */
 export function WorldStep (data)
@@ -415,7 +421,7 @@ export function WorldStep (data)
  * @typedef {Object} BodyCapsule
  * @property {b2BodyId} bodyId - ID for the body to attach the capsule to.
  * @property {b2ShapeId} shapeId - ID for the shape to attach the capsule to.
- * @propery {b2Capsule} object - The capsule object to attach.
+ * @property {b2Capsule} object - The capsule object to attach.
  */
 
 /**
@@ -905,7 +911,7 @@ export function CreatePolygon (data)
  * @property {number} [friction] - Friction of the polygon.
  * @property {number} [restitution=0.1] - Restitution of the polygon.
  * @property {any} [color] - Custom color for the polygon.
- * @property {number[]} indices - List of indices to the vertices for the polygon.
+ * @property {number[][]} indices - List of indices to the vertices for the polygon.
  * @property {number[]} vertices - List of vertices for the polygon in number pairs [x0,y0, x1,y1, ... xN,yN].
  * @property {b2Vec2} vertexOffset - Offset to recenter the vertices if they are not zero based.
  * @property {b2Vec2} vertexScale - Scale for the vertices, defaults to 1, 1.

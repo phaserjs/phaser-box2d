@@ -43,6 +43,7 @@ export class b2ContactArray
 {
     constructor(capacity = 0)
     {
+        /** @type {b2ContactSim[]} */
         this.data = [];
         this.count = 0;
         this.capacity = capacity;

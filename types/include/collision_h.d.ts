@@ -378,5 +378,18 @@ export class b2TreeNode {
     height: number;
     enlarged: boolean;
 }
+/**
+ * These are performance results returned by dynamic tree queries.
+ */
+export type b2TreeStats = {
+    /**
+     * - Number of internal nodes visited during the query.
+     */
+    nodeVisits: number;
+    /**
+     * - Number of leaf nodes visited during the query.
+     */
+    leafVisits: number;
+};
 import { b2Transform } from './math_functions_h.js';
 import { b2Vec2 } from './math_functions_h.js';

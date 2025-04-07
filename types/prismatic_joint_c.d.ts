@@ -2,6 +2,9 @@
  * @namespace PrismaticJoint
  */
 /**
+ * @import {b2JointId} from './include/id_h.js'
+ */
+/**
  * @function b2PrismaticJoint_EnableSpring
  * @summary Enables or disables the spring functionality of a prismatic joint.
  * @param {b2JointId} jointId - The identifier of the prismatic joint to modify.
@@ -177,4 +180,5 @@ export function b2PreparePrismaticJoint(base: any, context: any): void;
 export function b2WarmStartPrismaticJoint(base: any, context: any): void;
 export function b2SolvePrismaticJoint(base: any, context: any, useBias: any): void;
 export function b2DrawPrismaticJoint(draw: any, base: any, transformA: any, transformB: any): void;
+import type { b2JointId } from './include/id_h.js';
 import { b2Vec2 } from './include/math_functions_h.js';

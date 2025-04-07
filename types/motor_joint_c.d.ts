@@ -2,6 +2,9 @@
  * @namespace MotorJoint
  */
 /**
+ * @import {b2JointId} from './include/id_h.js'
+ */
+/**
  * @summary Sets the target linear offset for a motor joint.
  * @function b2MotorJoint_SetLinearOffset
  * @param {b2JointId} jointId - The identifier for the motor joint to modify.
@@ -100,4 +103,5 @@ export function b2GetMotorJointTorque(world: any, base: any): number;
 export function b2PrepareMotorJoint(base: any, context: any): void;
 export function b2WarmStartMotorJoint(base: any, context: any): void;
 export function b2SolveMotorJoint(base: any, context: any, useBias: any): void;
+import type { b2JointId } from './include/id_h.js';
 import { b2Vec2 } from './include/math_functions_h.js';

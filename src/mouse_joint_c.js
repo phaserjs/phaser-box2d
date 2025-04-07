@@ -5,7 +5,7 @@
  * - Copyright 2024 Phaser Studio Inc, released under the MIT license.
  */
 
-import { b2Add, b2Cross, b2CrossSV, b2GetInverse22, b2Length, b2MulAdd, b2MulMV, b2MulSV, b2Normalize, b2RotateVector, b2Sub, b2Vec2 } from "./include/math_functions_h.js";
+import { b2Add, b2Cross, b2CrossSV, b2GetInverse22, b2Length, b2Mat22, b2MulAdd, b2MulMV, b2MulSV, b2Normalize, b2RotateVector, b2Sub, b2Vec2 } from "./include/math_functions_h.js";
 import { b2GetJointSimCheckType, b2Joint_WakeBodies } from "./include/joint_h.js";
 
 import { B2_NULL_INDEX } from "./include/core_h.js";
@@ -15,6 +15,10 @@ import { b2SetType } from "./include/world_h.js";
 
 /**
  * @namespace MouseJoint
+ */
+
+/**
+ * @import {b2JointId} from './include/id_h.js'
  */
 
 /**
@@ -193,10 +197,10 @@ export function b2PrepareMouseJoint(base, context)
     const mB = bodySimB.invMass;
     const iB = bodySimB.invInertia;
 
-    const K = {
-        cx: new b2Vec2(mB + iB * rB.y * rB.y, -iB * rB.x * rB.y),
-        cy: new b2Vec2(-iB * rB.x * rB.y, mB + iB * rB.x * rB.x)
-    };
+    const K = new b2Mat22(
+        new b2Vec2(mB + iB * rB.y * rB.y, -iB * rB.x * rB.y),
+        new b2Vec2(-iB * rB.x * rB.y, mB + iB * rB.x * rB.x)
+    );
 
     joint.linearMass = b2GetInverse22(K);
     joint.deltaCenter = b2Sub(bodySimB.center, joint.targetA);

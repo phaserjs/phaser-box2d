@@ -1,5 +1,8 @@
 /**
  * @namespace DistanceJoint
+*/
+/**
+ * @import {b2JointId} from './include/id_h'
  */
 /**
  * @function b2DistanceJoint_SetLength
@@ -135,20 +138,20 @@ export function b2DistanceJoint_SetSpringHertz(jointId: b2JointId, hertz: number
 export function b2DistanceJoint_SetSpringDampingRatio(jointId: b2JointId, dampingRatio: number): void;
 /**
  * Gets the hertz frequency parameter of a distance joint.
- * @function b2DistanceJoint_GetHertz
+ * @function b2DistanceJoint_GetSpringHertz
  * @param {number} jointId - The identifier for the distance joint.
  * @returns {number} The hertz frequency value of the distance joint.
  * @throws {Error} If the joint is not a distance joint or the jointId is invalid.
  */
-export function b2DistanceJoint_GetHertz(jointId: number): number;
+export function b2DistanceJoint_GetSpringHertz(jointId: number): number;
 /**
  * Gets the damping ratio of a distance joint.
- * @function b2DistanceJoint_GetDampingRatio
+ * @function b2DistanceJoint_GetSpringDampingRatio
  * @param {number} jointId - The identifier for the distance joint.
  * @returns {number} The damping ratio of the distance joint.
  * @throws {Error} If the joint is not a distance joint or the jointId is invalid.
  */
-export function b2DistanceJoint_GetDampingRatio(jointId: number): number;
+export function b2DistanceJoint_GetSpringDampingRatio(jointId: number): number;
 /**
  * @function b2DistanceJoint_EnableMotor
  * @description
@@ -218,3 +221,4 @@ export function b2PrepareDistanceJoint(base: any, context: any): void;
 export function b2WarmStartDistanceJoint(base: any, context: any): void;
 export function b2SolveDistanceJoint(base: any, context: any, useBias: any): void;
 export function b2DrawDistanceJoint(draw: any, base: any, transformA: any, transformB: any): void;
+import type { b2JointId } from './include/id_h';

@@ -2,6 +2,9 @@
  * @namespace Distance
  */
 /**
+ * @import {b2ShapeCastPairInput, b2TOIInput} from './include/collision_h'
+ */
+/**
  * @function b2GetSweepTransform
  * @summary Computes an interpolated transform at a specified time during a sweep motion.
  * @param {b2Sweep} sweep - A sweep object containing initial (c1, q1) and final (c2, q2)
@@ -102,6 +105,7 @@ import { b2DistanceCache } from './include/collision_h.js';
 import { b2DistanceInput } from './include/collision_h.js';
 import { b2Simplex } from './include/collision_h.js';
 import { b2DistanceOutput } from './include/collision_h.js';
+import type { b2ShapeCastPairInput } from './include/collision_h';
 import { b2CastOutput } from './include/collision_h.js';
 declare class b2SeparationFunction {
     proxyA: any;
@@ -118,5 +122,6 @@ declare class MinSeparationReturn {
     indexB: any;
     separation: any;
 }
+import type { b2TOIInput } from './include/collision_h';
 import { b2TOIOutput } from './include/collision_h.js';
 export {};

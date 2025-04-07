@@ -2,6 +2,9 @@
  * @namespace Joint
  */
 /**
+ * @import {b2WorldId, b2BodyId} from './include/id_h.js'
+ */
+/**
  * Creates a default distance joint definition with preset values.
  * @function b2DefaultDistanceJointDef
  * @returns {b2DistanceJointDef} A distance joint definition with:
@@ -415,6 +418,8 @@ declare class b2JointPair {
     joint: any;
     jointSim: any;
 }
+import type { b2WorldId } from './include/id_h.js';
 import { b2JointId } from "./include/id_h.js";
+import type { b2BodyId } from './include/id_h.js';
 import { b2Vec2 } from "./include/math_functions_h.js";
 export {};

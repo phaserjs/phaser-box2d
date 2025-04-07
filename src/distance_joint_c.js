@@ -31,6 +31,10 @@ import { b2MakeSoft } from './include/solver_h.js';
 
 /**
  * @namespace DistanceJoint
+*/
+
+/**
+ * @import {b2JointId} from './include/id_h'
  */
 
 /**

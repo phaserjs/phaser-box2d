@@ -691,6 +691,87 @@ export class b2ContactData
     }
 }
 
+/**
+ * Prototype for a contact filter callback.
+ * This is called when a contact pair is considered for collision. This allows you to
+ * perform custom logic to prevent collision between shapes. This is only called if
+ * one of the two shapes has custom filtering enabled.
+ *
+ * **Notes:**
+ * - This function must be thread-safe.
+ * - This is only called if one of the two shapes has enabled custom filtering.
+ * - This is called only for awake dynamic bodies.
+ *
+ * @warning Do not attempt to modify the world inside this callback.
+ * @see b2ShapeDef
+ * @ingroup world
+ * @callback b2CustomFilterFcn
+ * @param {b2ShapeId} shapeIdA - The first shape ID.
+ * @param {b2ShapeId} shapeIdB - The second shape ID.
+ * @param {any} context - User-defined context.
+ * @returns {boolean} False to disable the collision.
+ */
+
+/**
+ * Prototype for a pre-solve callback.
+ * This is called after a contact is updated. This allows you to inspect a
+ * contact before it goes to the solver. If you are careful, you can modify the
+ * contact manifold (e.g., modify the normal).
+ *
+ * **Notes:**
+ * - This function must be thread-safe.
+ * - This is only called if the shape has enabled pre-solve events.
+ * - This is called only for awake dynamic bodies.
+ * - This is not called for sensors.
+ * - The supplied manifold has impulse values from the previous step.
+ *
+ * @warning Do not attempt to modify the world inside this callback.
+ * @ingroup world
+ * @callback b2PreSolveFcn
+ * @param {b2ShapeId} shapeIdA - The first shape ID.
+ * @param {b2ShapeId} shapeIdB - The second shape ID.
+ * @param {b2Manifold} manifold - The contact manifold.
+ * @param {any} context - User-defined context.
+ * @returns {boolean} False to disable the contact this step.
+ */
+
+/**
+ * Prototype callback for overlap queries.
+ * Called for each shape found in the query.
+ *
+ * @see b2World_OverlapABB
+ * @ingroup world
+ * @callback b2OverlapResultFcn
+ * @param {b2ShapeId} shapeId - The shape ID found in the query.
+ * @param {any} context - User-defined context.
+ * @returns {boolean} False to terminate the query.
+ */
+
+/**
+ * Prototype callback for ray casts.
+ * Called for each shape found in the query. You control how the ray cast proceeds by returning a float:
+ *
+ * - `-1`: Ignore this shape and continue.
+ * - `0`: Terminate the ray cast.
+ * - `fraction`: Clip the ray to this point.
+ * - `1`: Don't clip the ray and continue.
+ *
+ * @see b2World_CastRay
+ * @ingroup world
+ * @callback b2CastResultFcn
+ * @param {b2ShapeId} shapeId - The shape hit by the ray.
+ * @param {b2Vec2} point - The point of initial intersection.
+ * @param {b2Vec2} normal - The normal vector at the point of intersection.
+ * @param {number} fraction - The fraction along the ray at the point of intersection.
+ * @param {any} context - User-defined context.
+ * @returns {number} - `-1` to filter, `0` to terminate, `fraction` to clip the ray for closest hit, `1` to continue.
+ */
+
+
+/// These colors are used for debug draw and mostly match the named SVG colors.
+/// See https://www.rapidtables.com/web/color/index.html
+/// https://johndecember.com/html/spec/colorsvg.html
+/// https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg
 export const b2HexColor = {
     b2_colorAliceBlue: 0xf0f8ff,
     b2_colorAntiqueWhite: 0xfaebd7,

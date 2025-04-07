@@ -11,6 +11,10 @@ import * as b2Math from './include/math_functions_h.js';
  * @namespace Aabb
  */
 
+/**
+ * @import {b2AABB} from './include/math_functions_h.js'
+ */
+
 // Get surface area of an AABB (the perimeter length)
 export function b2Perimeter(a)
 {

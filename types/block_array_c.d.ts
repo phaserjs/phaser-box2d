@@ -27,7 +27,8 @@ export class b2BodyStateArray {
 }
 export class b2ContactArray {
     constructor(capacity?: number);
-    data: any[];
+    /** @type {b2ContactSim[]} */
+    data: b2ContactSim[];
     count: number;
     capacity: number;
 }
@@ -43,3 +44,4 @@ export class b2JointArray {
     count: number;
     capacity: number;
 }
+import { b2ContactSim } from './include/contact_h.js';

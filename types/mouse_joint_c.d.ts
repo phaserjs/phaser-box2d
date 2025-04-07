@@ -2,6 +2,9 @@
  * @namespace MouseJoint
  */
 /**
+ * @import {b2JointId} from './include/id_h.js'
+ */
+/**
  * @summary Sets the target position for a mouse joint.
  * @function b2MouseJoint_SetTarget
  * @param {b2JointId} jointId - The identifier of the mouse joint to modify.
@@ -79,4 +82,5 @@ export function b2GetMouseJointTorque(world: any, base: any): number;
 export function b2PrepareMouseJoint(base: any, context: any): void;
 export function b2WarmStartMouseJoint(base: any, context: any): void;
 export function b2SolveMouseJoint(base: any, context: any): void;
+import type { b2JointId } from './include/id_h.js';
 import { b2Vec2 } from "./include/math_functions_h.js";

@@ -28,6 +28,11 @@ import { b2MassData } from './include/collision_h.js';
  * @namespace Body
  */
 
+/**
+ * @import {b2WorldId} from './include/id_h.js'
+ * @import {b2BodyDef, b2ContactData} from './include/types_h.js'
+ */
+
 export function b2MakeSweep(bodySim, out)
 {
     out.c1.x = bodySim.center0X;

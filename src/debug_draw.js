@@ -521,12 +521,17 @@ export function CreateDebugDraw(canvas, ctx, scale = 20.0)
 }
 
 /**
+ * @callback RAFCallback
+ * @param {number} deltaTime - Time elapsed since last frame in seconds, capped at 0.1s
+ * @param {number} totalTime - Total accumulated time in seconds
+ * @param {number} currentFps - Current frames per second, updated once per second
+ * @returns {void}
+ */
+
+/**
  * @function RAF
  * @summary Implements a requestAnimationFrame loop with timing and FPS tracking
- * @param {function} callback - Function to call each frame with signature (deltaTime, totalTime, currentFps)
- * @param {number} callback.deltaTime - Time elapsed since last frame in seconds, capped at 0.1s
- * @param {number} callback.totalTime - Total accumulated time in seconds
- * @param {number} callback.currentFps - Current frames per second, updated once per second
+ * @param {RAFCallback} callback - Function to call each frame with signature (deltaTime, totalTime, currentFps)
  * @description
  * Creates an animation loop using requestAnimationFrame that tracks timing information
  * and FPS. The callback is invoked each frame with the time delta, total time, and
@@ -593,7 +598,7 @@ function loadPNGImage(imageUrl)
  * Attach a graphic image to a physics body
  * @function AttachImage
  * @param {number} worldId - The ID of the Box2D world
- * @param {number} bodyId - The ID of the body to attach the image to
+ * @param {b2BodyId} bodyId - The ID of the body to attach the image to
  * @param {string} path - Directory path where the image is located
  * @param {string} imgName - Name of the image file
  * @param {b2Vec2} [drawOffset=null] - Offset vector for drawing the image
