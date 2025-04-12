@@ -156,10 +156,10 @@ export function CreateWorld(data: WorldConfig): {
  * Steps a physics world to match fixedTimeStep.
  * Returns the average time spent in the step function.
  *
- * @param {WorldConfig} data - Configuration for the world.
+ * @param {WorldStepConfig} data - Configuration for the world.
  * @returns {number} totalTime - Time spent processing the step function, in seconds.
  */
-export function WorldStep(data: WorldConfig): number;
+export function WorldStep(data: WorldStepConfig): number;
 /**
  * @typedef {Object} ChainConfig
  * @property {b2WorldId} worldId - ID for the world.

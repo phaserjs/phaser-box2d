@@ -353,7 +353,7 @@ let _accumulator = 0;
  * Steps a physics world to match fixedTimeStep.
  * Returns the average time spent in the step function.
  * 
- * @param {WorldConfig} data - Configuration for the world.
+ * @param {WorldStepConfig} data - Configuration for the world.
  * @returns {number} totalTime - Time spent processing the step function, in seconds.
  */
 export function WorldStep (data)
