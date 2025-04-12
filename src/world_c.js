@@ -2620,6 +2620,7 @@ export function b2World_CastRayClosest(worldId, origin, translation, filter)
     const worldContext = new WorldRayCastContext();
     worldContext.world = world;
     worldContext.fcn = b2RayCastClosestFcn;
+    worldContext.filter = filter;
     worldContext.fraction = 1.0;
     worldContext.userContext = result;
 
