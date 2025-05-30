@@ -1066,6 +1066,7 @@ export function CreatePolygonFromVertices (data)
             b2CreatePolygonShape(body.bodyId, shapeDef, nGon);
         }
     });
+    return body;
 }
 
 /**
