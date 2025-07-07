@@ -592,7 +592,7 @@ export function b2SolveRevoluteJoint(base, context, useBias)
 
             // sign flipped on Cdot
             const Cdot = wA - wB;
-            let impulse = -massScale * joint.axialMass * (Cdot + bias) - impulseScale * joint.lowerImpulse;
+            let impulse = -massScale * joint.axialMass * (Cdot + bias) - impulseScale * joint.upperImpulse;
             const oldImpulse = joint.upperImpulse;
             joint.upperImpulse = Math.max(joint.upperImpulse + impulse, 0.0);
             impulse = joint.upperImpulse - oldImpulse;
