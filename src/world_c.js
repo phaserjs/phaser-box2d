@@ -194,12 +194,25 @@ export class b2TaskContext
     }
 }
 
+/**
+ * Resolves an active world ID to its registry entry.
+ * @throws {Error} If the ID is malformed, inactive, out of range, or stale.
+ */
 export function b2GetWorldFromId(id)
 {
-    console.assert(1 <= id.index1 && id.index1 <= B2_MAX_WORLDS);
+    if (id === null || typeof id !== 'object' || !Number.isInteger(id.index1) ||
+        id.index1 < 1 || id.index1 > B2_MAX_WORLDS || b2_worlds === null)
+    {
+        throw new Error('Invalid world ID');
+    }
+
     const world = b2_worlds[id.index1 - 1];
-    console.assert(id.index1 === world.worldId + 1);
-    console.assert(id.revision === world.revision);
+
+    if (world === undefined || world === null || world.inUse !== true ||
+        world.worldId !== id.index1 - 1 || id.revision !== world.revision)
+    {
+        throw new Error('Invalid world ID');
+    }
 
     return world;
 }
@@ -411,7 +424,7 @@ export function b2CreateWorld(def /* b2WorldDef */)
  * Creates a new empty world instance with an incremented revision number.
  * @param {b2WorldId} worldId - The ID of the world to destroy
  * @returns {void}
- * @throws {Error} Throws an assertion error if a null chain has non-null shape indices
+ * @throws {Error} Throws if the world ID is invalid or stale.
  */
 export function b2DestroyWorld(worldId)
 {
@@ -488,11 +501,12 @@ export function b2DestroyWorld(worldId)
 
     b2DestroyStackAllocator(world.stackAllocator);
 
-    // Wipe world but preserve revision
-    const revision = world.revision;
+    // Replace the registry entry and invalidate IDs from the destroyed world.
+    const revision = world.revision + 1;
     world = new b2World();
     world.worldId = B2_NULL_INDEX;
-    world.revision = revision + 1;
+    world.revision = revision;
+    b2_worlds[worldId.index1 - 1] = world;
 }
 
 const centerOffsetA = new b2Vec2();
@@ -929,9 +943,8 @@ GlobalDebug.b2SweepCount = 0;
  */
 export function b2World_Step(worldId, timeStep, subStepCount)
 {
-    GlobalDebug.b2FrameCount++;
-
     const world = b2GetWorldFromId(worldId);
+    GlobalDebug.b2FrameCount++;
     console.assert(world.locked == false);
 
     if (world.locked)
